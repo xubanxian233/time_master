@@ -5,10 +5,14 @@ import com.example.team.dao.UserTodoSetDAO;
 import com.example.team.pojo.UserTodo;
 import com.example.team.pojo.UserTodoSet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
+@Service("userTodoSetService")
+@Transactional(rollbackFor = Exception.class)
 public class UserTodoSetServiceImpl implements UserTodoSetService {
 
     @Autowired

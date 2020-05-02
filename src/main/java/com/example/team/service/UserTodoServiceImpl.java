@@ -15,13 +15,23 @@ public class UserTodoServiceImpl implements UserTodoService {
     private UserTodoDAO userTodoDAO;
 
     @Override
-    public void createUserTodo(UserTodo userTodo) {
-        userTodoDAO.add(userTodo);
+    public boolean createUserTodo(UserTodo userTodo) {
+        UserTodo userTodo1 = userTodoDAO.getByName(userTodo.getName());
+        if (userTodo1==null){
+            userTodoDAO.add(userTodo);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void updateUserTodo(UserTodo userTodo) {
-        userTodoDAO.update(userTodo);
+    public boolean updateUserTodo(UserTodo userTodo) {
+        UserTodo userTodo1 = userTodoDAO.getByName(userTodo.getName());
+        if (userTodo1==null){
+            userTodoDAO.update(userTodo);
+            return true;
+        }
+        return false;
     }
 
     @Override
