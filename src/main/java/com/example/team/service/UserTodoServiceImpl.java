@@ -13,10 +13,25 @@ import java.util.List;
 public class UserTodoServiceImpl implements UserTodoService {
     @Autowired
     private UserTodoDAO userTodoDAO;
+
+    @Override
+    public void createUserTodo(UserTodo userTodo) {
+        userTodoDAO.add(userTodo);
+    }
+
+    @Override
+    public void updateUserTodo(UserTodo userTodo) {
+        userTodoDAO.update(userTodo);
+    }
+
+    @Override
+    public void deleteUserTodo(int userTodoId) {
+        userTodoDAO.delete(userTodoId);
+    }
+
     @Override
     public List<UserTodo> listUserTodo(int userId) {
-
-        return null;
+        return userTodoDAO.listByUser(userId);
     }
 
     @Override

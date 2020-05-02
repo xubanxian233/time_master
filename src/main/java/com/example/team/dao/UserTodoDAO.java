@@ -9,5 +9,6 @@ public interface UserTodoDAO {
     void delete(int userTodoId);
     void update(UserTodo userTodo);
     UserTodo getById(int userTodoId);
-    List<UserTodo> listByUser(int userId,int userTodoSetId);
+    List<UserTodo> listByUser(int userId);
+    List<UserTodo> listByUser(int userId, int userTodoSetId);
 }

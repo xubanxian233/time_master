@@ -43,10 +43,14 @@ public class UserTodoDAOImpl implements UserTodoDAO {
     }
 
     @Override
+    public List<UserTodo> listByUser(int userId) {
+        String hql = "from UserTodo where userId=:userId";
+        return (List<UserTodo>) getSession().createQuery(hql).setParameter("userId", userId).list();
+    }
+
+    @Override
     public List<UserTodo> listByUser(int userId, int userTodoSetId) {
         String hql = "from UserTodo where userId=:userId and userTodoSetId=:userTodoSetId";
-        return (List<UserTodo>) getSession().createQuery(hql).setParameter("userId", userId).setParameter(
-                "userTodoSetId",
-                userTodoSetId).list();
+        return (List<UserTodo>) getSession().createQuery(hql).setParameter("userId", userId).setParameter("userTodoSetId", userTodoSetId).list();
     }
 }
