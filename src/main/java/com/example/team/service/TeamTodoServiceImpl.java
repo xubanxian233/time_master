@@ -27,7 +27,7 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     @Override
     public boolean updateTeamTodo(TeamTodo teamTodo) {
         TeamTodo teamTodo1 = teamTodoDAO.getByName(teamTodo.getName());
-        if (teamTodo1==null){
+        if (teamTodo1==null||teamTodo1.getTeamTodoId()==teamTodo.getTeamTodoId()){
             teamTodoDAO.update(teamTodo);
             return true;
         }

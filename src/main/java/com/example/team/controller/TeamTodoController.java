@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/teamTodo")
-public class TeamTodoController {
+public class TeamTodoController extends BaseController{
 
     @Autowired
     private TeamTodoService teamTodoService;

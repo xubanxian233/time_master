@@ -6,10 +6,7 @@ import com.example.team.service.UserTodoService;
 import com.example.team.service.UserTodoSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -18,23 +15,21 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/userTodo")
-public class UserTodoController {
+public class UserTodoController extends BaseController{
 
     @Autowired
     private UserTodoService userTodoService;
 
     @RequestMapping(value = "/listById",method = RequestMethod.POST)
     @ResponseBody
-    public List<UserTodo> listById(@RequestBody Map<String,Object> param) {
-        Integer userId=Integer.valueOf(param.get("userId").toString());
+    public List<UserTodo> listById(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId) {
         Integer userTodoSetId=Integer.valueOf(param.get("userTodoSetId").toString());
         return userTodoService.listUserTodo(userTodoSetId,userId);
     }
 
-    @RequestMapping(value = "/listByUserId",method = RequestMethod.POST)
+    @RequestMapping(value = "/listByUserId",method = RequestMethod.GET)
     @ResponseBody
-    public List<UserTodo> listByUserId(@RequestBody Map<String,Object> param) {
-        Integer userId=Integer.valueOf(param.get("userId").toString());
+    public List<UserTodo> listByUserId(@RequestHeader("id") int userId) {
         return userTodoService.listUserTodo(userId);
     }
 
@@ -47,11 +42,11 @@ public class UserTodoController {
 
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     @ResponseBody
-    public String create(@RequestBody Map<String,Object> param) {
+    public String create(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId) {
         UserTodo userTodo = new UserTodo();
         userTodo.setName(param.get("name").toString());
         userTodo.setUserTodoSetId(Integer.valueOf(param.get("userTodoSetId").toString()));
-        userTodo.setUserId(Integer.valueOf(param.get("userId").toString()));
+        userTodo.setUserId(userId);
         userTodo.setTime(Long.valueOf(param.get("time").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date create = new Date();
@@ -74,12 +69,12 @@ public class UserTodoController {
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
-    public String update(@RequestBody Map<String,Object> param) {
+    public String update(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId) {
         UserTodo userTodo = new UserTodo();
         userTodo.setUserTodoId(Integer.valueOf(param.get("userTodoId").toString()));
         userTodo.setName(param.get("name").toString());
         userTodo.setUserTodoSetId(Integer.valueOf(param.get("userTodoSetId").toString()));
-        userTodo.setUserId(Integer.valueOf(param.get("userId").toString()));
+        userTodo.setUserId(userId);
         userTodo.setTime(Long.valueOf(param.get("time").toString()));
         userTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
         userTodo.setTodoStatusId(Integer.valueOf(param.get("todoStatusId").toString()));
