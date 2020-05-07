@@ -1,6 +1,5 @@
 package com.example.team.dao;
 
-import com.example.team.pojo.Team;
 import com.example.team.pojo.TeamTodo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,7 +21,7 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
         return entityManagerFactory.unwrap(SessionFactory.class).openSession();
     }
 
-    /*@Override
+    @Override
     public void add(TeamTodo teamTodo) {
         getSession().save(teamTodo);
     }
@@ -47,5 +46,5 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     public List<TeamTodo> list(int teamTodoId) {
         String hql = "from TeamTodo where teamTodoId=:teamTodoId";
         return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamTodoId",teamTodoId).list();
-    }*/
+    }
 }
