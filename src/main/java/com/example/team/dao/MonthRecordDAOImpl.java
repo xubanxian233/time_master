@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
+import java.sql.Date;
 
 @Repository("monthRecordDAO")
 public class MonthRecordDAOImpl implements MonthRecordDAO {
@@ -40,8 +41,9 @@ public class MonthRecordDAOImpl implements MonthRecordDAO {
     }
 
     @Override
-    public MonthRecord getByUserId(int userId) {
-        String hql="from MonthRecord where userId=:userId";
-        return (MonthRecord) getSession().createQuery(hql).setParameter("userId",userId).uniqueResult();
+    public MonthRecord getByUserId(int userId, Date monthDate) {
+        String hql="from MonthRecord where userId=:userId and monthDate=:monthDate";
+        return (MonthRecord) getSession().createQuery(hql).setParameter("userId",userId)
+                .setParameter("monthDate",monthDate).uniqueResult();
     }
 }

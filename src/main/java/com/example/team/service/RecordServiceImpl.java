@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.List;
 
 @Service("recordService")
@@ -23,24 +24,36 @@ public class RecordServiceImpl implements RecordService {
     private TypeDAO typeDAO;
     @Override
     public void addRecordByUser(int userId) {
-        AccRecord accRecord=new AccRecord();
-        DailyRecord dailyRecord=new DailyRecord();
-        MonthRecord monthRecord=new MonthRecord();
-        List<Type> listType= typeDAO.listType();
-        accRecord.setUserId(userId);
-        accRecordDAO.add(accRecord);
-        monthRecord.setUserId(userId);
-        monthRecordDAO.add(monthRecord);
-        for (Type t:listType){
-            TypeRecord typeRecord= new TypeRecord();
-            typeRecord.setUserId(userId);
-            typeRecord.setTypeRecordId(t.getTypeId());
-            typeRecordDAO.add(typeRecord);
-        }
+
     }
 
     @Override
     public void updateRecordByUser(int userId) {
 
+    }
+
+    @Override
+    public AccRecord getAccRecord(int userId) {
+        return accRecordDAO.getByUserId(userId);
+    }
+
+    @Override
+    public DailyRecord getDailyRecord(int userId, Date dailyDate) {
+        return dailyRecordDAO.getByUserId(userId,dailyDate);
+    }
+
+    @Override
+    public MonthRecord getMonthRecord(int userId, Date monthDate) {
+        return monthRecordDAO.getByUserId(userId,monthDate);
+    }
+
+    @Override
+    public List<TypeRecord> getTypeRecord(int userId) {
+        return typeRecordDAO.getByUserId(userId);
+    }
+
+    @Override
+    public List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate,Date bigMonthDate) {
+        return dailyRecordDAO.listDailyRecordByMonth(userId,litleMonthDate,bigMonthDate);
     }
 }

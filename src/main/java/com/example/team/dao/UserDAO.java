@@ -4,7 +4,7 @@ package com.example.team.dao;
 import com.example.team.pojo.User;
 
 public interface UserDAO {
-    void add(User user);
+    int add(User user);
     void delete(int userId);
     void update(User user);
     User getById(int userId);

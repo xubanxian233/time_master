@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
+import java.sql.Date;
+import java.util.List;
 
 @Repository("dailyRecordDAO")
 public class DailyRecordDAOImpl implements DailyRecordDAO {
@@ -40,8 +42,17 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
     }
 
     @Override
-    public DailyRecord getByUserId(int userId) {
-        String hql="from DailyRecord where userId=:userId";
-        return (DailyRecord) getSession().createQuery(hql).setParameter("userId",userId).uniqueResult();
+    public DailyRecord getByUserId(int userId, Date dailyDate) {
+        String hql="from DailyRecord where userId=:userId and dailyDate=:dailyDate";
+        return (DailyRecord) getSession().createQuery(hql).setParameter("userId", userId)
+                .setParameter("dailyDate", dailyDate).uniqueResult();
+    }
+
+    @Override
+    public List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate,Date bigMonthDate) {
+        String hql="from DailyRecord where userId=:userId and dailyDate>=:litleMonthDate and dailyDate<=:bigMonthDate";
+        return getSession().createQuery(hql).setParameter("userId", userId)
+                .setParameter("litleMonthDate", litleMonthDate)
+                .setParameter("bigMonthDate",bigMonthDate).list();
     }
 }
