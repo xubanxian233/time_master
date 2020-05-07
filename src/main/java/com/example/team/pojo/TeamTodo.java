@@ -1,8 +1,11 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.sql.Date;
 
+@JsonIgnoreProperties(value = { "hibernateLazyInitializer"})
 @Entity
 @Table(name = "teamtodo")
 public class TeamTodo {
@@ -17,7 +20,7 @@ public class TeamTodo {
 
     @Column(name = "status")
     private int todoStatusId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status", insertable = false, updatable = false)
     private TodoStatus todoStatus;
     @Column(name = "todoset")
@@ -25,7 +28,7 @@ public class TeamTodo {
 
     @Column(name = "type")
     private int typeId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type", insertable = false, updatable = false)
     private Type type;
 

@@ -3,6 +3,7 @@ package com.example.team.dao;
 import com.example.team.pojo.TeamTodo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +29,22 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
 
     @Override
     public void delete(int teamTodoId) {
-        getSession().delete(teamTodoId);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        String hql = "from TeamTodo where teamTodoId=:teamTodoId";
+        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("teamTodoId",teamTodoId).uniqueResult();
+        session.delete(teamTodo);
+        tx.commit();
+        session.close();
     }
 
     @Override
     public void update(TeamTodo teamTodo) {
-        getSession().update(teamTodo);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        session.update(teamTodo);
+        tx.commit();
+        session.close();
     }
 
     @Override
@@ -43,8 +54,20 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     }
 
     @Override
-    public List<TeamTodo> list(int teamTodoId) {
-        String hql = "from TeamTodo where teamTodoId=:teamTodoId";
-        return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamTodoId",teamTodoId).list();
+    public TeamTodo getByName(String name) {
+        String hql = "from TeamTodo where name=:name";
+        return (TeamTodo) getSession().createQuery(hql).setParameter("name",name).uniqueResult();
+    }
+
+    @Override
+    public List<TeamTodo> list(int teamId) {
+        String hql = "from TeamTodo where teamId=:teamId";
+        return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamId",teamId).list();
+    }
+
+    @Override
+    public List<TeamTodo> list(int teamId, int teamTodoSetId) {
+        String hql = "from TeamTodo where teamId=:teamId and teamTodoSetId=:teamTodoSetId";
+        return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamId",teamId).setParameter("teamTodoSetId",teamTodoSetId).list();
     }
 }
