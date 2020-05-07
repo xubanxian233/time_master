@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 
 @Repository("typeRecordDAO")
 @Transactional(rollbackFor = Exception.class)
@@ -42,8 +43,8 @@ public class TypeRecordDAOImpl implements TypeRecordDAO {
     }
 
     @Override
-    public TypeRecord getByUserId(int userId) {
+    public List<TypeRecord> getByUserId(int userId) {
         String hql="from TypeRecord where userId=:userId";
-        return (TypeRecord) getSession().createQuery(hql).setParameter("userId",userId).uniqueResult();
+        return  getSession().createQuery(hql).setParameter("userId",userId).list();
     }
 }

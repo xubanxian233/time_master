@@ -3,7 +3,7 @@ package com.example.team.dao;
 import com.example.team.pojo.Pet;
 
 public interface PetDAO {
-    void add(Pet pet);
+    int add(Pet pet);
 
     void delete(int petId);
 

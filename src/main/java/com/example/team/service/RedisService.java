@@ -22,6 +22,8 @@ public interface RedisService<T> {
      * @param expire
      * @return
      */
-    void setobj(String key, T value);
+    void setExpire(String key,long expire);
+
+    void delete(String key);
 
 }

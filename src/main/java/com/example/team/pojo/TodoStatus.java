@@ -13,4 +13,20 @@ public class TodoStatus {
     @Column(name="todo_status_id")
     private int todoStatusId;
     private String status;
+
+    public int getTodoStatusId() {
+        return todoStatusId;
+    }
+
+    public void setTodoStatusId(int todoStatusId) {
+        this.todoStatusId = todoStatusId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
