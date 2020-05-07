@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -13,16 +15,19 @@ public class User {
     private String tel;
     private String name;
     private String email;
+    @JsonIgnore
     private String password;
     private String sex;
 
 
     @Column(name="create_date")
     private Date create;
+    @JsonIgnore
     @Column(name = "pet")
     private int petId;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet", insertable = false, updatable = false)
+    @JsonIgnore
     private Pet Pet;
 
     public void setSex(String sex) {

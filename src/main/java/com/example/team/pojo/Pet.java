@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -16,24 +18,28 @@ public class Pet {
 
     private Date birth;
 
+    @JsonIgnore
     @Column(name = "status")
     private  int petStatusId;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="status", insertable = false, updatable = false)
     private  PetStatus petStatus;
 
     private int level;
+    @JsonIgnore
     @Column(name = "user")
     private int userId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user", insertable = false, updatable = false)
+    @JsonIgnore
     private User user;
+    @JsonIgnore
     @Column(name = "skin")
-    private int sid;
-    @ManyToOne(fetch = FetchType.LAZY)
+    private int skinId;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "skin", insertable = false, updatable = false)
     private Skin skin;
 
@@ -109,12 +115,12 @@ public class Pet {
         this.user = user;
     }
 
-    public int getSid() {
-        return sid;
+    public int getSkinId() {
+        return skinId;
     }
 
-    public void setSid(int sid) {
-        this.sid = sid;
+    public void setSkinId(int skinId) {
+        this.skinId = skinId;
     }
 
     public Skin getSkin() {

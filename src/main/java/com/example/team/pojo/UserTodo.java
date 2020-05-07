@@ -1,5 +1,6 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ public class UserTodo {
     @Column(name = "create_date")
     private Date create;
 
+    @JsonIgnore
     @Column(name = "status")
     private int todoStatusId;
     @ManyToOne(fetch = FetchType.EAGER)
@@ -25,7 +27,7 @@ public class UserTodo {
 
     @Column(name = "todoset")
     private int userTodoSetId;
-
+    @JsonIgnore
     @Column(name = "type")
     private int typeId;
     @ManyToOne(fetch = FetchType.EAGER)

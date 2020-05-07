@@ -38,8 +38,7 @@ class TeamApplicationTests {
      */
     @Test
     public void getString() {
-        String result = redisService.get("redis_string_test");
-        System.out.println(result);
+
     }
 
     /**
@@ -47,8 +46,7 @@ class TeamApplicationTests {
      */
     @Test
     public void setObject() {
-        Person person = new Person("person", "male");
-        redisService.set("redis_obj_test", json.toJSONString(person));
+
     }
 
     /**
@@ -56,9 +54,7 @@ class TeamApplicationTests {
      */
     @Test
     public void getObject() {
-        String result = redisService.get("redis_obj_test");
-        Person person = json.parseObject(result, Person.class);
-        System.out.println(json.toJSONString(person));
+
     }
 
     /**
@@ -66,14 +62,7 @@ class TeamApplicationTests {
      */
     @Test
     public void setList() {
-        Person person1 = new Person("person1", "male");
-        Person person2 = new Person("person2", "female");
-        Person person3 = new Person("person3", "male");
-        List<Person> list = new ArrayList<>();
-        list.add(person1);
-        list.add(person2);
-        list.add(person3);
-        redisService.set("redis_list_test", json.toJSONString(list));
+
     }
 
     /**
@@ -81,9 +70,7 @@ class TeamApplicationTests {
      */
     @Test
     public void getList() {
-        String result = redisService.get("redis_list_test");
-        List<String> list = json.parseArray(result, String.class);
-        System.out.println(list);
+
     }
 
 

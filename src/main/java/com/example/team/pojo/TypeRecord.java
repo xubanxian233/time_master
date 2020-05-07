@@ -16,7 +16,7 @@ public class TypeRecord {
     private long acctime;
     @Column(name = "type")
     private int typeId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type", insertable = false, updatable = false)
     private Type type;
     @Column(name = "user")

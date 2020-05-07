@@ -9,4 +9,12 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="team_id")
     private int teamId;
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
+    }
 }

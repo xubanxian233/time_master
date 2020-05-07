@@ -25,10 +25,14 @@ public class RedisServiceImpl<T> implements RedisService<T> {
             return (String)o;
     }
 
-    public  void setobj(String key, T value) {
-        if(redisUtil.set(key,value))
-            System.out.println("success");
-        else
-        System.out.println("fail");
+    @Override
+    public void setExpire(String key, long expire) {
+        redisUtil.expire(key,expire);
     }
+
+    @Override
+    public void delete(String key) {
+        redisUtil.del(key);
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -14,15 +16,15 @@ public class TeamTodo {
     private long time;
     @Column(name="create_date")
     private Date create;
-
+    @JsonIgnore
     @Column(name = "status")
     private int todoStatusId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status", insertable = false, updatable = false)
     private TodoStatus todoStatus;
     @Column(name = "todoset")
     private int teamTodoSetId;
-
+    @JsonIgnore
     @Column(name = "type")
     private int typeId;
     @ManyToOne(fetch = FetchType.LAZY)
