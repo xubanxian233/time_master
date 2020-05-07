@@ -2,13 +2,13 @@ package com.example.team.service;
 
 import com.example.team.dao.UserTodoDAO;
 import com.example.team.dao.UserTodoSetDAO;
+import com.example.team.pojo.User;
 import com.example.team.pojo.UserTodo;
 import com.example.team.pojo.UserTodoSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 @Service("userTodoSetService")
@@ -21,13 +21,23 @@ public class UserTodoSetServiceImpl implements UserTodoSetService {
     private UserTodoDAO userTodoDAO;
 
     @Override
-    public void createUserTodoSet(UserTodoSet userTodoSet) {
-        userTodoSetDAO.add(userTodoSet);
+    public boolean createUserTodoSet(UserTodoSet userTodoSet) {
+        UserTodoSet userTodoSet1 = userTodoSetDAO.getByName(userTodoSet.getName());
+        if (userTodoSet1==null){
+            userTodoSetDAO.add(userTodoSet);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void updateUserTodoSet(UserTodoSet userTodoSet) {
-        userTodoSetDAO.update(userTodoSet);
+    public boolean updateUserTodoSet(UserTodoSet userTodoSet) {
+        UserTodoSet userTodoSet1 = userTodoSetDAO.getByName(userTodoSet.getName());
+        if (userTodoSet1==null){
+            userTodoSetDAO.update(userTodoSet);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -47,7 +57,7 @@ public class UserTodoSetServiceImpl implements UserTodoSetService {
     }
 
     @Override
-    public List<UserTodoSet> listByUserId(int userTodoSetId) {
-        return userTodoSetDAO.listById(userTodoSetId);
+    public List<UserTodoSet> listByUserId(int userId) {
+        return userTodoSetDAO.listById(userId);
     }
 }

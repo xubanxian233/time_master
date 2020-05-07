@@ -3,10 +3,12 @@ package com.example.team.dao;
 import com.example.team.pojo.UserTodo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
@@ -28,12 +30,22 @@ public class UserTodoDAOImpl implements UserTodoDAO {
 
     @Override
     public void delete(int userTodoId) {
-        getSession().delete(userTodoId);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        String hql = "from UserTodo where userTodoId=:userTodoId";
+        UserTodo userTodo =(UserTodo) session.createQuery(hql).setParameter("userTodoId", userTodoId).uniqueResult();
+        session.delete(userTodo);
+        tx.commit();
+        session.close();
     }
 
     @Override
     public void update(UserTodo userTodo) {
-        getSession().update(userTodo);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        session.update(userTodo);
+        tx.commit();
+        session.close();
     }
 
     @Override

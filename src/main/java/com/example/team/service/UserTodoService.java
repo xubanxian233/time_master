@@ -8,6 +8,7 @@ public interface UserTodoService {
     boolean createUserTodo(UserTodo userTodo);
     boolean updateUserTodo(UserTodo userTodo);
     void deleteUserTodo(int userTodoId);
+    UserTodo getById(int userTodoId);
     List<UserTodo> listUserTodo(int userId);
     List<UserTodo> listUserTodo(int userTodoSetId, int userId);
 }
