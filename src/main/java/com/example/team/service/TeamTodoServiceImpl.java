@@ -53,4 +53,9 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     public List<TeamTodo> listTeamTodo(int teamTodoSetId, int teamId) {
         return teamTodoDAO.list(teamId,teamTodoSetId);
     }
+
+    @Override
+    public void updateSchedule() {
+        teamTodoDAO.updateSchedule();
+    }
 }

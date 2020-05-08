@@ -53,4 +53,9 @@ public class UserTodoServiceImpl implements UserTodoService {
     public List<UserTodo> listUserTodo(int userTodoSetId, int userId) {
         return userTodoDAO.listByUser(userId,userTodoSetId);
     }
+
+    @Override
+    public void updateSchedule() {
+        userTodoDAO.updateSchedule();
+    }
 }
