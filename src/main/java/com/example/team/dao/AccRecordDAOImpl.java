@@ -1,8 +1,10 @@
 package com.example.team.dao;
 
 import com.example.team.pojo.AccRecord;
+import com.example.team.pojo.UserTodoSet;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -17,18 +19,26 @@ public class AccRecordDAOImpl implements AccRecordDAO {
         return entityManagerFactory.unwrap(SessionFactory.class).openSession();
     }
     @Override
-    public void add(AccRecord accRecord) {
-        getSession().save(accRecord);
-    }
+    public void add(AccRecord accRecord) {  getSession().save(accRecord); }
 
     @Override
     public void delete(int accRecordId) {
-        getSession().delete(accRecordId);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        String hql = "from accrecord where acc_record_id=:accRecordId";
+        AccRecord  accRecord = (AccRecord) session.createQuery(hql).setParameter("acc_record_id",accRecordId).uniqueResult();
+        session.delete(accRecord);
+        tx.commit();
+        session.close();
     }
 
     @Override
     public void update(AccRecord accRecord) {
-        getSession().update(accRecord);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        session.update(accRecord);
+        tx.commit();
+        session.close();
     }
 
     @Override
