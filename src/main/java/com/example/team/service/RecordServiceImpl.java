@@ -72,8 +72,13 @@ public class RecordServiceImpl implements RecordService {
         accRecordDAO.update(accRecord);
 
         getCurrentTime();
-        updatemonthRecord(uId,tTime,tsId);
-        updatedailyRecord(uId,tTime,tsId);
+
+        updatemonthRecord(uId,tTime,tsId);//?
+
+        if(dailyRecordDAO.getByUserId(uId,time)!=null)
+            updatedailyRecord(uId,tTime,tsId);
+        else
+            adddailyRecord(uId,tTime,tsId);
 
         List<Type> listType= typeDAO.listType();
         for (Type t:listType){
