@@ -11,4 +11,5 @@ public interface UserTodoService {
     UserTodo getById(int userTodoId);
     List<UserTodo> listUserTodo(int userId);
     List<UserTodo> listUserTodo(int userTodoSetId, int userId);
+    void updateSchedule();
 }

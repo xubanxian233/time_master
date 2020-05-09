@@ -12,4 +12,5 @@ public interface TeamTodoDAO {
     TeamTodo getByName(String name);
     List<TeamTodo> list(int teamId);
     List<TeamTodo> list(int teamId,int teamTodoSetId);
+    void updateSchedule();
 }

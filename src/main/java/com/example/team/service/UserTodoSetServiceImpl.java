@@ -33,7 +33,7 @@ public class UserTodoSetServiceImpl implements UserTodoSetService {
     @Override
     public boolean updateUserTodoSet(UserTodoSet userTodoSet) {
         UserTodoSet userTodoSet1 = userTodoSetDAO.getByName(userTodoSet.getName());
-        if (userTodoSet1==null){
+        if (userTodoSet1==null||userTodoSet1.getUserTodoSetId()==userTodoSet.getUserTodoSetId()){
             userTodoSetDAO.update(userTodoSet);
             return true;
         }
