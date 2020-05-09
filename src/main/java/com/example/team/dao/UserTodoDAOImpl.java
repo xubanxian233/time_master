@@ -3,6 +3,7 @@ package com.example.team.dao;
 import com.example.team.pojo.UserTodo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,19 @@ public class UserTodoDAOImpl implements UserTodoDAO {
     @Override
     public void update(UserTodo userTodo) {
         getSession().update(userTodo);
+    }
+
+    @Override
+    public void updateSchedule() {
+        Session session=getSession();
+        Transaction tx=session.beginTransaction();
+        String hqlUpdate = "update UserTodo as obj set todoStatusId = :status where todoStatusId != :oldStatus";
+        int updatedEntities = session.createQuery( hqlUpdate )
+                .setParameter( "status", 1 )
+                .setParameter( "oldStatus", 1 )
+                .executeUpdate();
+        tx.commit();
+        session.close();
     }
 
     @Override

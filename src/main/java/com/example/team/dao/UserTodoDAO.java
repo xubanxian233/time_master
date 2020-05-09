@@ -8,6 +8,7 @@ public interface UserTodoDAO {
     void add(UserTodo userTodo);
     void delete(int userTodoId);
     void update(UserTodo userTodo);
+    void updateSchedule();
     UserTodo getById(int userTodoId);
     UserTodo getByName(String name);
     List<UserTodo> listByUser(int userId);

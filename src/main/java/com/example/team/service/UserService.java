@@ -11,6 +11,6 @@ public interface UserService {
     public String getToken();
     public int getId();
     boolean updateUserInfo(int userId,String userName,String emain,String tel);
-    public boolean updateUserIPassword(int userId, String password);
+    public boolean updateUserPassword(int userId, String password);
     public User getById(int userId);
 }

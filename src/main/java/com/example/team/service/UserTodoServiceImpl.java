@@ -35,6 +35,11 @@ public class UserTodoServiceImpl implements UserTodoService {
     }
 
     @Override
+    public void upateSchedule() {
+        userTodoDAO.updateSchedule();
+    }
+
+    @Override
     public void deleteUserTodo(int userTodoId) {
         userTodoDAO.delete(userTodoId);
     }
