@@ -2,6 +2,7 @@ package com.example.team.controller;
 
 import com.example.team.dao.DailyRecordDAO;
 import com.example.team.dao.DailyRecordDAOImpl;
+import com.example.team.dao.UserTodoDAO;
 import com.example.team.pojo.AccRecord;
 import com.example.team.pojo.DailyRecord;
 import com.example.team.pojo.MonthRecord;
@@ -109,10 +110,12 @@ public class RecordController extends BaseController {
         String userId = request.getHeader("id"); //获取用户id
         String todoId = request.getHeader("userTodoId");//获取待办id
         String todoStatusId = request.getHeader("statusId");//获取待办状态
-        String todoName = request.getHeader("name");//获取待办名称
-        String todoTime = request.getHeader("time");//获取待办时间
-        String typeId = request.getHeader("typeId");//获取待办类型
         String todosetId = request.getHeader("todosetId");//获取所属待办集，0为无属
+        String todoTime = request.getHeader("time");//获取待办时间
+
+        String todoName = UserTodoDAO.getById(tId).getName();//获取待办名称
+        String typeId =UserTodoDAO.getById(tId).getTypeId();//获取待办类型
+
         int tId=Integer.parseInt(todoId);
         int tTime = Integer.parseInt(todoTime);
         int tsId = Integer.parseInt(todoStatusId);
@@ -137,6 +140,7 @@ public class RecordController extends BaseController {
         model.addObject("userId", userId);
         model.addObject("userTodoId", todoId);
         model.addObject("todoStatusId", todoStatusId);
+
         model.addObject("name", todoName);
         model.addObject("time", todoTime);
         model.addObject("typeId", typeId);
