@@ -9,6 +9,8 @@ public interface UserTodoService {
     boolean updateUserTodo(UserTodo userTodo);
     void upateSchedule();
     void deleteUserTodo(int userTodoId);
+    UserTodo getById(int userTodoId);
     List<UserTodo> listUserTodo(int userId);
     List<UserTodo> listUserTodo(int userTodoSetId, int userId);
+    void updateSchedule();
 }

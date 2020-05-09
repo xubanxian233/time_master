@@ -9,5 +9,8 @@ public interface TeamTodoDAO {
     void delete(int teamTodoId);
     void update(TeamTodo teamTodo);
     TeamTodo getById(int teamTodoId);
+    TeamTodo getByName(String name);
     List<TeamTodo> list(int teamId);
+    List<TeamTodo> list(int teamId,int teamTodoSetId);
+    void updateSchedule();
 }

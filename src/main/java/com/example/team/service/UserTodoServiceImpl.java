@@ -27,7 +27,7 @@ public class UserTodoServiceImpl implements UserTodoService {
     @Override
     public boolean updateUserTodo(UserTodo userTodo) {
         UserTodo userTodo1 = userTodoDAO.getByName(userTodo.getName());
-        if (userTodo1==null){
+        if (userTodo1==null||userTodo1.getUserTodoId()==userTodo.getUserTodoId()){
             userTodoDAO.update(userTodo);
             return true;
         }
@@ -45,6 +45,11 @@ public class UserTodoServiceImpl implements UserTodoService {
     }
 
     @Override
+    public UserTodo getById(int userTodoId) {
+        return userTodoDAO.getById(userTodoId);
+    }
+
+    @Override
     public List<UserTodo> listUserTodo(int userId) {
         return userTodoDAO.listByUser(userId);
     }
@@ -52,5 +57,10 @@ public class UserTodoServiceImpl implements UserTodoService {
     @Override
     public List<UserTodo> listUserTodo(int userTodoSetId, int userId) {
         return userTodoDAO.listByUser(userId,userTodoSetId);
+    }
+
+    @Override
+    public void updateSchedule() {
+        userTodoDAO.updateSchedule();
     }
 }
