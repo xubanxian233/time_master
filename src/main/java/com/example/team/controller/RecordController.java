@@ -1,5 +1,7 @@
 package com.example.team.controller;
 
+import com.example.team.dao.DailyRecordDAO;
+import com.example.team.dao.DailyRecordDAOImpl;
 import com.example.team.pojo.AccRecord;
 import com.example.team.pojo.DailyRecord;
 import com.example.team.pojo.MonthRecord;
@@ -10,10 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -91,5 +98,49 @@ public class RecordController extends BaseController {
         Date litleMonthDate = Date.valueOf(date_1);
         Date bigMonthDate = Date.valueOf(date_2);
         return recordService.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
+    }
+    //记录待办
+    protected HttpServletRequest request;
+    protected HttpServletResponse response;
+    protected HttpSession session;
+    public ModelAndView setRecord(HttpServletRequest req, HttpServletResponse res) {
+        this.request = req;
+        this.response = res;
+        String userId = request.getHeader("id"); //获取用户id
+        String todoId = request.getHeader("userTodoId");//获取待办id
+        String todoStatusId = request.getHeader("statusId");//获取待办状态
+        String todoName = request.getHeader("name");//获取待办名称
+        String todoTime = request.getHeader("time");//获取待办时间
+        String typeId = request.getHeader("typeId");//获取待办类型
+        String todosetId = request.getHeader("todosetId");//获取所属待办集，0为无属
+        int tId=Integer.parseInt(todoId);
+        int tTime = Integer.parseInt(todoTime);
+        int tsId = Integer.parseInt(todoStatusId);
+        int uId = Integer.parseInt(userId);
+
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Date time=null;
+        try {
+            time= sdf.parse(sdf.format(new Date()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        DailyRecordDAO dailyRecordDAO = new DailyRecordDAOImpl();
+        if (dailyRecordDAO.getByUserId(uId,time) != null) {
+            recordService.updateRecordByUser(uId, tTime, tsId);
+
+        } else {
+            recordService.addRecordByUser(uId, tTime, tsId);
+        }
+        ModelAndView model = new ModelAndView("/update");
+        model.addObject("userId", userId);
+        model.addObject("userTodoId", todoId);
+        model.addObject("todoStatusId", todoStatusId);
+        model.addObject("name", todoName);
+        model.addObject("time", todoTime);
+        model.addObject("typeId", typeId);
+        model.addObject("todosetId", todosetId);
+        return model;
     }
 }
