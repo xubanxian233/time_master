@@ -73,7 +73,18 @@ public class RecordServiceImpl implements RecordService {
 
         getCurrentTime();
 
-        updatemonthRecord(uId,tTime,tsId);//?
+        String t=time.toString();
+        String month=t.substring(0,t.indexOf("-"));
+
+        MonthRecord monthRecord=new MonthRecord();
+        t=monthRecord.getMonthDate().toString();
+        String m2=t.substring(0,t.indexOf("-"));
+        if(month.equals(m2)){
+            updatemonthRecord(uId,tTime,tsId);
+        }
+        else{
+            addmonthRecord(uId,tTime,tsId);
+        }
 
         if(dailyRecordDAO.getByUserId(uId,time)!=null)
             updatedailyRecord(uId,tTime,tsId);
@@ -93,6 +104,7 @@ public class RecordServiceImpl implements RecordService {
         MonthRecord monthRecord=new MonthRecord();
         monthRecord.setUserId(uId);
         monthRecord.setAcctime(tTime);
+        monthRecord.setMonthDate(time);
         if(tsId==2){
             monthRecord.setSuccessCount(1);
         }else if (tsId==3){
