@@ -73,12 +73,12 @@ public class RecordServiceImpl implements RecordService {
 
         getCurrentTime();
 
-        String t=time.toString();
-        String month=t.substring(0,t.indexOf("-"));
+        String times=time.toString();
+        String month=times.substring(0,times.indexOf("-"));
 
         MonthRecord monthRecord=new MonthRecord();
-        t=monthRecord.getMonthDate().toString();
-        String m2=t.substring(0,t.indexOf("-"));
+        times=monthRecord.getMonthDate().toString();
+        String m2=t.substring(0,times.indexOf("-"));
         if(month.equals(m2)){
             updatemonthRecord(uId,tTime,tsId);
         }
@@ -170,5 +170,14 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate,Date bigMonthDate) {
         return dailyRecordDAO.listDailyRecordByMonth(userId,litleMonthDate,bigMonthDate);
+    }
+
+    @Override
+    public boolean isExistDailyRecord(int uid,Date time){
+        if(dailyRecordDAO.getByUserId(uid, time)!=null){
+            return true;
+        }else{
+            return false;
+        }
     }
 }

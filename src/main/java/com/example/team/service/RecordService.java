@@ -14,6 +14,7 @@ public interface RecordService {
     AccRecord getAccRecord(int userId);
     DailyRecord getDailyRecord(int userId, Date dailyDate);
     MonthRecord getMonthRecord(int userId,Date monthDate);
+    boolean isExistDailyRecord(int uid,Date time);
     List<TypeRecord> getTypeRecord(int userId);
     List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate,Date bigMonthDate);
 }

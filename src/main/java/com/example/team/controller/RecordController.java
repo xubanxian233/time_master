@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/record")
@@ -100,21 +101,15 @@ public class RecordController extends BaseController {
         Date bigMonthDate = Date.valueOf(date_2);
         return recordService.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
     }
-    //记录待办
-    protected HttpServletRequest request;
-    protected HttpServletResponse response;
-    protected HttpSession session;
-    public ModelAndView setRecord(HttpServletRequest req, HttpServletResponse res) {
-        this.request = req;
-        this.response = res;
-        String userId = request.getHeader("id"); //获取用户id
-        String todoId = request.getHeader("userTodoId");//获取待办id
-        String todoStatusId = request.getHeader("statusId");//获取待办状态
-        String todosetId = request.getHeader("todosetId");//获取所属待办集，0为无属
-        String todoTime = request.getHeader("time");//获取待办时间
 
-        String todoName = UserTodoDAO.getById(tId).getName();//获取待办名称
-        String typeId =UserTodoDAO.getById(tId).getTypeId();//获取待办类型
+    @RequestMapping("/setRecord")
+    @ResponseBody
+    public String setRecord(@RequestParam Map<String, Object> param) {
+        String userId = request.getHeader("id"); //获取用户id
+        String todoId = param.get("userTodoId").toString();//获取待办id
+        String todoStatusId = param.get("statusId").toString();//获取待办状态
+        String todosetId = param.get("todosetId").toString();//获取所属待办集，0为无属
+        String todoTime = param.get("time").toString();//获取待办时间
 
         int tId=Integer.parseInt(todoId);
         int tTime = Integer.parseInt(todoTime);
@@ -129,22 +124,11 @@ public class RecordController extends BaseController {
             e.printStackTrace();
         }
 
-        DailyRecordDAO dailyRecordDAO = new DailyRecordDAOImpl();
-        if (dailyRecordDAO.getByUserId(uId,time) != null) {
+        if (recordService.isExistDailyRecord(uId,time)) {
             recordService.updateRecordByUser(uId, tTime, tsId);
-
         } else {
             recordService.addRecordByUser(uId, tTime, tsId);
         }
-        ModelAndView model = new ModelAndView("/update");
-        model.addObject("userId", userId);
-        model.addObject("userTodoId", todoId);
-        model.addObject("todoStatusId", todoStatusId);
-
-        model.addObject("name", todoName);
-        model.addObject("time", todoTime);
-        model.addObject("typeId", typeId);
-        model.addObject("todosetId", todosetId);
-        return model;
+        return "forword:/userTodo/update?userTodoId="+todoId+"&userTodoSetId="+todosetId+"&userId="+userId+"&todoStatusId="+todoStatusId;
     }
 }
