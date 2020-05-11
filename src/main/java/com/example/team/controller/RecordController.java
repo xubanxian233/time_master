@@ -129,6 +129,6 @@ public class RecordController extends BaseController {
         } else {
             recordService.addRecordByUser(uId, tTime, tsId);
         }
-        return "forword:/userTodo/update?userTodoId="+todoId+"&userTodoSetId="+todosetId+"&userId="+userId+"&todoStatusId="+todoStatusId;
+        return "forword:/userTodo/update?userTodoId="+todoId+"&userTodoSetId="+todosetId+"&userId="+userId+"&todoStatusId="+tsId+"&name="+""+"&create="+""+"&typeId="+"";
     }
 }

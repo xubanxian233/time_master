@@ -78,7 +78,7 @@ public class RecordServiceImpl implements RecordService {
 
         MonthRecord monthRecord=new MonthRecord();
         times=monthRecord.getMonthDate().toString();
-        String m2=t.substring(0,times.indexOf("-"));
+        String m2=times.substring(0,times.indexOf("-"));
         if(month.equals(m2)){
             updatemonthRecord(uId,tTime,tsId);
         }
