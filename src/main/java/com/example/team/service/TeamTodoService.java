@@ -11,4 +11,5 @@ public interface TeamTodoService {
     TeamTodo getById(int teamTodoId);
     List<TeamTodo> listTeamTodo(int teamId);
     List<TeamTodo> listTeamTodo(int teamTodoSetId, int teamId);
+    void updateSchedule();
 }
