@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.sql.Date;
 
 @Service("recordService")
 @Transactional(rollbackFor = Exception.class)
@@ -52,12 +52,13 @@ public class RecordServiceImpl implements RecordService {
     }
 
     public void getCurrentTime(){
+
+        Calendar cal=Calendar.getInstance();
+        int y=cal.get(Calendar.YEAR);
+        int m=cal.get(Calendar.MONTH);
+        int d=cal.get(Calendar.DATE);
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            time= sdf.parse(sdf.format(new Date()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        time= Date.valueOf(sdf.format(new Date(y,m,d)));
     }
 
     @Override

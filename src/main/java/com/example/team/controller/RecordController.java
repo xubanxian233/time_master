@@ -18,12 +18,12 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.sql.Date;
 
 @Controller
 @RequestMapping("/record")
@@ -116,10 +116,14 @@ public class RecordController extends BaseController {
         int tsId = Integer.parseInt(todoStatusId);
         int uId = Integer.parseInt(userId);
 
+        Calendar cal=Calendar.getInstance();
+        int y=cal.get(Calendar.YEAR);
+        int m=cal.get(Calendar.MONTH);
+        int d=cal.get(Calendar.DATE);
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         Date time=null;
         try {
-            time= sdf.parse(sdf.format(new Date()));
+            time= (Date) sdf.parse(sdf.format(new Date(y,m,d)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
