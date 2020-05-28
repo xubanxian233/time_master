@@ -1,7 +1,10 @@
 package com.example.team.pojo;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.lang.annotation.Target;
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "team")
@@ -10,20 +13,18 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="team_id")
     private int teamId;
-
     private String name;
-
-    private int leader;
-
+    @Column(name="create_date")
     private Date createDate;
-
-    public int getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(int teamId) {
-        this.teamId = teamId;
-    }
+    @ManyToMany()
+    @JoinTable(name="organize"
+            ,joinColumns = {@JoinColumn(name="team",referencedColumnName = "team_id")}
+            ,inverseJoinColumns = {@JoinColumn(name = "user",referencedColumnName = "user_id")}
+    )
+    private Set<User> users=new HashSet<User>();
+    @ManyToOne()
+    @JoinColumn(name="leader")
+    private User leader;
 
     public String getName(){
         return name;
@@ -33,19 +34,19 @@ public class Team {
         this.name=name;
     }
 
-    public int getLeader(){
-        return leader;
-    }
-
-    public void setLeader(int leader){
-        this.leader=leader;
-    }
-
     public Date getCreateDate(){
         return createDate;
     }
 
     public void setCreateDate(Date createDate){
         this.createDate=createDate;
+    }
+
+    public int getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
     }
 }
