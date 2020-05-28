@@ -4,13 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
+    @Column(name = "user_id")
     private int userId;
     private String tel;
     private String name;
@@ -20,19 +23,22 @@ public class User {
     private String sex;
 
 
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date create;
     @JsonIgnore
     @Column(name = "pet")
     private int petId;
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet", insertable = false, updatable = false)
-    @JsonIgnore
     private Pet Pet;
+    @ManyToMany(mappedBy="users")
+    private Set<Team> teams=new HashSet<Team>();
 
     public void setSex(String sex) {
         this.sex = sex;
     }
+
     public int getUserId() {
         return userId;
     }

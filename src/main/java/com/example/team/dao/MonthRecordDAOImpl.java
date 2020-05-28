@@ -1,9 +1,11 @@
 package com.example.team.dao;
 
 import com.example.team.pojo.AccRecord;
+import com.example.team.pojo.DailyRecord;
 import com.example.team.pojo.MonthRecord;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -26,12 +28,22 @@ public class MonthRecordDAOImpl implements MonthRecordDAO {
 
     @Override
     public void delete(int monthRecordId) {
-        getSession().delete(monthRecordId);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        String hql = "from monthrecord where month_record_id=:monthRecordId";
+        MonthRecord monthRecord = (MonthRecord) session.createQuery(hql).setParameter("month_record_id",monthRecordId).uniqueResult();
+        session.delete(monthRecord);
+        tx.commit();
+        session.close();
     }
 
     @Override
     public void update(MonthRecord monthRecord) {
-        getSession().update(monthRecord);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        session.update(monthRecord);
+        tx.commit();
+        session.close();
     }
 
     @Override
@@ -42,8 +54,7 @@ public class MonthRecordDAOImpl implements MonthRecordDAO {
 
     @Override
     public MonthRecord getByUserId(int userId, Date monthDate) {
-        String hql="from MonthRecord where userId=:userId and monthDate=:monthDate";
-        return (MonthRecord) getSession().createQuery(hql).setParameter("userId",userId)
-                .setParameter("monthDate",monthDate).uniqueResult();
+        String hql="from MonthRecord where userId=:userId and month_date=:monthDate";
+        return (MonthRecord) getSession().createQuery(hql).setParameter("userId",userId).uniqueResult();
     }
 }

@@ -44,6 +44,8 @@ public class UserDAOImpl implements UserDAO {
         session.close();
     }
 
+
+
     @Override
     public User getById(int userId) {
         String hql = "from User where userId=:userId";

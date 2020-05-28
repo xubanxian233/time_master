@@ -2,17 +2,19 @@ package com.example.team.service;
 
 import com.example.team.dao.PetDAO;
 import com.example.team.dao.UserDAO;
+import com.example.team.mail.MailSenderInfo;
+import com.example.team.mail.SimpleMailSender;
 import com.example.team.pojo.Pet;
 import com.example.team.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserService {
-    private String token;
     private int id;
     @Autowired
     private UserDAO userDAO;
@@ -30,10 +32,7 @@ public class UserServiceImpl implements UserService {
     public boolean verify(String userName, String password) {
         User user = userDAO.getByEmail(userName);
         if (user != null && password.equals(user.getPassword())) {
-            token = UUID.randomUUID().toString().replaceAll("-", "");
             id = user.getUserId();
-            redisService.set(String.valueOf(id), token);
-            redisService.setExpire(String.valueOf(id), 100000);
             return true;
         }
         return false;
@@ -97,16 +96,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * getToken 获取用户登录成功的Token
-     *
-     * @param
-     * @return Token
-     */
-    public String getToken() {
-        return token;
-    }
-
-    /**
      * getId 获得登录成功后的UserId
      *
      * @param
@@ -126,9 +115,12 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public boolean updateUserInfo(int userId, String userName, String email, String tel) {
         User user = userDAO.getById(userId);
-        if ((userDAO.getByName(userName) != null && userName.equals(user.getName()))
-                || (userDAO.getByEmail(email) != null && email.equals(user.getEmail()))
-                || (userDAO.getByName(tel) != null && tel.equals(user.getTel()))) {
+        User user1 = userDAO.getByName(userName);
+        User user2 = userDAO.getByEmail(email);
+        User user3 = userDAO.getByTel(tel);
+        if ((user1 != null && !userName.equals(user.getName()))
+                || (user2 != null && !email.equals(user.getEmail()))
+                || (user3 != null && !tel.equals(user.getTel()))) {
             return false;
         }
         if (userName != "") {
@@ -152,7 +144,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateUserIPassword(int userId, String password) {
+    public boolean updateUserPassword(int userId, String password) {
         User user = userDAO.getById(userId);
         if (password.length() >= 6 && password.length() <= 20) {
             user.setPassword(password);
@@ -172,4 +164,5 @@ public class UserServiceImpl implements UserService {
     public User getById(int userId) {
         return userDAO.getById(userId);
     }
+
 }

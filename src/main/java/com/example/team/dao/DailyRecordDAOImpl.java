@@ -4,12 +4,12 @@ import com.example.team.pojo.AccRecord;
 import com.example.team.pojo.DailyRecord;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManagerFactory;
 import java.sql.Date;
-import java.util.List;
 
 @Repository("dailyRecordDAO")
 public class DailyRecordDAOImpl implements DailyRecordDAO {
@@ -27,12 +27,22 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
 
     @Override
     public void delete(int dailyRecordId) {
-        getSession().delete(dailyRecordId);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        String hql = "from dailyrecord where daily_record_id=:dailyRecordId";
+        DailyRecord  dailyRecord = (DailyRecord) session.createQuery(hql).setParameter("daily_record_id",dailyRecordId).uniqueResult();
+        session.delete(dailyRecord);
+        tx.commit();
+        session.close();
     }
 
     @Override
     public void update(DailyRecord dailyRecord) {
-        getSession().update(dailyRecord);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        session.update(dailyRecord);
+        tx.commit();
+        session.close();
     }
 
     @Override
@@ -43,16 +53,7 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
 
     @Override
     public DailyRecord getByUserId(int userId, Date dailyDate) {
-        String hql="from DailyRecord where userId=:userId and dailyDate=:dailyDate";
-        return (DailyRecord) getSession().createQuery(hql).setParameter("userId", userId)
-                .setParameter("dailyDate", dailyDate).uniqueResult();
-    }
-
-    @Override
-    public List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate,Date bigMonthDate) {
-        String hql="from DailyRecord where userId=:userId and dailyDate>=:litleMonthDate and dailyDate<=:bigMonthDate";
-        return getSession().createQuery(hql).setParameter("userId", userId)
-                .setParameter("litleMonthDate", litleMonthDate)
-                .setParameter("bigMonthDate",bigMonthDate).list();
+        String hql="from DailyRecord where userId=:userId and daily_date=:dailyDate";
+        return (DailyRecord) getSession().createQuery(hql).setParameter("userId",userId).uniqueResult();
     }
 }
