@@ -1,4 +1,8 @@
 spring:
+  mvc:
+      view:
+        prefix: /WEB-INF/jsp/
+        suffix: .jsp
   datasource:
     url: jdbc:mysql://localhost:3306/timemaster?characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root

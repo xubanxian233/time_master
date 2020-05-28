@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -26,10 +28,12 @@ public class User {
     @JsonIgnore
     @Column(name = "pet")
     private int petId;
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet", insertable = false, updatable = false)
-    @JsonIgnore
     private Pet Pet;
+    @ManyToMany(mappedBy="users")
+    private Set<Team> teams=new HashSet<Team>();
 
     public void setSex(String sex) {
         this.sex = sex;

@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.persistence.EntityManagerFactory;
 
@@ -28,5 +29,13 @@ public class IndexControler {
         SpringApplication.run(IndexControler.class, args);
     }
 
-
+    @Bean
+    public InternalResourceViewResolver setupViewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        /** 设置视图路径的前缀 */
+        resolver.setPrefix("/WEB-INF/jsp/");
+        /** 设置视图路径的后缀 */
+        resolver.setSuffix(".jsp");
+        return resolver;
+    }
 }
