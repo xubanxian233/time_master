@@ -41,7 +41,8 @@ public class UserTodoSetController extends BaseController{
         Date create = new Date();
         userTodoSet.setCreate(java.sql.Date.valueOf(df.format(create)));
         if (userTodoSetService.createUserTodoSet(userTodoSet)){
-            return "create-success";
+            UserTodoSet userTodoSet1=userTodoSetService.getByName(userTodoSet.getName());
+            return "create-success,userTodoSetId:"+userTodoSet1.getUserTodoSetId();
         }
         return "create-fail";
     }

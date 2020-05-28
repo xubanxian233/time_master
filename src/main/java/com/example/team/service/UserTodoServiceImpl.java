@@ -45,6 +45,11 @@ public class UserTodoServiceImpl implements UserTodoService {
     }
 
     @Override
+    public UserTodo getByName(String name) {
+        return userTodoDAO.getByName(name);
+    }
+
+    @Override
     public List<UserTodo> listUserTodo(int userId) {
         return userTodoDAO.listByUser(userId);
     }

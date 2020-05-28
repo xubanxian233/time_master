@@ -54,7 +54,8 @@ public class UserTodoController extends BaseController{
         userTodo.setTodoStatusId(1);
         userTodo.setTypeId(2);
         if (userTodoService.createUserTodo(userTodo)){
-            return "create-success";
+            UserTodo userTodo1 = userTodoService.getByName(userTodo.getName());
+            return "create-success,userTodoId:"+userTodo1.getUserTodoId();
         }
         return "create-fail";
     }
@@ -83,5 +84,16 @@ public class UserTodoController extends BaseController{
             return "update-success";
         }
         return "update-fail";
+    }
+
+    @RequestMapping(value = "/updateState",method = RequestMethod.POST)
+    @ResponseBody
+    public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
+        UserTodo userTodo = userTodoService.getById(Integer.valueOf(param.get("userTodoId").toString()));
+        userTodo.setTodoStatusId(Integer.valueOf(param.get("todoStatusId").toString()));
+        if (userTodoService.updateUserTodo(userTodo)){
+            return "updateState-success";
+        }
+        return "updateState-fail";
     }
 }

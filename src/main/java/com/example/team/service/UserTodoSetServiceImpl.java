@@ -57,6 +57,11 @@ public class UserTodoSetServiceImpl implements UserTodoSetService {
     }
 
     @Override
+    public UserTodoSet getByName(String name) {
+        return userTodoSetDAO.getByName(name);
+    }
+
+    @Override
     public List<UserTodoSet> listByUserId(int userId) {
         return userTodoSetDAO.listById(userId);
     }
