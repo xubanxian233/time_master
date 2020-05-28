@@ -18,6 +18,6 @@ public interface TeamDAO {
     boolean addMember(int teamId, int userId);
 
     boolean inviteMember(int teamId, int userId);
-
+    
     boolean deleteMember(int teamId, int userId);
 }

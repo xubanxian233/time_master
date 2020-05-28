@@ -26,20 +26,20 @@ public class Team {
     @JoinColumn(name="leader")
     private User leader;
 
-    public String getName() {
+    public String getName(){
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String name){
+        this.name=name;
     }
 
-    public Date getCreateDate() {
+    public Date getCreateDate(){
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateDate(Date createDate){
+        this.createDate=createDate;
     }
 
     public int getTeamId() {
