@@ -8,7 +8,6 @@ public interface UserService {
     public void quit(int userId);
     public boolean sign(User user, Pet pet);
     public int getUserId(String tel,String email,String name);
-    public String getToken();
     public int getId();
     boolean updateUserInfo(int userId,String userName,String emain,String tel);
     public boolean updateUserPassword(int userId, String password);

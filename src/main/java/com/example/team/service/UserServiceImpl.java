@@ -2,17 +2,19 @@ package com.example.team.service;
 
 import com.example.team.dao.PetDAO;
 import com.example.team.dao.UserDAO;
+import com.example.team.mail.MailSenderInfo;
+import com.example.team.mail.SimpleMailSender;
 import com.example.team.pojo.Pet;
 import com.example.team.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserService {
-    private String token;
     private int id;
     @Autowired
     private UserDAO userDAO;
@@ -30,10 +32,7 @@ public class UserServiceImpl implements UserService {
     public boolean verify(String userName, String password) {
         User user = userDAO.getByEmail(userName);
         if (user != null && password.equals(user.getPassword())) {
-            token = UUID.randomUUID().toString().replaceAll("-", "");
             id = user.getUserId();
-            redisService.set(String.valueOf(id), token);
-            redisService.setExpire(String.valueOf(id), 100000);
             return true;
         }
         return false;
@@ -94,16 +93,6 @@ public class UserServiceImpl implements UserService {
             }
         }
         return 0;
-    }
-
-    /**
-     * getToken 获取用户登录成功的Token
-     *
-     * @param
-     * @return Token
-     */
-    public String getToken() {
-        return token;
     }
 
     /**
@@ -175,4 +164,5 @@ public class UserServiceImpl implements UserService {
     public User getById(int userId) {
         return userDAO.getById(userId);
     }
+
 }

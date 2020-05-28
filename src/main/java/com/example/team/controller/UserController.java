@@ -3,17 +3,18 @@ package com.example.team.controller;
 import com.example.team.pojo.Pet;
 import com.example.team.pojo.User;
 import com.example.team.pojo.UserTodo;
-import com.example.team.service.PetService;
-import com.example.team.service.RecordService;
-import com.example.team.service.UserService;
-import com.example.team.service.UserTodoService;
+import com.example.team.service.*;
+import com.example.team.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
@@ -21,11 +22,9 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
     @Autowired
-    private RecordService recordService;
-    @Autowired
     private UserTodoService userTodoService;
     @Autowired
-    private PetService petService;
+    private RedisService redisService;
 
     /**
      * login 登录
@@ -39,14 +38,19 @@ public class UserController extends BaseController {
         String userName = param.get("userName").toString();
         String password = param.get("password").toString();
         if (userService.verify(userName, password)) {
+            String token = UUID.randomUUID().toString().replaceAll("-", "");
+            int id = userService.getId();
+            redisService.set(String.valueOf(id), token);
+            redisService.setExpire(String.valueOf(id), 100000);
             response.setHeader("Access-Control-Expose-Headers", "token");
             response.setHeader("Access-Control-Expose-Headers", "id");
-            response.setHeader("token", userService.getToken());
-            response.setHeader("id", String.valueOf(userService.getId()));
-            return userTodoService.listUserTodo(0, userService.getId());
+            response.setHeader("token", token);
+            response.setHeader("id", String.valueOf(id));
+            return userTodoService.listUserTodo(0, id);
         }
         return null;
     }
+
     /**
      * quit 退出登录
      *
@@ -112,16 +116,20 @@ public class UserController extends BaseController {
     /**
      * updatePassword 修改密码
      *
-     * @param param 修改的密码参数 map
+     * @param param 修改的密码参数
      * @return String 修改结果
      */
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
     @ResponseBody
     public String updatePassword(@RequestBody Map<String, Object> param) {
         int userId = Integer.parseInt(request.getHeader("id"));
-        String password = param.get("password").toString();
-        if (userService.updateUserPassword(userId, password)) {
-            return "update-success";
+        String newPassword = param.get("newPassword").toString();
+        String oldPassword = param.get("oldPassword").toString();
+        User user = userService.getById(userId);
+        if (userService.verify(user.getEmail(), oldPassword)) {
+            if (userService.updateUserPassword(userId, newPassword)) {
+                return "update-success";
+            }
         }
         return "update-fail";
     }
@@ -137,6 +145,66 @@ public class UserController extends BaseController {
     public User getUserInfo() {
         int userId = Integer.parseInt(request.getHeader("id"));
         return userService.getById(userId);
+    }
+
+    /**
+     * findPassword 找回密码
+     *
+     * @param  email 邮箱账号
+     * @return  找回邮件发送结果
+     */
+    @RequestMapping("/findPassword")
+    @ResponseBody
+    public String findPassword(@RequestParam String email) {
+        int userId = userService.getUserId("", email, "");
+        if (userId != 0) {
+            if (MailUtil.sendEmail(email, userId)) {
+                return "send-success";
+            }
+        }
+        return "send-fail";
+    }
+
+    /**
+     * gotoReset 跳转重置密码页面
+     *
+     * @param key model 判定参数和传递参数
+     * @return String 跳转页面
+     */
+    @RequestMapping(value = "/gotoReset")
+    public String gotoReset(@RequestParam String key, Model model) {
+        String[] keys = key.split("@");
+        int userId = Integer.parseInt(keys[0]);
+        Long time = Long.parseLong(keys[1]);
+        java.util.Date date = new java.util.Date();
+        User user=userService.getById(userId);
+        model.addAttribute("userId",userId);
+        model.addAttribute("email",user.getEmail());
+        if (date.getTime() - time <= 600000) {
+            model.addAttribute("flag","true");
+            return "resetPassword";
+        }
+        model.addAttribute("flag","false");
+        return "resetPassword";
+    }
+
+    /**
+     * resetPassword 重置密码
+     *
+     * @param userId password1 修改的密码参数
+     * @return String 修改结果
+     */
+    @RequestMapping(value = "/resetPassword")
+    public String resetPassword(@RequestParam String userId, @RequestParam String password1,Model model) {
+        int userId1 = Integer.parseInt(userId);
+        User user = userService.getById(userId1);
+        model.addAttribute("email",user.getEmail());
+        if (userService.updateUserPassword(userId1, password1)) {
+            model.addAttribute("flag","true");
+            return "result";
+        }
+        model.addAttribute("flag","false");
+        return "result";
     }
 
     @RequestMapping("/test")
