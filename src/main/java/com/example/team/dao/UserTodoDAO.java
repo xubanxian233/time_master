@@ -13,5 +13,4 @@ public interface UserTodoDAO {
     UserTodo getByName(String name);
     List<UserTodo> listByUser(int userId);
     List<UserTodo> listByUser(int userId, int userTodoSetId);
-    public void updateSchedule();
 }
