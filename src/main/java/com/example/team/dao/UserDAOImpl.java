@@ -39,7 +39,7 @@ public class UserDAOImpl implements UserDAO {
     public void update(User user) {
         Session session=getSession();
         Transaction tx=session.beginTransaction();
-        session.update(user);
+        session.merge(user);
         tx.commit();
         session.close();
     }

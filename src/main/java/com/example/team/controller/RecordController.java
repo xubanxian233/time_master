@@ -100,7 +100,7 @@ public class RecordController extends BaseController {
         return recordService.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
     }
     //记录待办
-    protected HttpServletRequest request;
+   /* protected HttpServletRequest request;
     protected HttpServletResponse response;
     protected HttpSession session;
     public ModelAndView setRecord(HttpServletRequest req, HttpServletResponse res) {
@@ -142,5 +142,5 @@ public class RecordController extends BaseController {
         model.addObject("typeId", typeId);
         model.addObject("todosetId", todosetId);
         return model;
-    }
+    }*/
 }

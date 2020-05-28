@@ -53,11 +53,7 @@ public class RecordServiceImpl implements RecordService {
 
     public void getCurrentTime(){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            time= sdf.parse(sdf.format(new Date()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        time= new Date(new java.util.Date().getTime());
     }
 
     @Override
@@ -92,10 +88,10 @@ public class RecordServiceImpl implements RecordService {
             adddailyRecord(uId,tTime,tsId);
 
         List<Type> listType= typeDAO.listType();
-        for (Type t:listType){
+        for (Type t1:listType){
             TypeRecord typeRecord= new TypeRecord();
             typeRecord.setUserId(uId);
-            typeRecord.setTypeRecordId(t.getTypeId());
+            typeRecord.setTypeRecordId(t1.getTypeId());
             typeRecordDAO.add(typeRecord);
         }
     }
