@@ -41,7 +41,7 @@ public class MonthRecordDAOImpl implements MonthRecordDAO {
     public void update(MonthRecord monthRecord) {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
-        session.update(monthRecord);
+        session.merge(monthRecord);
         tx.commit();
         session.close();
     }

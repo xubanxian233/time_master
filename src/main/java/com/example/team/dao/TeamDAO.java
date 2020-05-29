@@ -14,4 +14,5 @@ public interface TeamDAO {
 
     boolean delete(int teamId);
 
+    Team getByTeamId(int teamId);
 }

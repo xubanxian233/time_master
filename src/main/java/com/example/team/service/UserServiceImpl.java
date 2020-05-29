@@ -1,16 +1,19 @@
 package com.example.team.service;
 
 import com.example.team.dao.PetDAO;
+import com.example.team.dao.TeamDAO;
 import com.example.team.dao.UserDAO;
 import com.example.team.mail.MailSenderInfo;
 import com.example.team.mail.SimpleMailSender;
 import com.example.team.pojo.Pet;
+import com.example.team.pojo.Team;
 import com.example.team.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Service(value = "userService")
@@ -22,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private RedisService redisService;
     @Autowired
     private PetDAO petDAO;
+    @Autowired
+    private TeamDAO teamDAO;
 
     /**
      * verify 验证登录并设置登录
@@ -163,6 +168,39 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(int userId) {
         return userDAO.getById(userId);
+    }
+
+    @Override
+    public Set<User> getMembers(int teamId) {
+        return teamDAO.getByTeamId(teamId).getUsers();
+    }
+
+    @Override
+    public Set<Team> getTeams(int userId) {
+        return userDAO.getById(userId).getTeams();
+    }
+
+    @Override
+    public void joinTeam(int teamId, int userId) {
+        Team team=teamDAO.getByTeamId(teamId);
+        User user=userDAO.getById(userId);
+        team.getUsers().add(user);
+        teamDAO.update(team);
+    }
+
+    @Override
+    public void quitTeam(int teamId, int userId) {
+        Team team=teamDAO.getByTeamId(teamId);
+        for (User user:team.getUsers()) {
+            if(user.getUserId()==userId){
+                team.getUsers().remove(user);
+                break;
+            }
+        }
+        teamDAO.update(team);
+        if(team.getUsers().size()==0){
+            teamDAO.delete(teamId);
+        }
     }
 
 }

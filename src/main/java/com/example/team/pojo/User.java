@@ -25,14 +25,14 @@ public class User {
 
     @Column(name = "create_date")
     private Date create;
-    @JsonIgnore
     @Column(name = "pet")
     private int petId;
     @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet", insertable = false, updatable = false)
     private Pet Pet;
-    @ManyToMany(mappedBy="users")
+    @JsonIgnore
+    @ManyToMany(mappedBy="users",fetch = FetchType.LAZY)
     private Set<Team> teams=new HashSet<Team>();
 
     public void setSex(String sex) {
@@ -105,5 +105,13 @@ public class User {
 
     public void setPet(com.example.team.pojo.Pet pet) {
         Pet = pet;
+    }
+
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
     }
 }

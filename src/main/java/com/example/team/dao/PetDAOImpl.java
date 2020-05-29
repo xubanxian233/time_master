@@ -38,7 +38,7 @@ public class PetDAOImpl implements PetDAO {
     public void update(Pet pet) {
         Session session=getSession();
         Transaction tx=session.beginTransaction();
-        session.update(pet);
+        session.merge(pet);
         tx.commit();
         session.close();
     }
