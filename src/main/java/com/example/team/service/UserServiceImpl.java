@@ -126,9 +126,12 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = Exception.class)
     public boolean updateUserInfo(int userId, String userName, String email, String tel) {
         User user = userDAO.getById(userId);
-        if ((userDAO.getByName(userName) != null && userName.equals(user.getName()))
-                || (userDAO.getByEmail(email) != null && email.equals(user.getEmail()))
-                || (userDAO.getByName(tel) != null && tel.equals(user.getTel()))) {
+        User user1 = userDAO.getByName(userName);
+        User user2 = userDAO.getByEmail(email);
+        User user3 = userDAO.getByTel(tel);
+        if ((user1 != null && !userName.equals(user.getName()))
+                || (user2 != null && !email.equals(user.getEmail()))
+                || (user3 != null && !tel.equals(user.getTel()))) {
             return false;
         }
         if (userName != "") {
@@ -152,7 +155,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateUserIPassword(int userId, String password) {
+    public boolean updateUserPassword(int userId, String password) {
         User user = userDAO.getById(userId);
         if (password.length() >= 6 && password.length() <= 20) {
             user.setPassword(password);

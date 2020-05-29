@@ -38,7 +38,7 @@ public class PetController extends BaseController {
      * @param param 名字或者皮肤
      * @return Pet 宠物
      **/
-    @RequestMapping("/updatePet")
+    @RequestMapping(value = "/updatePet",method = RequestMethod.POST)
     @ResponseBody
     public Pet updatePet(@RequestBody Map<String, Object> param) {
         Object name = param.get("name");

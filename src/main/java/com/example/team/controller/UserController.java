@@ -120,7 +120,7 @@ public class UserController extends BaseController {
     public String updatePassword(@RequestBody Map<String, Object> param) {
         int userId = Integer.parseInt(request.getHeader("id"));
         String password = param.get("password").toString();
-        if (userService.updateUserIPassword(userId, password)) {
+        if (userService.updateUserPassword(userId, password)) {
             return "update-success";
         }
         return "update-fail";
@@ -132,7 +132,7 @@ public class UserController extends BaseController {
      * @param
      * @return User 对应用户
      */
-    @RequestMapping(value = "/getUserInfo", method = RequestMethod.POST)
+    @RequestMapping("/getUserInfo")
     @ResponseBody
     public User getUserInfo() {
         int userId = Integer.parseInt(request.getHeader("id"));

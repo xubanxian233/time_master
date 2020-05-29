@@ -70,4 +70,17 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
         String hql = "from TeamTodo where teamId=:teamId and teamTodoSetId=:teamTodoSetId";
         return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamId",teamId).setParameter("teamTodoSetId",teamTodoSetId).list();
     }
+
+    @Override
+    public void updateSchedule() {
+        Session session=getSession();
+        Transaction tx=session.beginTransaction();
+        String hqlUpdate = "update TeamTodo as t set todoStatusId = :status where todoStatusId != :oldStatus";
+        int updatedEntities = session.createQuery( hqlUpdate )
+                .setParameter( "status", 1 )
+                .setParameter( "oldStatus", 1 )
+                .executeUpdate();
+        tx.commit();
+        session.close();
+    }
 }

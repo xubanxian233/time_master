@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/teamTodo")
-public class TeamTodoController {
+public class TeamTodoController extends BaseController{
 
     @Autowired
     private TeamTodoService teamTodoService;
@@ -83,8 +83,8 @@ public class TeamTodoController {
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     @ResponseBody
     private String deleteTeamTodo(@RequestBody Map<String,Object> param){
-        Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
-        teamTodoService.deleteTeamTodo(teamTodoSetId);
+        Integer teamTodoId = Integer.valueOf(param.get("teamTodoId").toString());
+        teamTodoService.deleteTeamTodo(teamTodoId);
         return "delete-success";
     }
 

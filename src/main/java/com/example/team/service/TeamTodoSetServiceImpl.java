@@ -32,7 +32,7 @@ public class TeamTodoSetServiceImpl implements TeamTodoSetService {
     @Override
     public boolean updateTeamTodoSet(TeamTodoSet teamTodoSet) {
         TeamTodoSet teamTodoSet1 = teamTodoSetDAO.getByName(teamTodoSet.getName());
-        if (teamTodoSet1==null){
+        if (teamTodoSet1==null||teamTodoSet1.getTeamTodoSetId()==teamTodoSet.getTeamTodoSetId()){
             teamTodoSetDAO.update(teamTodoSet);
             return true;
         }
