@@ -48,6 +48,19 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     }
 
     @Override
+    public void updateState(int teamTodoId, int todoStatusId) {
+        Session session=getSession();
+        Transaction tx=session.beginTransaction();
+        String hqlUpdate = "update TeamTodo as t set todoStatusId = :status where teamTodoId = :teamTodoId";
+        int updatedEntities = session.createQuery( hqlUpdate )
+                .setParameter( "status", todoStatusId )
+                .setParameter( "teamTodoId", teamTodoId )
+                .executeUpdate();
+        tx.commit();
+        session.close();
+    }
+
+    @Override
     public TeamTodo getById(int teamTodoId) {
         String hql = "from TeamTodo where teamTodoId=:teamTodoId";
         return (TeamTodo) getSession().createQuery(hql).setParameter("teamTodoId",teamTodoId).uniqueResult();

@@ -22,6 +22,12 @@ public class TeamTodoSetController extends BaseController{
     @Autowired
     private TeamTodoSetService teamTodoSetService;
 
+    /**
+     * list 列出所有的团队待办集
+     *
+     * @param param 团队ID
+     * @return List<TeamTodoSet> 团队待办集
+     **/
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     @ResponseBody
     private List<TeamTodoSet> list(@RequestBody Map<String,Object> param){
@@ -29,6 +35,12 @@ public class TeamTodoSetController extends BaseController{
         return teamTodoSetService.listByTeamId(teamId);
     }
 
+    /**
+     * get 获取某一团队待办集
+     *
+     * @param param 团队待办集ID
+     * @return TeamTodoSet 摸鱼具体团队待办集
+     **/
     @RequestMapping(value = "/get",method = RequestMethod.POST)
     @ResponseBody
     private TeamTodoSet getTeamTodoSet(@RequestBody Map<String,Object> param){
@@ -36,6 +48,12 @@ public class TeamTodoSetController extends BaseController{
         return teamTodoSetService.getById(teamTodoSetId);
     }
 
+    /**
+     * createTeamTodoSet 创建团队待办集
+     *
+     * @param param 团队待办集名，团队ID
+     * @return String 成功或失败
+     **/
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     @ResponseBody
     private String createTeamTodoSet(@RequestBody Map<String,Object> param){
@@ -51,6 +69,12 @@ public class TeamTodoSetController extends BaseController{
         return "create-fail";
     }
 
+    /**
+     * update 更新团队待办集
+     *
+     * @param param 团队待办集名，团队ID，团队待办集ID，创建时间
+     * @return String 成功或失败
+     **/
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
     private String updateTeamTodoSet(@RequestBody Map<String,Object> param){
@@ -60,11 +84,18 @@ public class TeamTodoSetController extends BaseController{
         teamTodoSet.setTeamTodoSetId(Integer.valueOf(param.get("teamTodoSetId").toString()));
         teamTodoSet.setCreate(Date.valueOf(param.get("create").toString()));
         if (teamTodoSetService.updateTeamTodoSet(teamTodoSet)){
-            return "update-success";
+            TeamTodoSet teamTodoSet1 = teamTodoSetService.getByName(teamTodoSet.getName());
+            return "update-success,teamTodoSetId:"+teamTodoSet1.getTeamTodoSetId();
         }
         return "update-fail";
     }
 
+    /**
+     * delete 删除团队待办集
+     *
+     * @param param 团队待办集ID
+     * @return String 成功
+     **/
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     @ResponseBody
     private String deleteTeamTodoSet(@RequestBody Map<String,Object> param){

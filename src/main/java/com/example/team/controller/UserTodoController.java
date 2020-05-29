@@ -20,6 +20,12 @@ public class UserTodoController extends BaseController{
     @Autowired
     private UserTodoService userTodoService;
 
+    /**
+     * listById 列出某一用户待办集中所有用户待办
+     *
+     * @param param 用户待办集ID
+     * @return List<UserTodo> 用户待办
+     **/
     @RequestMapping(value = "/listById",method = RequestMethod.POST)
     @ResponseBody
     public List<UserTodo> listById(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId) {
@@ -27,12 +33,24 @@ public class UserTodoController extends BaseController{
         return userTodoService.listUserTodo(userTodoSetId,userId);
     }
 
+    /**
+     * listByUserId 列出所有用户待办
+     *
+     * @param
+     * @return List<UserTodo> 用户待办
+     **/
     @RequestMapping(value = "/listByUserId",method = RequestMethod.GET)
     @ResponseBody
     public List<UserTodo> listByUserId(@RequestHeader("id") int userId) {
         return userTodoService.listUserTodo(userId);
     }
 
+    /**
+     * get 获取某一用户待办
+     *
+     * @param param 用户待办ID
+     * @return UserTodo 用户待办
+     **/
     @RequestMapping(value = "/get",method = RequestMethod.POST)
     @ResponseBody
     public UserTodo get(@RequestBody Map<String,Object> param){
@@ -40,6 +58,12 @@ public class UserTodoController extends BaseController{
         return userTodoService.getById(userTodoId);
     }
 
+    /**
+     * create 创建用户待办
+     *
+     * @param param 用户待办名，用户待办集ID，时长
+     * @return String 成功或失败
+     **/
     @RequestMapping(value = "/create",method = RequestMethod.POST)
     @ResponseBody
     public String create(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId) {
@@ -54,11 +78,18 @@ public class UserTodoController extends BaseController{
         userTodo.setTodoStatusId(1);
         userTodo.setTypeId(2);
         if (userTodoService.createUserTodo(userTodo)){
-            return "create-success";
+            UserTodo userTodo1 = userTodoService.getByName(userTodo.getName());
+            return "create-success,userTodoId:"+userTodo1.getUserTodoId();
         }
         return "create-fail";
     }
 
+    /**
+     * delete 删除用户待办
+     *
+     * @param param 用户待办ID
+     * @return String 成功或失败
+     **/
     @RequestMapping(value = "/delete",method = RequestMethod.POST)
     @ResponseBody
     public String delete(@RequestBody Map<String,Object> param){
@@ -67,6 +98,12 @@ public class UserTodoController extends BaseController{
         return "delete-success";
     }
 
+    /**
+     * update 更新用户待办
+     *
+     * @param param 用户待办名，用户待办集ID，用户待办ID，时长，创建时间，状态ID，类型ID
+     * @return String 成功或失败
+     **/
     @RequestMapping(value = "/update",method = RequestMethod.POST)
     @ResponseBody
     public String update(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId) {
@@ -83,5 +120,22 @@ public class UserTodoController extends BaseController{
             return "update-success";
         }
         return "update-fail";
+    }
+
+    /**
+     * updateState 更新用户待办状态
+     *
+     * @param param 状态ID，用户待办ID
+     * @return String 成功或失败
+     **/
+    @RequestMapping(value = "/updateState",method = RequestMethod.POST)
+    @ResponseBody
+    public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
+        int userTodoId = Integer.valueOf(param.get("userTodoId").toString());
+        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
+        if (userTodoService.updateState(userTodoId,todoStatusId)){
+            return "updateState-success";
+        }
+        return "updateState-fail";
     }
 }
