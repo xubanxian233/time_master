@@ -1,9 +1,11 @@
 package com.example.team.dao;
 
 import com.example.team.pojo.Team;
+import com.example.team.pojo.TeamTodo;
 import com.example.team.pojo.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,36 +23,28 @@ public class TeamDAOImpl implements TeamDAO {
 
     @Override
     public void add(Team team) {
-
+        getSession().save(team);
     }
 
     @Override
     public boolean update(Team team) {
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        session.update(team);
+        tx.commit();
+        session.close();
         return false;
     }
 
     @Override
     public boolean delete(int teamId) {
-        return false;
-    }
-
-    @Override
-    public Set<User> getMembers() {
-        return null;
-    }
-
-    @Override
-    public boolean addMember(int teamId, int userId) {
-        return false;
-    }
-
-    @Override
-    public boolean inviteMember(int teamId, int userId) {
-        return false;
-    }
-
-    @Override
-    public boolean deleteMember(int teamId, int userId) {
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        String hql = "from TeamTodo where teamId=:teamId";
+        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("teamId",teamId).uniqueResult();
+        session.delete(teamTodo);
+        tx.commit();
+        session.close();
         return false;
     }
 }
