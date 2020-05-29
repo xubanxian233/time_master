@@ -40,7 +40,7 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
     public void update(DailyRecord dailyRecord) {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
-        session.update(dailyRecord);
+        session.merge(dailyRecord);
         tx.commit();
         session.close();
     }

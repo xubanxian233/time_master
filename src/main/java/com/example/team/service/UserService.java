@@ -1,7 +1,10 @@
 package com.example.team.service;
 
 import com.example.team.pojo.Pet;
+import com.example.team.pojo.Team;
 import com.example.team.pojo.User;
+
+import java.util.Set;
 
 public interface UserService {
     public boolean verify(String userName,String password);
@@ -12,4 +15,11 @@ public interface UserService {
     boolean updateUserInfo(int userId,String userName,String emain,String tel);
     public boolean updateUserPassword(int userId, String password);
     public User getById(int userId);
+    Set<User> getMembers(int teamId);
+
+    Set<Team> getTeams(int userId);
+
+    void joinTeam(int teamId, int userId);
+
+    void quitTeam(int teamId, int userId);
 }

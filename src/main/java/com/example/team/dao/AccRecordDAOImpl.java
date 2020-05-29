@@ -36,7 +36,7 @@ public class AccRecordDAOImpl implements AccRecordDAO {
     public void update(AccRecord accRecord) {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
-        session.update(accRecord);
+        session.merge(accRecord);
         tx.commit();
         session.close();
     }

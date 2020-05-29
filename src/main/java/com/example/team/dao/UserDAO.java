@@ -1,7 +1,10 @@
 package com.example.team.dao;
 
 
+import com.example.team.pojo.Team;
 import com.example.team.pojo.User;
+
+import java.util.Set;
 
 public interface UserDAO {
     int add(User user);
