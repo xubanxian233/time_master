@@ -70,7 +70,7 @@ public class RecordController extends BaseController {
     MonthRecord getMonthRecord(@RequestParam String date) {
         int userId = Integer.parseInt(request.getHeader("id"));
         Date monthDate = Date.valueOf(date);
-        return recordService.getMonthRecord(userId, monthDate);
+        return recordService.getMonthRecord(userId,monthDate);
     }
 
     /**
@@ -112,27 +112,18 @@ public class RecordController extends BaseController {
         String todoTime = param.get("time").toString();//获取待办时间
 
         int tId=Integer.parseInt(todoId);
-        int tTime = Integer.parseInt(todoTime);
+        long tTime = Integer.parseInt(todoTime);
         int tsId = Integer.parseInt(todoStatusId);
         int uId = Integer.parseInt(userId);
 
-        Calendar cal=Calendar.getInstance();
-        int y=cal.get(Calendar.YEAR);
-        int m=cal.get(Calendar.MONTH);
-        int d=cal.get(Calendar.DATE);
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        Date time=null;
-        try {
-            time= (Date) sdf.parse(sdf.format(new Date(y,m,d)));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        java.util.Date date = new java.util.Date();
+        Date time=new Date(date.getTime());
 
         if (recordService.isExistDailyRecord(uId,time)) {
             recordService.updateRecordByUser(uId, tTime, tsId);
         } else {
             recordService.addRecordByUser(uId, tTime, tsId);
         }
-        return "forword:/userTodo/update?userTodoId="+todoId+"&userTodoSetId="+todosetId+"&userId="+userId+"&todoStatusId="+tsId+"&name="+""+"&create="+""+"&typeId="+"";
+        return "forword:/userTodo/updateState?userTodoId="+todoId+"&todoStatusId="+tsId+"";
     }
 }

@@ -31,8 +31,8 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
     public void delete(int dailyRecordId) {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
-        String hql = "from dailyrecord where daily_record_id=:dailyRecordId";
-        DailyRecord  dailyRecord = (DailyRecord) session.createQuery(hql).setParameter("daily_record_id",dailyRecordId).uniqueResult();
+        String hql = "from DailyRecord where dailyRecordId=:dailyRecordId";
+        DailyRecord  dailyRecord = (DailyRecord) session.createQuery(hql).setParameter("dailyRecordId",dailyRecordId).uniqueResult();
         session.delete(dailyRecord);
         tx.commit();
         session.close();
@@ -49,19 +49,19 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
 
     @Override
     public DailyRecord getById(int dailyRecordId) {
-        String hql="from dailyrecord where dailyRecordId=:dailyRecordId";
+        String hql="from DailyRecord where dailyRecordId=:dailyRecordId";
         return (DailyRecord) getSession().createQuery(hql).setParameter("dailyRecordId",dailyRecordId).uniqueResult();
     }
 
     @Override
     public DailyRecord getByUserId(int userId, Date dailyDate) {
-        String hql="from dailyrecord where userId=:userId and daily_date=:dailyDate";
-        return (DailyRecord) getSession().createQuery(hql).setParameter("userId",userId).uniqueResult();
+        String hql="from DailyRecord where userId=:userId and dailyDate=:dailyDate";
+        return (DailyRecord) getSession().createQuery(hql).setParameter("userId",userId).setParameter("dailyDate",dailyDate).uniqueResult();
     }
 
     @Override
     public List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate){
-        String hql = "from dailyrecord where userId=:userId and daily_date>=:littleDate and daily_date<=:bigDate ";
+        String hql = "from DailyRecord where userId=:userId and dailyDate>=:littleDate and dailyDate<=:bigDate ";
         return (List<DailyRecord>) getSession().createQuery(hql).setParameter("littleDate",litleMonthDate).setParameter("bigDate",bigMonthDate).list();
     }
 }

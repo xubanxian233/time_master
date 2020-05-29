@@ -25,8 +25,8 @@ public class AccRecordDAOImpl implements AccRecordDAO {
     public void delete(int accRecordId) {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
-        String hql = "from accrecord where acc_record_id=:accRecordId";
-        AccRecord  accRecord = (AccRecord) session.createQuery(hql).setParameter("acc_record_id",accRecordId).uniqueResult();
+        String hql = "from AccRecord where accRecordId=:accRecordId";
+        AccRecord  accRecord = (AccRecord) session.createQuery(hql).setParameter("accRecordId",accRecordId).uniqueResult();
         session.delete(accRecord);
         tx.commit();
         session.close();
