@@ -10,5 +10,6 @@ public interface TeamTodoSetService {
     boolean updateTeamTodoSet(TeamTodoSet teamTodoSet);
     void deleteTeamTodoSet(int teamTodoSetId);
     TeamTodoSet getById(int teamTodoSetId);
+    TeamTodoSet getByName(String name);
     List<TeamTodoSet> listByTeamId(int teamId);
 }

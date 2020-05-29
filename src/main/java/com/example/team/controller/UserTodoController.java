@@ -131,9 +131,9 @@ public class UserTodoController extends BaseController{
     @RequestMapping(value = "/updateState",method = RequestMethod.POST)
     @ResponseBody
     public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
-        UserTodo userTodo = userTodoService.getById(Integer.valueOf(param.get("userTodoId").toString()));
-        userTodo.setTodoStatusId(Integer.valueOf(param.get("todoStatusId").toString()));
-        if (userTodoService.updateUserTodo(userTodo)){
+        int userTodoId = Integer.valueOf(param.get("userTodoId").toString());
+        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
+        if (userTodoService.updateState(userTodoId,todoStatusId)){
             return "updateState-success";
         }
         return "updateState-fail";

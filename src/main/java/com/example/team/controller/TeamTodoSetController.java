@@ -84,7 +84,8 @@ public class TeamTodoSetController extends BaseController{
         teamTodoSet.setTeamTodoSetId(Integer.valueOf(param.get("teamTodoSetId").toString()));
         teamTodoSet.setCreate(Date.valueOf(param.get("create").toString()));
         if (teamTodoSetService.updateTeamTodoSet(teamTodoSet)){
-            return "update-success";
+            TeamTodoSet teamTodoSet1 = teamTodoSetService.getByName(teamTodoSet.getName());
+            return "update-success,teamTodoSetId:"+teamTodoSet1.getTeamTodoSetId();
         }
         return "update-fail";
     }

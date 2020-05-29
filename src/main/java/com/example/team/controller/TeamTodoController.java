@@ -1,5 +1,6 @@
 package com.example.team.controller;
 
+import com.example.team.pojo.Team;
 import com.example.team.pojo.TeamTodo;
 import com.example.team.service.TeamTodoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,8 @@ public class TeamTodoController extends BaseController{
         teamTodo.setTypeId(0);
         teamTodo.setTodoStatusId(1);
         if (teamTodoService.createTeamTodo(teamTodo)){
-            return "create-success";
+            TeamTodo teamTodo1 = teamTodoService.getByName(teamTodo.getName());
+            return "create-success,teamTodoId:"+teamTodo1.getTeamTodoId();
         }
         return "create-fail";
     }
@@ -124,4 +126,20 @@ public class TeamTodoController extends BaseController{
         return "delete-success";
     }
 
+    /**
+     * updateState 更新团队待办状态
+     *
+     * @param param 状态ID，团队待办ID
+     * @return String 成功或失败
+     **/
+    @RequestMapping(value = "/updateState",method = RequestMethod.POST)
+    @ResponseBody
+    public String updateState(@RequestBody Map<String,Object> param){
+        int teamTodoId = Integer.valueOf(param.get("teamTodoId").toString());
+        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
+        if (teamTodoService.updateState(teamTodoId,todoStatusId)){
+            return "updateState-success";
+        }
+        return "updateState-fail";
+    }
 }
