@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserTodoService {
     boolean createUserTodo(UserTodo userTodo);
     boolean updateUserTodo(UserTodo userTodo);
-    void upateSchedule();
+    boolean updateState(int userTodoId,int todoStatusId);
     void deleteUserTodo(int userTodoId);
     UserTodo getById(int userTodoId);
     UserTodo getByName(String name);

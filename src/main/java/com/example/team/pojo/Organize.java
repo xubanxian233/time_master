@@ -10,8 +10,10 @@ public class Organize {
     @Column(name="organize_id")
     private int organizeId;
 
+    @Column(name="user")
     private int userId;
 
+    @Column(name="team")
     private int teamId;
 
     public int getOrganizeId(){

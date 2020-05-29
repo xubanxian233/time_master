@@ -35,6 +35,12 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     }
 
     @Override
+    public boolean updateState(int teamTodoId, int todoStatusId) {
+        teamTodoDAO.updateState(teamTodoId,todoStatusId);
+        return true;
+    }
+
+    @Override
     public void deleteTeamTodo(int teamTodoId) {
         teamTodoDAO.delete(teamTodoId);
     }
@@ -42,6 +48,11 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     @Override
     public TeamTodo getById(int teamTodoId) {
         return teamTodoDAO.getById(teamTodoId);
+    }
+
+    @Override
+    public TeamTodo getByName(String name) {
+        return teamTodoDAO.getByName(name);
     }
 
     @Override

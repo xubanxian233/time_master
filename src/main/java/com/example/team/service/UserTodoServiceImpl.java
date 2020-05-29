@@ -35,8 +35,9 @@ public class UserTodoServiceImpl implements UserTodoService {
     }
 
     @Override
-    public void upateSchedule() {
-        userTodoDAO.updateSchedule();
+    public boolean updateState(int userTodoId, int todoStatusId) {
+        userTodoDAO.updateState(userTodoId,todoStatusId);
+        return true;
     }
 
     @Override

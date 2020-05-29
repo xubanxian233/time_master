@@ -56,6 +56,11 @@ public class TeamTodoSetServiceImpl implements TeamTodoSetService {
     }
 
     @Override
+    public TeamTodoSet getByName(String name) {
+        return teamTodoSetDAO.getByName(name);
+    }
+
+    @Override
     public List<TeamTodoSet> listByTeamId(int teamId) {
         return teamTodoSetDAO.list(teamId);
     }

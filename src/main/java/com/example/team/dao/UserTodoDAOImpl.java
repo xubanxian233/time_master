@@ -62,6 +62,19 @@ public class UserTodoDAOImpl implements UserTodoDAO {
     }
 
     @Override
+    public void updateState(int userTodoId, int todoStatusId) {
+        Session session=getSession();
+        Transaction tx=session.beginTransaction();
+        String hqlUpdate = "update UserTodo as obj set todoStatusId = :status where userTodoId = :userTodoId";
+        int updatedEntities = session.createQuery( hqlUpdate )
+                .setParameter( "status", todoStatusId )
+                .setParameter( "userTodoId", userTodoId )
+                .executeUpdate();
+        tx.commit();
+        session.close();
+    }
+
+    @Override
     public UserTodo getById(int userTodoId) {
         String hql = "from UserTodo where userTodoId=:userTodoId";
         return (UserTodo) getSession().createQuery(hql).setParameter("userTodoId", userTodoId).uniqueResult();
