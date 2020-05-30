@@ -4,6 +4,7 @@ import com.example.team.pojo.Team;
 import com.example.team.pojo.TeamTodo;
 import com.example.team.pojo.User;
 import com.example.team.service.TeamTodoService;
+import com.example.team.service.TeamTodoSetService;
 import com.example.team.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,9 @@ public class TeamTodoController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TeamTodoSetService teamTodoSetService;
 
     /**
      * listByTeamId 通过团队ID获取团队所有的待办事项
@@ -75,10 +79,11 @@ public class TeamTodoController extends BaseController {
     @ResponseBody
     private String createTeamTodo(@RequestBody Map<String,Object> param){
         String result = "create-fail";
+        int teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
         TeamTodo teamTodo = new TeamTodo();
         teamTodo.setName(param.get("name").toString());
         teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
-        teamTodo.setTeamTodoSetId(Integer.valueOf(param.get("teamTodoSetId").toString()));
+        teamTodo.setTeamTodoSetId(teamTodoSetId);
         teamTodo.setTime(Long.valueOf(param.get("time").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date create = new Date();
@@ -86,10 +91,13 @@ public class TeamTodoController extends BaseController {
         teamTodo.setTypeId(0);
         teamTodo.setTodoStatusId(1);
         Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
+        if (teamTodoSetService.getById(teamTodoSetId)==null){
+            return "create-fail:团队待办集不存在";
+        }
         for (User user : set) {
             teamTodo.setUserId(user.getUserId());
             if (teamTodoService.createTeamTodo(teamTodo)) {
-                //TeamTodo teamTodo1 = teamTodoService.getByName(teamTodo.getName());
+                //TeamTodo teamTodo1 = teamTodoService.getByUser(teamTodo.getName(),user.getUserId());
                 result = "create-success";
             }
         }
@@ -107,16 +115,23 @@ public class TeamTodoController extends BaseController {
     private String updateTeamTodo(@RequestBody Map<String,Object> param){
         String result = "update-fail";
         String name = param.get("name").toString();
+        int teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
         TeamTodo teamTodo = new TeamTodo();
         teamTodo.setName(param.get("changeName").toString());
         teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
-        teamTodo.setTeamTodoSetId(Integer.valueOf(param.get("teamTodoSetId").toString()));
+        teamTodo.setTeamTodoSetId(teamTodoSetId);
         teamTodo.setTime(Long.valueOf(param.get("time").toString()));
-        //teamTodo.setTeamTodoId(Integer.valueOf(param.get("teamTodoId").toString()));
         teamTodo.setTypeId(Integer.valueOf(param.get("typeId").toString()));
-        teamTodo.setTodoStatusId(Integer.valueOf(param.get("todoStatusId").toString()));
+        teamTodo.setTodoStatusId(todoStatusId);
         teamTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
         Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
+        if (teamTodoSetService.getById(teamTodoSetId)==null){
+            return "update-fail:团队待办集ID不存在";
+        }
+        else if (todoStatusId<1||todoStatusId>3){
+            return "update-fail：状态ID错误";
+        }
         for (User user : set) {
             teamTodo.setUserId(user.getUserId());
             int teamTodoId = teamTodoService.getByUser(name,user.getUserId()).getTeamTodoId();
@@ -154,11 +169,15 @@ public class TeamTodoController extends BaseController {
     @RequestMapping(value = "/updateState", method = RequestMethod.POST)
     @ResponseBody
     public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
+        String result = "updateState-fail";
         int teamTodoId = Integer.valueOf(param.get("teamTodoId").toString());
         int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
-        if (teamTodoService.updateState(teamTodoId,todoStatusId,userId)){
-            return "updateState-success";
+        if (todoStatusId<1||todoStatusId>3){
+             result = "updateState-fail：状态ID错误";
         }
-        return "updateState-fail";
+        else if (teamTodoService.updateState(teamTodoId,todoStatusId,userId)){
+            result = "updateState-success";
+        }
+        return result;
     }
 }
