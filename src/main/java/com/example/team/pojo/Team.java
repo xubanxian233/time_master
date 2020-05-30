@@ -13,36 +13,40 @@ import java.util.Set;
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="team_id")
+    @Column(name = "team_id")
     private int teamId;
+
     private String name;
-    @Column(name="create_date")
+
+    @Column(name = "create_date")
     private Date createDate;
-    @JsonIgnore
+
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="organize"
-            ,joinColumns = {@JoinColumn(name="team",referencedColumnName = "team_id")}
-            ,inverseJoinColumns = {@JoinColumn(name = "user",referencedColumnName = "user_id")}
+    @JoinTable(name = "organize"
+            , joinColumns = {@JoinColumn(name = "team", referencedColumnName = "team_id")}
+            , inverseJoinColumns = {@JoinColumn(name = "user", referencedColumnName = "user_id")}
     )
-    private Set<User> users=new HashSet<User>();
+    @JsonIgnore
+    private Set<User> users = new HashSet<User>();
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="leader")
+    @JoinColumn(name = "leader")
     private User leader;
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
-        this.name=name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Date getCreateDate(){
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate){
-        this.createDate=createDate;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public int getTeamId() {

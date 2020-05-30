@@ -172,35 +172,52 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<User> getMembers(int teamId) {
-        return teamDAO.getByTeamId(teamId).getUsers();
+        Team team = teamDAO.getByTeamId(teamId);
+        if (team != null) {
+            return team.getUsers();
+        }
+        return null;
     }
 
     @Override
     public Set<Team> getTeams(int userId) {
-        return userDAO.getById(userId).getTeams();
+        User user = userDAO.getById(userId);
+        if (user != null) {
+            return user.getTeams();
+        }
+        return null;
     }
 
     @Override
-    public void joinTeam(int teamId, int userId) {
-        Team team=teamDAO.getByTeamId(teamId);
-        User user=userDAO.getById(userId);
-        team.getUsers().add(user);
-        teamDAO.update(team);
+    public boolean joinTeam(int teamId, int userId) {
+        Team team = teamDAO.getByTeamId(teamId);
+        User user = userDAO.getById(userId);
+        if (team != null && user != null) {
+            team.getUsers().add(user);
+            teamDAO.update(team);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void quitTeam(int teamId, int userId) {
-        Team team=teamDAO.getByTeamId(teamId);
-        for (User user:team.getUsers()) {
-            if(user.getUserId()==userId){
-                team.getUsers().remove(user);
-                break;
+    public boolean quitTeam(int teamId, int userId) {
+        boolean flag = false;
+        Team team = teamDAO.getByTeamId(teamId);
+        if (team != null) {
+            for (User user : team.getUsers()) {
+                if (user.getUserId() == userId) {
+                    team.getUsers().remove(user);
+                    flag = true;
+                    break;
+                }
+            }
+            teamDAO.update(team);
+            if (team.getUsers().size() == 0) {
+                teamDAO.delete(teamId);
             }
         }
-        teamDAO.update(team);
-        if(team.getUsers().size()==0){
-            teamDAO.delete(teamId);
-        }
+        return flag;
     }
 
 }

@@ -23,7 +23,7 @@ public class UserTodoSetServiceImpl implements UserTodoSetService {
     @Override
     public boolean createUserTodoSet(UserTodoSet userTodoSet) {
         UserTodoSet userTodoSet1 = userTodoSetDAO.getByName(userTodoSet.getName());
-        if (userTodoSet1==null){
+        if (userTodoSet1 == null) {
             userTodoSetDAO.add(userTodoSet);
             return true;
         }
@@ -33,7 +33,7 @@ public class UserTodoSetServiceImpl implements UserTodoSetService {
     @Override
     public boolean updateUserTodoSet(UserTodoSet userTodoSet) {
         UserTodoSet userTodoSet1 = userTodoSetDAO.getByName(userTodoSet.getName());
-        if (userTodoSet1==null||userTodoSet1.getUserTodoSetId()==userTodoSet.getUserTodoSetId()){
+        if (userTodoSet1 == null || userTodoSet1.getUserTodoSetId() == userTodoSet.getUserTodoSetId()) {
             userTodoSetDAO.update(userTodoSet);
             return true;
         }
@@ -43,7 +43,7 @@ public class UserTodoSetServiceImpl implements UserTodoSetService {
     @Override
     public void deleteUserTodoSet(int userTodoSetId) {
         int userId = userTodoSetDAO.getById(userTodoSetId).getUserId();
-        List<UserTodo> list = userTodoDAO.listByUser(userId,userTodoSetId);
+        List<UserTodo> list = userTodoDAO.listByUser(userId, userTodoSetId);
         for (int i = 0; i < list.size(); i++) {
             UserTodo userTodo = list.get(i);
             userTodoDAO.delete(userTodo.getUserTodoId());

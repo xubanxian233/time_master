@@ -10,7 +10,7 @@ import java.sql.Date;
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="pet_id")
+    @Column(name = "pet_id")
     private int petId;
     private String name;
 
@@ -18,27 +18,30 @@ public class Pet {
 
     private Date birth;
 
-    @JsonIgnore
     @Column(name = "status")
-    private  int petStatusId;
+    @JsonIgnore
+    private int petStatusId;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="status", insertable = false, updatable = false)
-    private  PetStatus petStatus;
+    @JoinColumn(name = "status", insertable = false, updatable = false)
+    private PetStatus petStatus;
 
     private int level;
-    @JsonIgnore
+
     @Column(name = "user")
+    @JsonIgnore
     private int userId;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user", insertable = false, updatable = false)
     @JsonIgnore
     private User user;
-    @JsonIgnore
+
     @Column(name = "skin")
+    @JsonIgnore
     private int skinId;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "skin", insertable = false, updatable = false)
     private Skin skin;

@@ -36,8 +36,8 @@ public class PetDAOImpl implements PetDAO {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Pet pet) {
-        Session session=getSession();
-        Transaction tx=session.beginTransaction();
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
         session.merge(pet);
         tx.commit();
         session.close();

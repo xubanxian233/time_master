@@ -7,36 +7,36 @@ import javax.persistence.*;
 public class Organize {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="organize_id")
+    @Column(name = "organize_id")
     private int organizeId;
 
-    @Column(name="user")
+    @Column(name = "user")
     private int userId;
 
-    @Column(name="team")
+    @Column(name = "team")
     private int teamId;
 
-    public int getOrganizeId(){
+    public int getOrganizeId() {
         return organizeId;
     }
 
-    public void setOrganizeId(int organizeId){
-        this.organizeId=organizeId;
+    public void setOrganizeId(int organizeId) {
+        this.organizeId = organizeId;
     }
 
-    public int getUserId(){
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId){
-        this.userId=userId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public int getTeamId(){
+    public int getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(int teamId){
-        this.teamId=teamId;
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
     }
 }

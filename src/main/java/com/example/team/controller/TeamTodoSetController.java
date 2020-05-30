@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/teamTodoSet")
-public class TeamTodoSetController extends BaseController{
+public class TeamTodoSetController extends BaseController {
 
     @Autowired
     private TeamTodoSetService teamTodoSetService;
@@ -28,9 +28,9 @@ public class TeamTodoSetController extends BaseController{
      * @param param 团队ID
      * @return List<TeamTodoSet> 团队待办集
      **/
-    @RequestMapping(value = "/list",method = RequestMethod.POST)
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
-    private List<TeamTodoSet> list(@RequestBody Map<String,Object> param){
+    private List<TeamTodoSet> list(@RequestBody Map<String, Object> param) {
         Integer teamId = Integer.valueOf(param.get("teamId").toString());
         return teamTodoSetService.listByTeamId(teamId);
     }
@@ -41,9 +41,9 @@ public class TeamTodoSetController extends BaseController{
      * @param param 团队待办集ID
      * @return TeamTodoSet 摸鱼具体团队待办集
      **/
-    @RequestMapping(value = "/get",method = RequestMethod.POST)
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
-    private TeamTodoSet getTeamTodoSet(@RequestBody Map<String,Object> param){
+    private TeamTodoSet getTeamTodoSet(@RequestBody Map<String, Object> param) {
         Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
         return teamTodoSetService.getById(teamTodoSetId);
     }
@@ -54,16 +54,16 @@ public class TeamTodoSetController extends BaseController{
      * @param param 团队待办集名，团队ID
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/create",method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    private String createTeamTodoSet(@RequestBody Map<String,Object> param){
+    private String createTeamTodoSet(@RequestBody Map<String, Object> param) {
         TeamTodoSet teamTodoSet = new TeamTodoSet();
         teamTodoSet.setName(param.get("name").toString());
         teamTodoSet.setTeamId(Integer.valueOf(param.get("teamId").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date create = new java.util.Date();
         teamTodoSet.setCreate(Date.valueOf(df.format(create)));
-        if (teamTodoSetService.createTeamTodoSet(teamTodoSet)){
+        if (teamTodoSetService.createTeamTodoSet(teamTodoSet)) {
             return "create-success";
         }
         return "create-fail";
@@ -75,17 +75,17 @@ public class TeamTodoSetController extends BaseController{
      * @param param 团队待办集名，团队ID，团队待办集ID，创建时间
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    private String updateTeamTodoSet(@RequestBody Map<String,Object> param){
+    private String updateTeamTodoSet(@RequestBody Map<String, Object> param) {
         TeamTodoSet teamTodoSet = new TeamTodoSet();
         teamTodoSet.setName(param.get("name").toString());
         teamTodoSet.setTeamId(Integer.valueOf(param.get("teamId").toString()));
         teamTodoSet.setTeamTodoSetId(Integer.valueOf(param.get("teamTodoSetId").toString()));
         teamTodoSet.setCreate(Date.valueOf(param.get("create").toString()));
-        if (teamTodoSetService.updateTeamTodoSet(teamTodoSet)){
+        if (teamTodoSetService.updateTeamTodoSet(teamTodoSet)) {
             TeamTodoSet teamTodoSet1 = teamTodoSetService.getByName(teamTodoSet.getName());
-            return "update-success,teamTodoSetId:"+teamTodoSet1.getTeamTodoSetId();
+            return "update-success,teamTodoSetId:" + teamTodoSet1.getTeamTodoSetId();
         }
         return "update-fail";
     }
@@ -96,9 +96,9 @@ public class TeamTodoSetController extends BaseController{
      * @param param 团队待办集ID
      * @return String 成功
      **/
-    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
-    private String deleteTeamTodoSet(@RequestBody Map<String,Object> param){
+    private String deleteTeamTodoSet(@RequestBody Map<String, Object> param) {
         Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
         teamTodoSetService.deleteTeamTodoSet(teamTodoSetId);
         return "delete-success";

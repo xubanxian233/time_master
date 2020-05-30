@@ -12,22 +12,22 @@ public class RedisServiceImpl<T> implements RedisService<T> {
     @Autowired
     private RedisUtil redisUtil;
 
-    public void set(String key, String value){
-        if(redisUtil.set(key,value))
+    public void set(String key, String value) {
+        if (redisUtil.set(key, value))
             System.out.println("success");
         else
-        System.out.println("fail");
+            System.out.println("fail");
     }
 
-    public String get(String key){
-        Object o=redisUtil.get(key);
-            System.out.println(o);
-            return (String)o;
+    public String get(String key) {
+        Object o = redisUtil.get(key);
+        System.out.println(o);
+        return (String) o;
     }
 
     @Override
     public void setExpire(String key, long expire) {
-        redisUtil.expire(key,expire);
+        redisUtil.expire(key, expire);
     }
 
     @Override

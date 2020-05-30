@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/teamTodo")
-public class TeamTodoController extends BaseController{
+public class TeamTodoController extends BaseController {
 
     @Autowired
     private TeamTodoService teamTodoService;
@@ -31,7 +31,7 @@ public class TeamTodoController extends BaseController{
      * @param param 团队ID
      * @return List<TeamTodo> 团队待办事项
      **/
-    @RequestMapping(value = "/listByTeamId",method = RequestMethod.POST)
+    @RequestMapping(value = "/listByTeamId", method = RequestMethod.POST)
     @ResponseBody
     private List<TeamTodo> listByTeamId(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         Integer teamId = Integer.valueOf(param.get("teamId").toString());
@@ -44,7 +44,7 @@ public class TeamTodoController extends BaseController{
      * @param param 团队ID和团队待办集ID
      * @return List<TeamTodo> 某一团队待办集中的事项
      **/
-    @RequestMapping(value = "/listById",method = RequestMethod.POST)
+    @RequestMapping(value = "/listById", method = RequestMethod.POST)
     @ResponseBody
     private List<TeamTodo> listById(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         Integer teamId = Integer.valueOf(param.get("teamId").toString());
@@ -58,7 +58,7 @@ public class TeamTodoController extends BaseController{
      * @param param 团队待办ID
      * @return List<TeamTodo> 某一团队待办事项
      **/
-    @RequestMapping(value = "/get",method = RequestMethod.POST)
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     private TeamTodo getTeamTodo(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         Integer teamTodoId = Integer.valueOf(param.get("teamTodoId").toString());
@@ -71,7 +71,7 @@ public class TeamTodoController extends BaseController{
      * @param param 团队待办名，团队ID，团队待办集ID，时长
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/create",method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     private String createTeamTodo(@RequestBody Map<String,Object> param){
         String result = "create-fail";
@@ -102,7 +102,7 @@ public class TeamTodoController extends BaseController{
      * @param param 原团队待办名，改后的团队待办名，团队待办集ID，时长，团队待办ID，待办状态ID，创建时间
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     private String updateTeamTodo(@RequestBody Map<String,Object> param){
         String result = "update-fail";
@@ -134,7 +134,7 @@ public class TeamTodoController extends BaseController{
      * @param param 团队待办名称，团队ID
      * @return String 成功
      **/
-    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     private String deleteTeamTodo(@RequestBody Map<String,Object> param){
         String name = param.get("name").toString();
@@ -151,7 +151,7 @@ public class TeamTodoController extends BaseController{
      * @param param 状态ID，团队待办ID
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/updateState",method = RequestMethod.POST)
+    @RequestMapping(value = "/updateState", method = RequestMethod.POST)
     @ResponseBody
     public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         int teamTodoId = Integer.valueOf(param.get("teamTodoId").toString());

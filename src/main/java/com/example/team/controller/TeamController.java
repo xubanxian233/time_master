@@ -7,10 +7,7 @@ import com.example.team.service.TeamService;
 import com.example.team.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.List;
@@ -45,6 +42,7 @@ public class TeamController extends BaseController {
         teamService.createTeam(user, team);
         return "create-success";
     }
+
     /**
      * deleteTeam 解散团队
      *
@@ -70,8 +68,10 @@ public class TeamController extends BaseController {
     public String joinTeam(@RequestBody Map<String, Object> param) {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         int userId = Integer.parseInt(request.getHeader("id"));
-        userService.joinTeam(teamId, userId);
-        return "join-success";
+        if (userService.joinTeam(teamId, userId)) {
+            return "join-success";
+        }
+        return "join-fail";
     }
 
     /**
@@ -85,8 +85,10 @@ public class TeamController extends BaseController {
     public String quitTeam(@RequestBody Map<String, Object> param) {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         int userId = Integer.parseInt(request.getHeader("id"));
-        userService.quitTeam(teamId, userId);
-        return "quit-success";
+        if (userService.quitTeam(teamId, userId)) {
+            return "quit-success";
+        }
+        return "quit-fail";
     }
 
     /**
@@ -101,9 +103,12 @@ public class TeamController extends BaseController {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         String email = param.get("email").toString();
         int userId = userService.getUserId("", email, "");
-        userService.joinTeam(teamId, userId);
-        return "invite-success";
+        if (userService.joinTeam(teamId, userId)) {
+            return "invite-success";
+        }
+        return "invite-fail";
     }
+
     /**
      * outMember 踢出成员
      *
@@ -116,28 +121,32 @@ public class TeamController extends BaseController {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         String email = param.get("email").toString();
         int userId = userService.getUserId("", email, "");
-        userService.quitTeam(teamId, userId);
-        return "out-success";
+        if (userService.quitTeam(teamId, userId)) {
+            return "out-success";
+        }
+        return "out-fail";
     }
+
     /**
      * getMembers 获取团队所有成员
      *
-     * @param param
+     * @param teamId
      * @return String
      */
-    @RequestMapping(value = "/getMembers", method = RequestMethod.POST)
+    @RequestMapping(value = "/getMembers", method = RequestMethod.GET)
     @ResponseBody
-    public Set<User> getMembers(@RequestBody Map<String, Object> param) {
-        int teamId = Integer.parseInt(param.get("teamId").toString());
-        return userService.getMembers(teamId);
+    public Set<User> getMembers(@RequestParam String teamId) {
+        int teamId1 = Integer.parseInt(teamId);
+        return userService.getMembers(teamId1);
     }
+
     /**
      * getTeams 获取用户所有团队
      *
      * @param
      * @return String
      */
-    @RequestMapping(value = "/getTeams", method = RequestMethod.POST)
+    @RequestMapping(value = "/getTeams",method = RequestMethod.GET)
     @ResponseBody
     public Set<Team> getTeams() {
         int userId = Integer.parseInt(request.getHeader("id"));

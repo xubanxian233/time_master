@@ -38,13 +38,13 @@ public class TypeRecordDAOImpl implements TypeRecordDAO {
 
     @Override
     public TypeRecord getById(int typeRecordId) {
-        String hql="from TypeRecord where typeRecordId=:typeRecordId";
-        return (TypeRecord) getSession().createQuery(hql).setParameter("typeRecordId",typeRecordId).uniqueResult();
+        String hql = "from TypeRecord where typeRecordId=:typeRecordId";
+        return (TypeRecord) getSession().createQuery(hql).setParameter("typeRecordId", typeRecordId).uniqueResult();
     }
 
     @Override
     public List<TypeRecord> getByUserId(int userId) {
-        String hql="from TypeRecord where userId=:userId";
-        return  getSession().createQuery(hql).setParameter("userId",userId).list();
+        String hql = "from TypeRecord where userId=:userId";
+        return getSession().createQuery(hql).setParameter("userId", userId).list();
     }
 }

@@ -40,7 +40,7 @@ public class TeamDAOImpl implements TeamDAO {
     public boolean delete(int teamId) {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
-        Team team =session.get(Team.class,teamId);
+        Team team = session.get(Team.class, teamId);
         session.delete(team);
         tx.commit();
         session.close();
@@ -50,6 +50,6 @@ public class TeamDAOImpl implements TeamDAO {
     @Override
     public Team getByTeamId(int teamId) {
         String hql = "from Team where teamId=:teamId";
-        return (Team) getSession().createQuery(hql).setParameter("teamId",teamId).uniqueResult();
+        return (Team) getSession().createQuery(hql).setParameter("teamId", teamId).uniqueResult();
     }
 }

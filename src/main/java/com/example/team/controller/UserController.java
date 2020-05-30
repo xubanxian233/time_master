@@ -150,8 +150,8 @@ public class UserController extends BaseController {
     /**
      * findPassword 找回密码
      *
-     * @param  email 邮箱账号
-     * @return  找回邮件发送结果
+     * @param email 邮箱账号
+     * @return 找回邮件发送结果
      */
     @RequestMapping("/findPassword")
     @ResponseBody
@@ -177,14 +177,14 @@ public class UserController extends BaseController {
         int userId = Integer.parseInt(keys[0]);
         Long time = Long.parseLong(keys[1]);
         java.util.Date date = new java.util.Date();
-        User user=userService.getById(userId);
-        model.addAttribute("userId",userId);
-        model.addAttribute("email",user.getEmail());
+        User user = userService.getById(userId);
+        model.addAttribute("userId", userId);
+        model.addAttribute("email", user.getEmail());
         if (date.getTime() - time <= 600000) {
-            model.addAttribute("flag","true");
+            model.addAttribute("flag", "true");
             return "resetPassword";
         }
-        model.addAttribute("flag","false");
+        model.addAttribute("flag", "false");
         return "resetPassword";
     }
 
@@ -195,15 +195,15 @@ public class UserController extends BaseController {
      * @return String 修改结果
      */
     @RequestMapping(value = "/resetPassword")
-    public String resetPassword(@RequestParam String userId, @RequestParam String password1,Model model) {
+    public String resetPassword(@RequestParam String userId, @RequestParam String password1, Model model) {
         int userId1 = Integer.parseInt(userId);
         User user = userService.getById(userId1);
-        model.addAttribute("email",user.getEmail());
+        model.addAttribute("email", user.getEmail());
         if (userService.updateUserPassword(userId1, password1)) {
-            model.addAttribute("flag","true");
+            model.addAttribute("flag", "true");
             return "result";
         }
-        model.addAttribute("flag","false");
+        model.addAttribute("flag", "false");
         return "result";
     }
 

@@ -4,16 +4,16 @@ import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Table(name="usertodoset")
+@Table(name = "usertodoset")
 public class UserTodoSet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_todo_set_id")
+    @Column(name = "user_todo_set_id")
     private int userTodoSetId;
     private String name;
     @Column(name = "create_date")
     private Date create;
-    @Column(name="user")
+    @Column(name = "user")
     private int userId;
 
     public int getUserTodoSetId() {

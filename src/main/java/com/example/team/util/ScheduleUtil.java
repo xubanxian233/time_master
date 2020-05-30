@@ -17,7 +17,7 @@ public class ScheduleUtil {
     private TeamTodoService teamTodoService;
 
     @Scheduled(cron = "0 0 0 * * ?")
-    public void updateStatus(){
+    public void updateStatus() {
         userTodoService.updateSchedule();
         teamTodoService.updateSchedule();
     }

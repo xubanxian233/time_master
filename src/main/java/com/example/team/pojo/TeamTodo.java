@@ -12,11 +12,11 @@ import java.sql.Date;
 public class TeamTodo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="team_todo_id")
+    @Column(name = "team_todo_id")
     private int teamTodoId;
     private String name;
     private long time;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date create;
     @JsonIgnore
     @Column(name = "status")

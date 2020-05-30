@@ -47,17 +47,18 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
 
     @Override
     public DailyRecord getById(int dailyRecordId) {
-        String hql="from DailyRecord where dailyRecordId=:dailyRecordId";
-        return (DailyRecord) getSession().createQuery(hql).setParameter("dailyRecordId",dailyRecordId).uniqueResult();
+        String hql = "from DailyRecord where dailyRecordId=:dailyRecordId";
+        return (DailyRecord) getSession().createQuery(hql).setParameter("dailyRecordId", dailyRecordId).uniqueResult();
     }
 
     @Override
     public DailyRecord getByUserId(int userId, Date dailyDate) {
-        String hql="from DailyRecord where userId=:userId and dailyDate=:dailyDate";
-        return (DailyRecord) getSession().createQuery(hql).setParameter("userId",userId).uniqueResult();
+        String hql = "from DailyRecord where userId=:userId and dailyDate=:dailyDate";
+        return (DailyRecord) getSession().createQuery(hql).setParameter("userId", userId).uniqueResult();
     }
-    public List listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate){
-        String hql="from DailyRecord where userId=:userId and dailyDate>=:litleMonthDate and dailyDate<=:bigMonthDate";
+
+    public List listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate) {
+        String hql = "from DailyRecord where userId=:userId and dailyDate>=:litleMonthDate and dailyDate<=:bigMonthDate";
         return getSession().createQuery(hql)
                 .setParameter("userId", userId)
                 .setParameter("litleMonthDate", litleMonthDate)

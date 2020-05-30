@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface TeamTodoDAO {
     void add(TeamTodo teamTodo);
+
     void delete(int teamTodoId);
     void deleteByUser(String name,int userId);
     void update(TeamTodo teamTodo);

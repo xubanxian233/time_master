@@ -37,6 +37,7 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     @Override
     public boolean updateState(int teamTodoId, int todoStatusId,int userId) {
         teamTodoDAO.updateState(teamTodoId,todoStatusId,userId);
+
         return true;
     }
 
@@ -67,7 +68,7 @@ public class TeamTodoServiceImpl implements TeamTodoService {
 
     @Override
     public List<TeamTodo> listTeamTodo(int teamTodoSetId, int teamId) {
-        return teamTodoDAO.list(teamId,teamTodoSetId);
+        return teamTodoDAO.list(teamId, teamTodoSetId);
     }
 
     @Override

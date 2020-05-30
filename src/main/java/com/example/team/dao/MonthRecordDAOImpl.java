@@ -48,14 +48,14 @@ public class MonthRecordDAOImpl implements MonthRecordDAO {
 
     @Override
     public MonthRecord getById(int monthRecordId) {
-        String hql="from MonthRecord where monthRecordId=:monthRecordId";
-        return (MonthRecord) getSession().createQuery(hql).setParameter("monthRecordId",monthRecordId).uniqueResult();
+        String hql = "from MonthRecord where monthRecordId=:monthRecordId";
+        return (MonthRecord) getSession().createQuery(hql).setParameter("monthRecordId", monthRecordId).uniqueResult();
     }
 
     @Override
     public MonthRecord getByUserId(int userId, Date monthDate) {
-        String hql="from MonthRecord where userId=:userId and monthDate=:monthDate";
-        return (MonthRecord) getSession().createQuery(hql).setParameter("userId",userId).setParameter("monthDate",
+        String hql = "from MonthRecord where userId=:userId and monthDate=:monthDate";
+        return (MonthRecord) getSession().createQuery(hql).setParameter("userId", userId).setParameter("monthDate",
                 monthDate).uniqueResult();
     }
 }

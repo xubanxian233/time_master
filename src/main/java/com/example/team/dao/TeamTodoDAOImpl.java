@@ -32,7 +32,7 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
         String hql = "from TeamTodo where teamTodoId=:teamTodoId";
-        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("teamTodoId",teamTodoId).uniqueResult();
+        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("teamTodoId", teamTodoId).uniqueResult();
         session.delete(teamTodo);
         tx.commit();
         session.close();
@@ -75,7 +75,7 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     @Override
     public TeamTodo getById(int teamTodoId) {
         String hql = "from TeamTodo where teamTodoId=:teamTodoId";
-        return (TeamTodo) getSession().createQuery(hql).setParameter("teamTodoId",teamTodoId).uniqueResult();
+        return (TeamTodo) getSession().createQuery(hql).setParameter("teamTodoId", teamTodoId).uniqueResult();
     }
 
     @Override
@@ -117,12 +117,12 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
 
     @Override
     public void updateSchedule() {
-        Session session=getSession();
-        Transaction tx=session.beginTransaction();
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
         String hqlUpdate = "update TeamTodo as t set todoStatusId = :status where todoStatusId != :oldStatus";
-        int updatedEntities = session.createQuery( hqlUpdate )
-                .setParameter( "status", 1 )
-                .setParameter( "oldStatus", 1 )
+        int updatedEntities = session.createQuery(hqlUpdate)
+                .setParameter("status", 1)
+                .setParameter("oldStatus", 1)
                 .executeUpdate();
         tx.commit();
         session.close();

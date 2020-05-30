@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface TeamTodoService {
     boolean createTeamTodo(TeamTodo teamTodo);
+
     boolean updateTeamTodo(TeamTodo teamTodo);
     boolean updateState(int teamTodoId,int todoStatusId,int userId);
     void deleteTeamTodo(int teamTodoId);
