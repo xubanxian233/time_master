@@ -27,7 +27,7 @@ public interface UserService {
 
     Set<Team> getTeams(int userId);
 
-    boolean joinTeam(int teamId, int userId);
+    Team joinTeam(int teamId, int userId);
 
     boolean quitTeam(int teamId, int userId);
 }

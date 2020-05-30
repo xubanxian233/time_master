@@ -15,19 +15,23 @@ public class TeamServiceImpl implements TeamService {
     private UserDAO userDAO;
 
     @Override
-    public void createTeam(User user, Team team) {
+    public Team createTeam(User user, Team team) {
         teamDAO.add(team);
         team.getUsers().add(user);
         teamDAO.update(team);
+        return team;
     }
 
     @Override
     public void updateTeam(Team team) {
-        teamDAO.update(team);
+        Team team1=teamDAO.getByTeamId(team.getTeamId());
+        team1.setName(team.getName());
+        teamDAO.update(team1);
     }
 
     @Override
     public void deleteTeam(int teamId) {
         teamDAO.delete(teamId);
     }
+
 }
