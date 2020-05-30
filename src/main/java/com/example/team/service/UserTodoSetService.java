@@ -6,9 +6,14 @@ import java.util.List;
 
 public interface UserTodoSetService {
     boolean createUserTodoSet(UserTodoSet userTodoSet);
+
     boolean updateUserTodoSet(UserTodoSet userTodoSet);
+
     void deleteUserTodoSet(int userTodoSetId);
+
     UserTodoSet getById(int userTodoSetId);
+
     UserTodoSet getByName(String name);
+
     List<UserTodoSet> listByUserId(int userId);
 }

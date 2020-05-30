@@ -6,8 +6,8 @@ import com.example.team.mail.SimpleMailSender;
 import java.util.Date;
 
 public class MailUtil {
-    public static boolean sendEmail(String email,int userId){
-        Boolean flag=false;
+    public static boolean sendEmail(String email, int userId) {
+        Boolean flag = false;
         Date now = new Date();
         MailSenderInfo mailInfo = new MailSenderInfo();
         mailInfo.setMailServerHost("smtp.163.com");
@@ -18,16 +18,16 @@ public class MailUtil {
         mailInfo.setFromAddress("wjchen1015@163.com");
         mailInfo.setToAddress(email);
         mailInfo.setSubject("重置密码");
-        String content="点击下方重置链接重置密码<br><a href = \"http://localhost:8080/user/gotoReset?key="
-                +userId+"@"+now.getTime() +"\">重置链接</a><br>有效时长10分钟。";
+        String content = "点击下方重置链接重置密码<br><a href = \"http://localhost:8080/user/gotoReset?key="
+                + userId + "@" + now.getTime() + "\">重置链接</a><br>有效时长10分钟。";
         mailInfo.setContent(content);
         //这个类主要来发送邮件
         try {
             SimpleMailSender sms = new SimpleMailSender();
             sms.sendTextMail(mailInfo);//发送文体格式
             SimpleMailSender.sendHtmlMail(mailInfo);//发送html格式
-            flag= true;
-        }catch (Exception e) {
+            flag = true;
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return flag;

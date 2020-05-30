@@ -19,6 +19,7 @@ public class TypeDAOImpl implements TypeDAO {
     public Session getSession() {
         return entityManagerFactory.unwrap(SessionFactory.class).openSession();
     }
+
     @Override
     public List<Type> listType() {
         return getSession().createQuery("from Type").list();

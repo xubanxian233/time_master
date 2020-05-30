@@ -41,7 +41,7 @@ public class UserTodoSetDAOImpl implements UserTodoSetDAO {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
         String hql = "from UserTodoSet where userTodoSetId=:userTodoSetId";
-        UserTodoSet userTodoSet = (UserTodoSet) session.createQuery(hql).setParameter("userTodoSetId",userTodoSetId).uniqueResult();
+        UserTodoSet userTodoSet = (UserTodoSet) session.createQuery(hql).setParameter("userTodoSetId", userTodoSetId).uniqueResult();
         session.delete(userTodoSet);
         tx.commit();
         session.close();
@@ -50,18 +50,18 @@ public class UserTodoSetDAOImpl implements UserTodoSetDAO {
     @Override
     public UserTodoSet getById(int userTodoSetId) {
         String hql = "from UserTodoSet where userTodoSetId=:userTodoSetId";
-        return (UserTodoSet) getSession().createQuery(hql).setParameter("userTodoSetId",userTodoSetId).uniqueResult();
+        return (UserTodoSet) getSession().createQuery(hql).setParameter("userTodoSetId", userTodoSetId).uniqueResult();
     }
 
     @Override
     public UserTodoSet getByName(String name) {
         String hql = "from UserTodoSet where name=:name";
-        return (UserTodoSet) getSession().createQuery(hql).setParameter("name",name).uniqueResult();
+        return (UserTodoSet) getSession().createQuery(hql).setParameter("name", name).uniqueResult();
     }
 
     @Override
     public List<UserTodoSet> listById(int userId) {
         String hql = "from UserTodoSet where userId=:userId";
-        return (List<UserTodoSet>) getSession().createQuery(hql).setParameter("userId",userId).list();
+        return (List<UserTodoSet>) getSession().createQuery(hql).setParameter("userId", userId).list();
     }
 }

@@ -7,11 +7,11 @@ import javax.persistence.*;
 public class TypeRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="type_record_id")
+    @Column(name = "type_record_id")
     private int typeRecordId;
-    @Column(name="success_count")
+    @Column(name = "success_count")
     private int successCount;
-    @Column(name="fail_count")
+    @Column(name = "fail_count")
     private int failCount;
     private long acctime;
     @Column(name = "type")

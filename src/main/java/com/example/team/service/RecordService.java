@@ -9,11 +9,17 @@ import java.sql.Date;
 import java.util.List;
 
 public interface RecordService {
-    void addRecordByUser(int uId,int tTime,int tsId);
-    void updateRecordByUser(int uId,int tTime,int tsId);
+    void addRecordByUser(int uId, int tTime, int tsId);
+
+    void updateRecordByUser(int uId, int tTime, int tsId);
+
     AccRecord getAccRecord(int userId);
+
     DailyRecord getDailyRecord(int userId, Date dailyDate);
-    MonthRecord getMonthRecord(int userId,Date monthDate);
+
+    MonthRecord getMonthRecord(int userId, Date monthDate);
+
     List<TypeRecord> getTypeRecord(int userId);
-    List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate,Date bigMonthDate);
+
+    List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate);
 }

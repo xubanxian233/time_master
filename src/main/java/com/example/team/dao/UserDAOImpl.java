@@ -37,13 +37,12 @@ public class UserDAOImpl implements UserDAO {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(User user) {
-        Session session=getSession();
-        Transaction tx=session.beginTransaction();
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
         session.merge(user);
         tx.commit();
         session.close();
     }
-
 
 
     @Override

@@ -33,7 +33,7 @@ public class UserTodoDAOImpl implements UserTodoDAO {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
         String hql = "from UserTodo where userTodoId=:userTodoId";
-        UserTodo userTodo =(UserTodo) session.createQuery(hql).setParameter("userTodoId", userTodoId).uniqueResult();
+        UserTodo userTodo = (UserTodo) session.createQuery(hql).setParameter("userTodoId", userTodoId).uniqueResult();
         session.delete(userTodo);
         tx.commit();
         session.close();
@@ -50,12 +50,12 @@ public class UserTodoDAOImpl implements UserTodoDAO {
 
     @Override
     public void updateSchedule() {
-        Session session=getSession();
-        Transaction tx=session.beginTransaction();
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
         String hqlUpdate = "update UserTodo as obj set todoStatusId = :status where todoStatusId != :oldStatus";
-        int updatedEntities = session.createQuery( hqlUpdate )
-                .setParameter( "status", 1 )
-                .setParameter( "oldStatus", 1 )
+        int updatedEntities = session.createQuery(hqlUpdate)
+                .setParameter("status", 1)
+                .setParameter("oldStatus", 1)
                 .executeUpdate();
         tx.commit();
         session.close();
@@ -63,12 +63,12 @@ public class UserTodoDAOImpl implements UserTodoDAO {
 
     @Override
     public void updateState(int userTodoId, int todoStatusId) {
-        Session session=getSession();
-        Transaction tx=session.beginTransaction();
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
         String hqlUpdate = "update UserTodo as obj set todoStatusId = :status where userTodoId = :userTodoId";
-        int updatedEntities = session.createQuery( hqlUpdate )
-                .setParameter( "status", todoStatusId )
-                .setParameter( "userTodoId", userTodoId )
+        int updatedEntities = session.createQuery(hqlUpdate)
+                .setParameter("status", todoStatusId)
+                .setParameter("userTodoId", userTodoId)
                 .executeUpdate();
         tx.commit();
         session.close();
@@ -83,7 +83,7 @@ public class UserTodoDAOImpl implements UserTodoDAO {
     @Override
     public UserTodo getByName(String name) {
         String hql = "from UserTodo where name=:name";
-        return (UserTodo) getSession().createQuery(hql).setParameter("name",name).uniqueResult();
+        return (UserTodo) getSession().createQuery(hql).setParameter("name", name).uniqueResult();
     }
 
     @Override

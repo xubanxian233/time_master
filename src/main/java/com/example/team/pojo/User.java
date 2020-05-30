@@ -18,6 +18,7 @@ public class User {
     private String tel;
     private String name;
     private String email;
+
     @JsonIgnore
     private String password;
     private String sex;
@@ -25,15 +26,18 @@ public class User {
 
     @Column(name = "create_date")
     private Date create;
+
     @Column(name = "pet")
     private int petId;
-    @JsonIgnore
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet", insertable = false, updatable = false)
-    private Pet Pet;
     @JsonIgnore
-    @ManyToMany(mappedBy="users",fetch = FetchType.LAZY)
-    private Set<Team> teams=new HashSet<Team>();
+    private Pet Pet;
+
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Team> teams = new HashSet<Team>();
 
     public void setSex(String sex) {
         this.sex = sex;

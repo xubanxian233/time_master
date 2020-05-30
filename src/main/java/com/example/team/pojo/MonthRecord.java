@@ -8,11 +8,11 @@ import java.sql.Date;
 public class MonthRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="month_record_id")
+    @Column(name = "month_record_id")
     private int monthRecordId;
-    @Column(name="success_count")
+    @Column(name = "success_count")
     private int successCount;
-    @Column(name="fail_count")
+    @Column(name = "fail_count")
     private int failCount;
     private long acctime;
     @Column(name = "month_date")

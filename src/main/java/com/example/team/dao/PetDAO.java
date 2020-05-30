@@ -10,5 +10,6 @@ public interface PetDAO {
     void update(Pet pet);
 
     Pet getById(int petId);
+
     Pet getByUserId(int userId);
 }

@@ -2,17 +2,19 @@ package com.example.team.mail;
 
 import javax.mail.*;
 
-public class MyAuthenticator extends Authenticator{
-    String userName=null;
-    String password=null;
+public class MyAuthenticator extends Authenticator {
+    String userName = null;
+    String password = null;
 
-    public MyAuthenticator(){
+    public MyAuthenticator() {
     }
+
     public MyAuthenticator(String username, String password) {
         this.userName = username;
         this.password = password;
     }
-    protected PasswordAuthentication getPasswordAuthentication(){
+
+    protected PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(userName, password);
     }
 }

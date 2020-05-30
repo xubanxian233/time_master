@@ -17,7 +17,7 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     @Override
     public boolean createTeamTodo(TeamTodo teamTodo) {
         TeamTodo teamTodo1 = teamTodoDAO.getByName(teamTodo.getName());
-        if (teamTodo1==null){
+        if (teamTodo1 == null) {
             teamTodoDAO.add(teamTodo);
             return true;
         }
@@ -27,7 +27,7 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     @Override
     public boolean updateTeamTodo(TeamTodo teamTodo) {
         TeamTodo teamTodo1 = teamTodoDAO.getByName(teamTodo.getName());
-        if (teamTodo1==null||teamTodo1.getTeamTodoId()==teamTodo.getTeamTodoId()){
+        if (teamTodo1 == null || teamTodo1.getTeamTodoId() == teamTodo.getTeamTodoId()) {
             teamTodoDAO.update(teamTodo);
             return true;
         }
@@ -36,7 +36,7 @@ public class TeamTodoServiceImpl implements TeamTodoService {
 
     @Override
     public boolean updateState(int teamTodoId, int todoStatusId) {
-        teamTodoDAO.updateState(teamTodoId,todoStatusId);
+        teamTodoDAO.updateState(teamTodoId, todoStatusId);
         return true;
     }
 
@@ -62,7 +62,7 @@ public class TeamTodoServiceImpl implements TeamTodoService {
 
     @Override
     public List<TeamTodo> listTeamTodo(int teamTodoSetId, int teamId) {
-        return teamTodoDAO.list(teamId,teamTodoSetId);
+        return teamTodoDAO.list(teamId, teamTodoSetId);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.team.service;
 public interface RedisService<T> {
     /**
      * set存数据
+     *
      * @param key
      * @param value
      * @return
@@ -11,6 +12,7 @@ public interface RedisService<T> {
 
     /**
      * get获取数据
+     *
      * @param key
      * @return
      */
@@ -18,11 +20,12 @@ public interface RedisService<T> {
 
     /**
      * 设置有效天数
+     *
      * @param key
      * @param expire
      * @return
      */
-    void setExpire(String key,long expire);
+    void setExpire(String key, long expire);
 
     void delete(String key);
 

@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class TodoStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="todo_status_id")
+    @Column(name = "todo_status_id")
     private int todoStatusId;
     private String status;
 

@@ -11,7 +11,7 @@ import java.sql.Date;
 public class UserTodo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_todo_id")
+    @Column(name = "user_todo_id")
     private int userTodoId;
     private String name;
     private long time;
