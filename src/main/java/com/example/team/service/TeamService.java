@@ -6,9 +6,10 @@ import org.springframework.stereotype.Service;
 
 
 public interface TeamService {
-    void createTeam(User user, Team team);
+    Team createTeam(User user, Team team);
 
     void updateTeam(Team team);
 
     void deleteTeam(int teamId);
+
 }

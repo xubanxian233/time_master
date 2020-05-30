@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,7 +32,7 @@ public class User {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet", insertable = false, updatable = false)
     @JsonIgnore
-    private Pet Pet;
+    private Pet pet;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     @JsonIgnore
@@ -103,19 +102,19 @@ public class User {
         this.petId = petId;
     }
 
-    public com.example.team.pojo.Pet getPet() {
-        return Pet;
-    }
-
-    public void setPet(com.example.team.pojo.Pet pet) {
-        Pet = pet;
-    }
-
     public Set<Team> getTeams() {
         return teams;
     }
 
     public void setTeams(Set<Team> teams) {
         this.teams = teams;
+    }
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
 }

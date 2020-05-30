@@ -27,11 +27,11 @@ public class TeamController extends BaseController {
      * createTeam 创建团队
      *
      * @param param
-     * @return String
+     * @return Team
      */
     @RequestMapping(value = "/createTeam", method = RequestMethod.POST)
     @ResponseBody
-    public String createTeam(@RequestBody Map<String, Object> param) {
+    public Team createTeam(@RequestBody Map<String, Object> param) {
         String name = param.get("name").toString();
         int userId = Integer.parseInt(request.getHeader("id"));
         Team team = new Team();
@@ -39,8 +39,7 @@ public class TeamController extends BaseController {
         team.setName(name);
         team.setCreateDate(new Date(new java.util.Date().getTime()));
         team.setLeader(user);
-        teamService.createTeam(user, team);
-        return "create-success";
+        return teamService.createTeam(user, team);
     }
 
     /**
@@ -61,17 +60,14 @@ public class TeamController extends BaseController {
      * joinTeam 加入团队
      *
      * @param param
-     * @return String
+     * @return Team
      */
     @RequestMapping(value = "/joinTeam", method = RequestMethod.POST)
     @ResponseBody
-    public String joinTeam(@RequestBody Map<String, Object> param) {
+    public Team joinTeam(@RequestBody Map<String, Object> param) {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         int userId = Integer.parseInt(request.getHeader("id"));
-        if (userService.joinTeam(teamId, userId)) {
-            return "join-success";
-        }
-        return "join-fail";
+        return userService.joinTeam(teamId, userId);
     }
 
     /**
@@ -103,7 +99,7 @@ public class TeamController extends BaseController {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         String email = param.get("email").toString();
         int userId = userService.getUserId("", email, "");
-        if (userService.joinTeam(teamId, userId)) {
+        if (userService.joinTeam(teamId, userId) != null) {
             return "invite-success";
         }
         return "invite-fail";
@@ -146,10 +142,28 @@ public class TeamController extends BaseController {
      * @param
      * @return String
      */
-    @RequestMapping(value = "/getTeams",method = RequestMethod.GET)
+    @RequestMapping(value = "/getTeams", method = RequestMethod.GET)
     @ResponseBody
     public Set<Team> getTeams() {
         int userId = Integer.parseInt(request.getHeader("id"));
         return userService.getTeams(userId);
+    }
+
+    /**
+     * updateTeam 获取用户所有团队
+     *
+     * @param
+     * @return String
+     */
+    @RequestMapping(value = "/updateTeam", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateTeam(@RequestBody Map<String, Object> param) {
+        String name = param.get("name").toString();
+        int teamId = Integer.parseInt(param.get("teamId").toString());
+        Team team = new Team();
+        team.setName(name);
+        team.setTeamId(teamId);
+        teamService.updateTeam(team);
+        return "update-success";
     }
 }

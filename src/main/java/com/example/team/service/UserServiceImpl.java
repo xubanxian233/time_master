@@ -189,15 +189,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean joinTeam(int teamId, int userId) {
+    public Team joinTeam(int teamId, int userId) {
         Team team = teamDAO.getByTeamId(teamId);
         User user = userDAO.getById(userId);
         if (team != null && user != null) {
             team.getUsers().add(user);
             teamDAO.update(team);
-            return true;
+            return team;
         }
-        return false;
+        return null;
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.example.team.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.lang.annotation.Target;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +29,7 @@ public class Team {
     private Set<User> users = new HashSet<User>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "leader")
+    @JoinColumn(name = "leader", insertable = false, updatable = false)
     private User leader;
 
     public String getName() {
