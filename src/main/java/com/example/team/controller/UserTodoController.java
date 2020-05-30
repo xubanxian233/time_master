@@ -20,6 +20,9 @@ public class UserTodoController extends BaseController {
     @Autowired
     private UserTodoService userTodoService;
 
+    @Autowired
+    private UserTodoSetService userTodoSetService;
+
     /**
      * listById 列出某一用户待办集中所有用户待办
      *
@@ -67,21 +70,26 @@ public class UserTodoController extends BaseController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     public String create(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
+        String result = "create-fail";
+        int userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
         UserTodo userTodo = new UserTodo();
         userTodo.setName(param.get("name").toString());
-        userTodo.setUserTodoSetId(Integer.valueOf(param.get("userTodoSetId").toString()));
+        userTodo.setUserTodoSetId(userTodoSetId);
         userTodo.setUserId(userId);
         userTodo.setTime(Long.valueOf(param.get("time").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date create = new Date();
         userTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
         userTodo.setTodoStatusId(1);
-        userTodo.setTypeId(2);
-        if (userTodoService.createUserTodo(userTodo)) {
-            UserTodo userTodo1 = userTodoService.getByName(userTodo.getName());
-            return "create-success,userTodoId:" + userTodo1.getUserTodoId();
+        userTodo.setTypeId(0);
+        if (userTodoSetService.getById(userTodoSetId)==null){
+            result = "create-fail:用户待办集不存在";
         }
-        return "create-fail";
+        else if (userTodoService.createUserTodo(userTodo)) {
+            UserTodo userTodo1 = userTodoService.getByName(userTodo.getName());
+            result = "create-success,userTodoId:" + userTodo1.getUserTodoId();
+        }
+        return result;
     }
 
     /**
@@ -107,19 +115,28 @@ public class UserTodoController extends BaseController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public String update(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
+        String result = "update-fail";
+        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
+        int userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
         UserTodo userTodo = new UserTodo();
         userTodo.setUserTodoId(Integer.valueOf(param.get("userTodoId").toString()));
         userTodo.setName(param.get("name").toString());
-        userTodo.setUserTodoSetId(Integer.valueOf(param.get("userTodoSetId").toString()));
+        userTodo.setUserTodoSetId(userTodoSetId);
         userTodo.setUserId(userId);
         userTodo.setTime(Long.valueOf(param.get("time").toString()));
         userTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
-        userTodo.setTodoStatusId(Integer.valueOf(param.get("todoStatusId").toString()));
+        userTodo.setTodoStatusId(todoStatusId);
         userTodo.setTypeId(Integer.valueOf(param.get("typeId").toString()));
-        if (userTodoService.updateUserTodo(userTodo)) {
-            return "update-success";
+        if (todoStatusId<1||todoStatusId>3){
+            result = "update-fail:状态ID错误";
         }
-        return "update-fail";
+        else if (userTodoService.getById(userTodoSetId)==null){
+            result = "update-fail:用户待办集不存在";
+        }
+        else if (userTodoService.updateUserTodo(userTodo)) {
+            result = "update-success";
+        }
+        return result;
     }
 
     /**
@@ -131,11 +148,15 @@ public class UserTodoController extends BaseController {
     @RequestMapping(value = "/updateState", method = RequestMethod.POST)
     @ResponseBody
     public String updateState(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
+        String result = "updateState-fail";
         int userTodoId = Integer.valueOf(param.get("userTodoId").toString());
         int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
-        if (userTodoService.updateState(userTodoId, todoStatusId)) {
-            return "updateState-success";
+        if (todoStatusId<1||todoStatusId>3){
+            result = "updateState-fail:状态ID错误";
         }
-        return "updateState-fail";
+        else if (userTodoService.updateState(userTodoId, todoStatusId)) {
+            result = "updateState-success";
+        }
+        return result;
     }
 }
