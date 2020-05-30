@@ -36,6 +36,9 @@ public class TeamTodo {
     @Column(name = "team")
     private int teamId;
 
+    @Column(name = "user")
+    private int userId;
+
     public int getTeamTodoId() {
         return teamTodoId;
     }
@@ -114,5 +117,13 @@ public class TeamTodo {
 
     public void setTeamId(int teamId) {
         this.teamId = teamId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void  setUserId(int userId){
+        this.userId=userId;
     }
 }

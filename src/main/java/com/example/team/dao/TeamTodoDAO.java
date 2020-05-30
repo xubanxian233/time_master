@@ -8,18 +8,13 @@ public interface TeamTodoDAO {
     void add(TeamTodo teamTodo);
 
     void delete(int teamTodoId);
-
+    void deleteByUser(String name,int userId);
     void update(TeamTodo teamTodo);
-
-    void updateState(int teamTodoId, int todoStatusId);
-
+    void updateState(int teamTodoId,int todoStatusId,int userId);
     TeamTodo getById(int teamTodoId);
-
-    TeamTodo getByName(String name);
-
-    List<TeamTodo> list(int teamId);
-
-    List<TeamTodo> list(int teamId, int teamTodoSetId);
-
+    TeamTodo getByUser(String name,int userId);
+    List<TeamTodo> listByUser(int teamId,int userId);
+    List<TeamTodo> list(int teamId,int teamTodoSetId);
+    List<TeamTodo> list(int teamId,int teamTodoSetId,int userId);
     void updateSchedule();
 }
