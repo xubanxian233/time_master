@@ -17,7 +17,11 @@ public interface UserService {
 
     public int getId();
 
-    boolean updateUserInfo(int userId, String userName, String emain, String tel);
+    boolean updateEmail(int userId, String email);
+
+    boolean updateTel(int userId, String tel);
+
+    boolean updateUserName(int userId, String userName);
 
     public boolean updateUserPassword(int userId, String password);
 

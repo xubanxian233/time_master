@@ -14,6 +14,7 @@ import javax.jws.soap.SOAPBinding;
 import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 @Controller
@@ -41,7 +42,7 @@ public class UserController extends BaseController {
             String token = UUID.randomUUID().toString().replaceAll("-", "");
             int id = userService.getId();
             redisService.set(String.valueOf(id), token);
-            redisService.setExpire(String.valueOf(id), 100000);
+            redisService.setExpire(String.valueOf(id), 3600);
             response.setHeader("Access-Control-Expose-Headers", "token");
             response.setHeader("Access-Control-Expose-Headers", "id");
             response.setHeader("token", token);
@@ -88,29 +89,77 @@ public class UserController extends BaseController {
         pet.setPetStatusId(1);
         pet.setSkinId(1);
         pet.setLevel(1);
-        if (userService.sign(user, pet)) {
-            return "sign-succees";
+        String vertification = redisService.get(user.getEmail());
+        if (vertification != null) {
+            if (vertification.equals(param.get("vertification").toString())) {
+                if (userService.sign(user, pet)) {
+                    return "sign-succees";
+                }
+                return "sign-fail";
+            }
+            return "vertify-fail";
         }
-        return "sign-fail";
+        return "overtime";
     }
 
     /**
-     * updateInfo 修改信息
+     * updateEamil 修改信息
      *
      * @param param 修改的用户信息参数 map
      * @return String 修改结果
      */
-    @RequestMapping(value = "/updateInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateEmail", method = RequestMethod.POST)
     @ResponseBody
-    public String updateInfo(@RequestBody Map<String, Object> param) {
+    public String updateEmail(@RequestBody Map<String, Object> param) {
+        int userId = Integer.parseInt(request.getHeader("id"));
+        String email = param.get("email").toString();
+        String vertification = redisService.get(email);
+        if (vertification != null) {
+            if (vertification.equals(param.get("vertification").toString())) {
+                if (userService.updateEmail(userId, email)) {
+                    return "update-success";
+                }
+                return "update-fail";
+            }
+            return "vertify-fail";
+        }
+        return "overtime";
+    }
+
+    /**
+     * updateUserName 修改信息
+     *
+     * @param param 修改的用户信息参数 map
+     * @return String 修改结果
+     */
+    @RequestMapping(value = "/updateUserName", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateUserName(@RequestBody Map<String, Object> param) {
         int userId = Integer.parseInt(request.getHeader("id"));
         String userName = param.get("userName").toString();
-        String tel = param.get("tel").toString();
-        String email = param.get("email").toString();
-        if (userService.updateUserInfo(userId, userName, email, tel)) {
+        if (userService.updateUserName(userId, userName)) {
             return "update-success";
         }
         return "update-fail";
+
+    }
+
+    /**
+     * updateTel 修改信息
+     *
+     * @param param 修改的用户信息参数 map
+     * @return String 修改结果
+     */
+    @RequestMapping(value = "/updateTel", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateTel(@RequestBody Map<String, Object> param) {
+        int userId = Integer.parseInt(request.getHeader("id"));
+        String tel = param.get("tel").toString();
+        if (userService.updateTel(userId, tel)) {
+            return "update-success";
+        }
+        return "update-fail";
+
     }
 
     /**
@@ -157,8 +206,10 @@ public class UserController extends BaseController {
     @ResponseBody
     public String findPassword(@RequestParam String email) {
         int userId = userService.getUserId("", email, "");
+        String content = "点击下方重置链接重置密码<br><a href = \"http://localhost:8080/user/gotoReset?key="
+                + userId + "@" + new java.util.Date().getTime() + "\">重置链接</a><br>有效时长10分钟。";
         if (userId != 0) {
-            if (MailUtil.sendEmail(email, userId)) {
+            if (MailUtil.sendEmail(email, "重置密码",content)) {
                 return "send-success";
             }
         }
@@ -205,6 +256,30 @@ public class UserController extends BaseController {
         }
         model.addAttribute("flag", "false");
         return "result";
+    }
+
+    /**
+     * sendVerification 找回密码
+     *
+     * @param email 邮箱账号
+     * @return 找回邮件发送结果
+     */
+    @RequestMapping("/sendVerification")
+    @ResponseBody
+    public String sendVerification(@RequestParam String email) {
+        StringBuilder content = new StringBuilder();
+        content.append("有效时长：2分钟<br>");
+        String sources = "0123456789"; // 加上一些字母，就可以生成pc站的验证码了
+        Random rand = new Random();
+        for (int j = 0; j < 6; j++) {
+            content.append(sources.charAt(rand.nextInt(9)));
+        }
+        if (MailUtil.sendEmail(email, "验证码",content.toString())) {
+            redisService.set(email,content.toString());
+            redisService.setExpire(email, 120);
+            return "send-success";
+        }
+        return "send-fail";
     }
 
     @RequestMapping("/test")
