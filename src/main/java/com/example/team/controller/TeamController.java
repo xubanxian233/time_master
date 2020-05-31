@@ -99,7 +99,11 @@ public class TeamController extends BaseController {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         String email = param.get("email").toString();
         int userId = userService.getUserId("", email, "");
-        if (userService.joinTeam(teamId, userId) != null) {
+        Team team=userService.joinTeam(teamId, userId);
+        if (team != null) {
+            if(team.getTeamId()==-1){
+                return "invited";
+            }
             return "invite-success";
         }
         return "invite-fail";

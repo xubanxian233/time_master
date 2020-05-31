@@ -110,32 +110,65 @@ public class UserServiceImpl implements UserService {
         return id;
     }
 
+
     /**
-     * updateUserInfo 修改用户信息
+     * updateEmail 修改用户信息
      *
-     * @param userId,userName,email,tel 修改对应的userName、email、tel，以及对应用户的Id
+     * @param userId,email 修改对应的email以及对应用户的Id
      * @return 修改结果
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateUserInfo(int userId, String userName, String email, String tel) {
+    public boolean updateEmail(int userId, String email) {
         User user = userDAO.getById(userId);
-        User user1 = userDAO.getByName(userName);
-        User user2 = userDAO.getByEmail(email);
-        User user3 = userDAO.getByTel(tel);
-        if ((user1 != null && !userName.equals(user.getName()))
-                || (user2 != null && !email.equals(user.getEmail()))
-                || (user3 != null && !tel.equals(user.getTel()))) {
+        User user1 = userDAO.getByEmail(email);
+        if (user1 != null && !email.equals(user.getEmail())) {
             return false;
         }
-        if (userName != "") {
-            user.setName(userName);
+        if (email != "") {
+            user.setEmail(email);
+        }
+        userDAO.update(user);
+        return true;
+    }
+
+    /**
+     * updateTel 修改用户信息
+     *
+     * @param userId,tel 修改对应的tel，以及对应用户的Id
+     * @return 修改结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateTel(int userId, String tel) {
+        User user = userDAO.getById(userId);
+        User user1 = userDAO.getByEmail(tel);
+        if (user1 != null && !tel.equals(user.getTel())) {
+            return false;
         }
         if (tel != "") {
             user.setTel(tel);
         }
-        if (email != "") {
-            user.setEmail(email);
+        userDAO.update(user);
+        return true;
+    }
+
+    /**
+     * updateUserName 修改用户信息
+     *
+     * @param userId,userName 修改对应的userName，以及对应用户的Id
+     * @return 修改结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateUserName(int userId, String userName) {
+        User user = userDAO.getById(userId);
+        User user1 = userDAO.getByEmail(userName);
+        if (user1 != null && !userName.equals(user.getName())) {
+            return false;
+        }
+        if (userName != "") {
+            user.setName(userName);
         }
         userDAO.update(user);
         return true;
@@ -193,6 +226,12 @@ public class UserServiceImpl implements UserService {
         Team team = teamDAO.getByTeamId(teamId);
         User user = userDAO.getById(userId);
         if (team != null && user != null) {
+            for (User user1 : team.getUsers()) {
+                if (user1.getUserId() == userId) {
+                    team.setTeamId(-1);
+                    return team;
+                }
+            }
             team.getUsers().add(user);
             teamDAO.update(team);
             return team;

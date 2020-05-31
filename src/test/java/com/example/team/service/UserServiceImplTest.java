@@ -59,7 +59,7 @@ class UserServiceImplTest {
         Assert.assertEquals(1,id3);
     }
 
-    @Test
+   /* @Test
     void updateUserInfo() {
         //已存在用户名、email、tel 返回false
         Assert.assertTrue(!userService.updateUserInfo(1,"wjchen","",""));
@@ -67,7 +67,7 @@ class UserServiceImplTest {
         Assert.assertTrue(!userService.updateUserInfo(1,"","1158802650@qq.com",""));
         //不存在
         Assert.assertTrue(userService.updateUserInfo(1,"admin1","",""));
-    }
+    }*/
 
     @Test
     void updateUserPassword() {
