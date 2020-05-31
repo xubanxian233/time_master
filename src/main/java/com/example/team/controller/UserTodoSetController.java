@@ -80,7 +80,8 @@ public class UserTodoSetController extends BaseController {
         userTodoSet.setUserId(userId);
         userTodoSet.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
         if (userTodoSetService.updateUserTodoSet(userTodoSet)) {
-            return "update-success";
+            UserTodoSet userTodoSet1 = userTodoSetService.getByName(userTodoSet.getName());
+            return "update-success,userTodoSetId:"+userTodoSet1.getUserTodoSetId();
         }
         return "update-fail";
     }

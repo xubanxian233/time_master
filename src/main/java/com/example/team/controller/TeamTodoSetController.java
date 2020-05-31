@@ -39,7 +39,7 @@ public class TeamTodoSetController extends BaseController {
      * get 获取某一团队待办集
      *
      * @param param 团队待办集ID
-     * @return TeamTodoSet 摸鱼具体团队待办集
+     * @return TeamTodoSet 获取具体团队待办集
      **/
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
@@ -57,14 +57,16 @@ public class TeamTodoSetController extends BaseController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     private String createTeamTodoSet(@RequestBody Map<String, Object> param) {
+        String name = param.get("name").toString();
         TeamTodoSet teamTodoSet = new TeamTodoSet();
-        teamTodoSet.setName(param.get("name").toString());
+        teamTodoSet.setName(name);
         teamTodoSet.setTeamId(Integer.valueOf(param.get("teamId").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date create = new java.util.Date();
         teamTodoSet.setCreate(Date.valueOf(df.format(create)));
         if (teamTodoSetService.createTeamTodoSet(teamTodoSet)) {
-            return "create-success";
+            TeamTodoSet teamTodoSet1 = teamTodoSetService.getByName(name);
+            return "create-success,teamTodoSetId:"+teamTodoSet1.getTeamTodoSetId();
         }
         return "create-fail";
     }
