@@ -1,9 +1,9 @@
 package com.example.team.controller;
 
-import com.example.team.pojo.Team;
-import com.example.team.pojo.User;
-import com.example.team.pojo.UserTodo;
+import com.example.team.pojo.*;
 import com.example.team.service.TeamService;
+import com.example.team.service.TeamTodoService;
+import com.example.team.service.TeamTodoSetService;
 import com.example.team.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,10 @@ public class TeamController extends BaseController {
     private TeamService teamService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TeamTodoService teamTodoService;
+    @Autowired
+    private TeamTodoSetService teamTodoSetService;
 
     /**
      * createTeam 创建团队
@@ -165,5 +169,75 @@ public class TeamController extends BaseController {
         team.setTeamId(teamId);
         teamService.updateTeam(team);
         return "update-success";
+    }
+
+    /**
+     * getRecords 获取用户待办和待办集使用情况
+     *
+     * @param param 选择项（option），团队ID（teamId）
+     * @return String
+     */
+    @RequestMapping(value = "/getRecords", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @ResponseBody
+    public String getRecords(@RequestBody Map<String, Object> param,@RequestHeader("id") int userId){
+        int todoNum = 0;
+        int todoSetNum = 0;
+        String records = "";
+        int option = Integer.parseInt(param.get("option").toString());
+        int teamId = Integer.parseInt(param.get("teamId").toString());
+        List<TeamTodo> teamTodoList = teamTodoService.listByUser(teamId,userId);
+        List<TeamTodoSet> teamTodoSetList = teamTodoSetService.listByTeamId(teamId);
+        if (option == 1){
+            for (TeamTodo list : teamTodoList){
+                if (list.getTodoStatusId()==2){
+                    todoNum++;
+                }
+            }
+            records += "Todo:" + todoNum + "/" + teamTodoList.size() + "\r\n";
+            for (TeamTodoSet set : teamTodoSetList){
+                int i = 0;
+                List<TeamTodo> todoList = teamTodoService.listTeamTodo(set.getTeamTodoSetId(),teamId,userId);
+                for (TeamTodo list : todoList){
+                    if (list.getTodoStatusId()==2){
+                        i++;
+                    }
+                }
+                if (i == todoList.size()){
+                    todoSetNum++;
+                }
+            }
+            records += "TodoSet:" + todoSetNum + "/" + teamTodoSetList.size();
+        }
+        else if (option == 2){
+            records += "Todo:" + "\r\n";
+            for (TeamTodo list : teamTodoList){
+                if (list.getTodoStatusId()==2){
+                    records += "  " + list.getName() + ":1" + "\r\n";
+                }
+                else {
+                    records += "  " + list.getName() + ":0" + "\r\n";
+                }
+            }
+            records += "TodoSet:" + "\r\n";
+            for (TeamTodoSet set : teamTodoSetList){
+                int i = 0;
+                List<TeamTodo> todoList = teamTodoService.listTeamTodo(set.getTeamTodoSetId(),teamId,userId);
+                for (TeamTodo list : todoList){
+                    if (list.getTodoStatusId()==2){
+                        i++;
+                    }
+                }
+                if (i == todoList.size()){
+                    records += "  " + set.getName() + ":1" + "\r\n";
+                }
+                else {
+                    records += "  " + set.getName() + ":0" + "\r\n";
+                }
+            }
+        }
+        else {
+            records = "option输入错误";
+        }
+        return records;
     }
 }
