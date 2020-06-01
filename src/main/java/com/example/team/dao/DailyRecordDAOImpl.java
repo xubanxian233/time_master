@@ -53,8 +53,13 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
 
     @Override
     public DailyRecord getByUserId(int userId, Date dailyDate) {
-        String hql = "from DailyRecord where userId=:userId and dailyDate=:dailyDate";
-        return (DailyRecord) getSession().createQuery(hql).setParameter("userId", userId).uniqueResult();
+        Date date=new Date(dailyDate.getTime()+10*60*60*1000);
+        String hql = "from DailyRecord where userId=:userId and dailyDate>=:dailyDate and dailyDate<=:date";
+        return (DailyRecord) getSession().createQuery(hql)
+                .setParameter("userId", userId)
+                .setParameter("dailyDate",dailyDate)
+                .setParameter("date",date)
+                .uniqueResult();
     }
 
     public List listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate) {

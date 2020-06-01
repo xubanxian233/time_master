@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,6 +18,7 @@ public class AccRecord {
     private long acctime;
     private long dailytime;
     @Column(name = "user")
+    @JsonIgnore
     private int userId;
 
     public int getAccRecordId() {

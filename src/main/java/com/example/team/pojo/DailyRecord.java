@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -18,6 +20,7 @@ public class DailyRecord {
     @Column(name = "daily_date")
     private Date dailyDate;
     @Column(name = "user")
+    @JsonIgnore
     private int userId;
 
     public int getDailyRecordId() {
