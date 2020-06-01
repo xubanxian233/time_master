@@ -28,7 +28,7 @@ import java.util.Map;
 public class UserControllerTest {
     private MockMvc mvc;
 
-    @Autowired
+    /*@Autowired
     private WebApplicationContext wac;
     @Before
     public void setUp() throws Exception {
@@ -183,5 +183,5 @@ public class UserControllerTest {
 
 
         System.out.println("response------------------:"+mvcResult.getResponse().getContentAsString());
-    }
+    }*/
 }

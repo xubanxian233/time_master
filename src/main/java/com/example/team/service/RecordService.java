@@ -7,6 +7,7 @@ import com.example.team.pojo.TypeRecord;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface RecordService {
     void addRecordByUser(int uId, int tTime, int tsId);
@@ -21,5 +22,5 @@ public interface RecordService {
 
     List<TypeRecord> getTypeRecord(int userId);
 
-    List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate);
+    Map<Integer,Long> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate);
 }

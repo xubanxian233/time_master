@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RecordControllerTest {
     private MockMvc mvc;
 
-    @Autowired
+   /* @Autowired
     private WebApplicationContext wac;
     @Before
     public void setUp() throws Exception {
@@ -57,5 +57,5 @@ public class RecordControllerTest {
 
     @Test
     public void getDailyRecordByMonth() {
-    }
+    }*/
 }
