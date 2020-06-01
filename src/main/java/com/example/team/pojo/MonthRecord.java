@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -18,6 +20,7 @@ public class MonthRecord {
     @Column(name = "month_date")
     private Date monthDate;
     @Column(name = "user")
+    @JsonIgnore
     private int userId;
 
     public int getMonthRecordId() {
