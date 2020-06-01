@@ -69,8 +69,7 @@ public class UserTodoController extends BaseController {
      **/
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
-    public String create(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
-        String result = "create-fail";
+    public UserTodo create(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         int userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
         UserTodo userTodo = new UserTodo();
         userTodo.setName(param.get("name").toString());
@@ -83,13 +82,13 @@ public class UserTodoController extends BaseController {
         userTodo.setTodoStatusId(1);
         userTodo.setTypeId(0);
         if (userTodoSetService.getById(userTodoSetId)==null){
-            result = "create-fail:用户待办集不存在";
+            return null;
         }
         else if (userTodoService.createUserTodo(userTodo)) {
             UserTodo userTodo1 = userTodoService.getByName(userTodo.getName());
-            result = "create-success,userTodoId:" + userTodo1.getUserTodoId();
+            return userTodo1;
         }
-        return result;
+        return null;
     }
 
     /**

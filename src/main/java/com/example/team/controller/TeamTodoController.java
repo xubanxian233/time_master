@@ -79,11 +79,16 @@ public class TeamTodoController extends BaseController {
     @ResponseBody
     private String createTeamTodo(@RequestBody Map<String,Object> param){
         String result = "create-fail";
-        int teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+        Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
         TeamTodo teamTodo = new TeamTodo();
+        if (teamTodoSetId == null){
+            teamTodo.setTeamTodoSetId(1);
+        }
+        else {
+            teamTodo.setTeamTodoSetId(teamTodoSetId);
+        }
         teamTodo.setName(param.get("name").toString());
         teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
-        teamTodo.setTeamTodoSetId(teamTodoSetId);
         teamTodo.setTime(Long.valueOf(param.get("time").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date create = new Date();
@@ -97,7 +102,6 @@ public class TeamTodoController extends BaseController {
         for (User user : set) {
             teamTodo.setUserId(user.getUserId());
             if (teamTodoService.createTeamTodo(teamTodo)) {
-                //TeamTodo teamTodo1 = teamTodoService.getByUser(teamTodo.getName(),user.getUserId());
                 result = "create-success";
             }
         }
