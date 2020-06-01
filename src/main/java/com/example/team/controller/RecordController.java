@@ -22,6 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/record")
@@ -92,7 +93,7 @@ public class RecordController extends BaseController {
      */
     @RequestMapping("/getDailyRecordByMonth")
     @ResponseBody
-    List<DailyRecord> getDailyRecordByMonth(@RequestParam String date_1, @RequestParam String date_2) throws ParseException {
+    Map<Integer,Long> getDailyRecordByMonth(@RequestParam String date_1, @RequestParam String date_2) throws ParseException {
         int userId = Integer.parseInt(request.getHeader("id"));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date litleMonthDate = Date.valueOf(date_1);

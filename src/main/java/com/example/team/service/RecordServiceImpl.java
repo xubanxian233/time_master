@@ -10,7 +10,9 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("recordService")
 @Transactional(rollbackFor = Exception.class)
@@ -164,7 +166,19 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate) {
-        return dailyRecordDAO.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
+    public Map<Integer,Long> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate) {
+        List<DailyRecord> list=dailyRecordDAO.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Map<Integer,Long> month=new HashMap<>();
+        for (DailyRecord dailyRecord:list) {
+            String date=simpleDateFormat.format(dailyRecord.getDailyDate());
+            month.put(Integer.parseInt(date.substring(8,10)),dailyRecord.getAcctime());
+        }
+        for(int i=0;i<31;i++){
+            if(!month.containsKey(i+1)){
+                month.put(i+1,0L);
+            }
+        }
+        return month;
     }
 }

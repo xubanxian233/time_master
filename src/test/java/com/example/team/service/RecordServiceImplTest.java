@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class RecordServiceImplTest {
-    @Autowired
+    /*@Autowired
     private RecordService recordService;
     @Autowired
     private DailyRecordDAO dailyRecordDAO;
@@ -59,7 +59,7 @@ class RecordServiceImplTest {
     void getTypeRecord() {
     }*/
 
-    @Test
+    /*@Test
     void listDailyRecordByMonth() throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date date1 = simpleDateFormat.parse("2020-04-01");
@@ -69,5 +69,5 @@ class RecordServiceImplTest {
         Assert.assertEquals(1, list.get(0).getDailyRecordId());
         Assert.assertEquals(0, list.get(0).getSuccessCount());
         Assert.assertEquals(0, list.get(0).getFailCount());
-    }
+    }*/
 }

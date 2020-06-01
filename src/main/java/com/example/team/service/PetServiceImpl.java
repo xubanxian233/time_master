@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PetServiceImpl implements PetService {
     @Autowired
     private PetDAO petDAO;
+    @Autowired
+    private UserDAO userDAO;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -39,7 +41,8 @@ public class PetServiceImpl implements PetService {
      */
     @Override
     public Pet getPetByUserId(int userId) {
-        return petDAO.getByUserId(userId);
+        //return petDAO.getByUserId(userId);
+        return userDAO.getById(userId).getPet();
     }
 
     /**

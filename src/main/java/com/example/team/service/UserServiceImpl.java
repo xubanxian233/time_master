@@ -63,12 +63,10 @@ public class UserServiceImpl implements UserService {
         User user_2 = userDAO.getByTel(tel);
         User user_3 = userDAO.getByName(name);
         if (user_1 == null && user_2 == null && user_3 == null) {
-            int userId = userDAO.add(user);
-            int petId = petDAO.add(pet);
-            user.setPetId(petId);
-            pet.setUserId(userId);
+            pet.setUser(user);
+            petDAO.add(pet);
+            user.setPet(pet);
             userDAO.update(user);
-            petDAO.update(pet);
             return true;
         }
         return false;
