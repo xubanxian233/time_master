@@ -5,15 +5,18 @@ import com.example.team.service.TeamService;
 import com.example.team.service.TeamTodoService;
 import com.example.team.service.TeamTodoSetService;
 import com.example.team.service.UserService;
+import com.example.team.util.DataVo;
+import com.example.team.util.ExcelWriter;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/team")
@@ -191,13 +194,18 @@ public class TeamController extends BaseController {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         List<TeamTodo> teamTodoList = teamTodoService.listByUser(teamId,userId);
         List<TeamTodoSet> teamTodoSetList = teamTodoSetService.listByTeamId(teamId);
+        List<DataVo> dataVOList = new ArrayList<>();
         if (option == 1){
+            DataVo dataVO = new DataVo();
             for (TeamTodo list : teamTodoList){
                 if (list.getTodoStatusId()==2){
                     todoNum++;
                 }
             }
-            records += "Todo:" + todoNum + "/" + teamTodoList.size() + "\r\n";
+            dataVO.setName("Todo");
+            dataVO.setCompletion(todoNum + "/" + teamTodoList.size());
+            //records += "Todo:" + todoNum + "/" + teamTodoList.size() + "\r\n";
+            DataVo dataVO2 = new DataVo();
             for (TeamTodoSet set : teamTodoSetList){
                 int i = 0;
                 List<TeamTodo> todoList = teamTodoService.listTeamTodo(set.getTeamTodoSetId(),teamId,userId);
@@ -210,37 +218,76 @@ public class TeamController extends BaseController {
                     todoSetNum++;
                 }
             }
-            records += "TodoSet:" + todoSetNum + "/" + teamTodoSetList.size();
+            dataVO2.setSName("TodoSet");
+            dataVO2.setCompletion(todoSetNum + "/" + teamTodoSetList.size());
+            //records += "TodoSet:" + todoSetNum + "/" + teamTodoSetList.size();
+            dataVOList.add(dataVO2);
+            dataVOList.add(dataVO);
+            records = "操作1";
         }
         else if (option == 2){
-            records += "Todo:" + "\r\n";
-            for (TeamTodo list : teamTodoList){
-                if (list.getTodoStatusId()==2){
-                    records += "  " + list.getName() + ":1" + "\r\n";
-                }
-                else {
-                    records += "  " + list.getName() + ":0" + "\r\n";
-                }
-            }
-            records += "TodoSet:" + "\r\n";
             for (TeamTodoSet set : teamTodoSetList){
+                DataVo dataVO = new DataVo();
                 int i = 0;
                 List<TeamTodo> todoList = teamTodoService.listTeamTodo(set.getTeamTodoSetId(),teamId,userId);
                 for (TeamTodo list : todoList){
+                    DataVo dataVO1 = new DataVo();
                     if (list.getTodoStatusId()==2){
+                        dataVO1.setName(list.getName());
+                        dataVO1.setSName(set.getName());
+                        dataVO1.setRecord(1);
                         i++;
                     }
+                    else {
+                        dataVO1.setName(list.getName());
+                        dataVO1.setSName(set.getName());
+                        dataVO1.setRecord(0);
+                    }
+                    dataVOList.add(dataVO1);
                 }
                 if (i == todoList.size()){
-                    records += "  " + set.getName() + ":1" + "\r\n";
+                    dataVO.setSName(set.getName());
+                    dataVO.setRecord(1);
                 }
                 else {
-                    records += "  " + set.getName() + ":0" + "\r\n";
+                    dataVO.setSName(set.getName());
+                    dataVO.setRecord(0);
                 }
+                dataVOList.add(dataVO);
             }
+            records = "操作2";
         }
         else {
             records = "option输入错误";
+        }
+        // 写入数据到工作簿对象内
+        Workbook workbook = ExcelWriter.exportData(dataVOList);
+        // 以文件的形式输出工作簿对象
+        FileOutputStream fileOut = null;
+        try {
+            //E:\files\write-01.xlsx  不用创建，会自动生成的
+            String exportFilePath = "E:\\write-01.xlsx";
+            File exportFile = new File(exportFilePath);
+            if (!exportFile.exists()) {
+                exportFile.createNewFile();
+            }
+            fileOut = new FileOutputStream(exportFilePath);
+            workbook.write(fileOut);
+            fileOut.flush();
+        } catch (
+                Exception e) {
+            //logger.warn("输出Excel时发生错误，错误原因：" + e.getMessage());
+        } finally {
+            try {
+                if (null != fileOut) {
+                    fileOut.close();
+                }
+                if (null != workbook) {
+                    workbook.close();
+                }
+            } catch (IOException e) {
+                //logger.warn("关闭输出流时发生错误，错误原因：" + e.getMessage());
+            }
         }
         return records;
     }
