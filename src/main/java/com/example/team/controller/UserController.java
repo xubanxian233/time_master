@@ -1,8 +1,6 @@
 package com.example.team.controller;
 
-import com.example.team.pojo.Pet;
-import com.example.team.pojo.User;
-import com.example.team.pojo.UserTodo;
+import com.example.team.pojo.*;
 import com.example.team.service.*;
 import com.example.team.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,21 +33,21 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public List<UserTodo> login(@RequestBody Map<String, Object> param) {
+    public String login(@RequestBody Map<String, Object> param) {
         String userName = param.get("userName").toString();
         String password = param.get("password").toString();
         if (userService.verify(userName, password)) {
             String token = UUID.randomUUID().toString().replaceAll("-", "");
             int id = userService.getId();
             redisService.set(String.valueOf(id), token);
-            redisService.setExpire(String.valueOf(id), 3600);
+            redisService.setExpire(String.valueOf(id), 21600);
             response.setHeader("Access-Control-Expose-Headers", "token");
             response.setHeader("Access-Control-Expose-Headers", "id");
             response.setHeader("token", token);
             response.setHeader("id", String.valueOf(id));
-            return userTodoService.listUserTodo(0, id);
+            return "login-success";
         }
-        return null;
+        return "login-fail";
     }
 
     /**
@@ -86,18 +84,22 @@ public class UserController extends BaseController {
         pet.setBirth(new Date(new java.util.Date().getTime()));
         pet.setSex(1);
         pet.setName("简时");
-        pet.setPetStatusId(1);
-        pet.setSkinId(1);
+        PetStatus petStatus=new PetStatus();
+        petStatus.setPetStatusId(1);
+        pet.setPetStatus(petStatus);
+        Skin skin=new Skin();
+        skin.setSkinId(1);
+        pet.setSkin(skin);
         pet.setLevel(1);
-        String vertification = redisService.get(user.getEmail());
-        if (vertification != null) {
-            if (vertification.equals(param.get("vertification").toString())) {
+        String verification = redisService.get(user.getEmail());
+        if (verification != null) {
+            if (verification.equals(param.get("verification").toString())) {
                 if (userService.sign(user, pet)) {
                     return "sign-succees";
                 }
                 return "sign-fail";
             }
-            return "vertify-fail";
+            return "verify-fail";
         }
         return "overtime";
     }
@@ -113,15 +115,15 @@ public class UserController extends BaseController {
     public String updateEmail(@RequestBody Map<String, Object> param) {
         int userId = Integer.parseInt(request.getHeader("id"));
         String email = param.get("email").toString();
-        String vertification = redisService.get(email);
-        if (vertification != null) {
-            if (vertification.equals(param.get("vertification").toString())) {
+        String verification = redisService.get(email);
+        if (verification != null) {
+            if (verification.equals(param.get("verification").toString())) {
                 if (userService.updateEmail(userId, email)) {
                     return "update-success";
                 }
                 return "update-fail";
             }
-            return "vertify-fail";
+            return "verify-fail";
         }
         return "overtime";
     }
@@ -206,7 +208,8 @@ public class UserController extends BaseController {
     @ResponseBody
     public String findPassword(@RequestParam String email) {
         int userId = userService.getUserId("", email, "");
-        String content = "点击下方重置链接重置密码<br><a href = \"http://localhost:8080/user/gotoReset?key="
+        String address="http://3554ff4f3e94.ngrok.io";
+        String content = "点击下方重置链接重置密码<br><a href = \""+address+"/user/gotoReset?key="
                 + userId + "@" + new java.util.Date().getTime() + "\">重置链接</a><br>有效时长10分钟。";
         if (userId != 0) {
             if (MailUtil.sendEmail(email, "重置密码",content)) {
@@ -268,15 +271,17 @@ public class UserController extends BaseController {
     @ResponseBody
     public String sendVerification(@RequestParam String email) {
         StringBuilder content = new StringBuilder();
-        content.append("有效时长：2分钟<br>");
+        StringBuilder code = new StringBuilder();
+        content.append("有效时长：5分钟<br>");
         String sources = "0123456789"; // 加上一些字母，就可以生成pc站的验证码了
         Random rand = new Random();
         for (int j = 0; j < 6; j++) {
-            content.append(sources.charAt(rand.nextInt(9)));
+            code.append(sources.charAt(rand.nextInt(9)));
         }
+        content.append(code);
         if (MailUtil.sendEmail(email, "验证码",content.toString())) {
-            redisService.set(email,content.toString());
-            redisService.setExpire(email, 120);
+            redisService.set(email,code.toString());
+            redisService.setExpire(email, 300);
             return "send-success";
         }
         return "send-fail";

@@ -26,11 +26,8 @@ public class User {
     @Column(name = "create_date")
     private Date create;
 
-    @Column(name = "pet")
-    private int petId;
-
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pet", insertable = false, updatable = false)
+    @JoinColumn(name = "pet",referencedColumnName = "pet_id")
     @JsonIgnore
     private Pet pet;
 
@@ -94,14 +91,6 @@ public class User {
         this.create = create;
     }
 
-    public int getPetId() {
-        return petId;
-    }
-
-    public void setPetId(int petId) {
-        this.petId = petId;
-    }
-
     public Set<Team> getTeams() {
         return teams;
     }
@@ -117,4 +106,5 @@ public class User {
     public void setPet(Pet pet) {
         this.pet = pet;
     }
+
 }

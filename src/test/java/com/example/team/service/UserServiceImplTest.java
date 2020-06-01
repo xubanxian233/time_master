@@ -18,7 +18,7 @@ class UserServiceImplTest {
     @Autowired
     private UserService userService;
 
-    @Test
+    /*@Test
     void verify() {
         Assert.assertTrue(userService.verify("wj@163.com","123456"));
     }
@@ -69,7 +69,7 @@ class UserServiceImplTest {
         Assert.assertTrue(userService.updateUserInfo(1,"admin1","",""));
     }*/
 
-    @Test
+    /*@Test
     void updateUserPassword() {
         //太短太长
         Assert.assertTrue(!userService.updateUserPassword(1,"12345"));
@@ -82,5 +82,5 @@ class UserServiceImplTest {
     void getById() {
         User user=userService.getById(1);
         Assert.assertEquals(1,user.getUserId());
-    }
+    }*/
 }

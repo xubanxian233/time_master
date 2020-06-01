@@ -18,32 +18,20 @@ public class Pet {
 
     private Date birth;
 
-    @Column(name = "status")
-    @JsonIgnore
-    private int petStatusId;
-
-
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "status", insertable = false, updatable = false)
+    @JoinColumn(name = "status")
     private PetStatus petStatus;
 
     private int level;
 
-    @Column(name = "user")
-    @JsonIgnore
-    private int userId;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user", insertable = false, updatable = false)
+    @OneToOne(mappedBy = "pet",cascade = CascadeType.MERGE)
     @JsonIgnore
     private User user;
 
-    @Column(name = "skin")
-    @JsonIgnore
-    private int skinId;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "skin", insertable = false, updatable = false)
+    @JoinColumn(name = "skin")
     private Skin skin;
 
     public int getPetId() {
@@ -78,14 +66,6 @@ public class Pet {
         this.birth = birth;
     }
 
-    public int getPetStatusId() {
-        return petStatusId;
-    }
-
-    public void setPetStatusId(int petStatusId) {
-        this.petStatusId = petStatusId;
-    }
-
     public PetStatus getPetStatus() {
         return petStatus;
     }
@@ -102,13 +82,6 @@ public class Pet {
         this.level = level;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public User getUser() {
         return user;
@@ -118,13 +91,6 @@ public class Pet {
         this.user = user;
     }
 
-    public int getSkinId() {
-        return skinId;
-    }
-
-    public void setSkinId(int skinId) {
-        this.skinId = skinId;
-    }
 
     public Skin getSkin() {
         return skin;
