@@ -110,7 +110,7 @@ public class UserTodoController extends BaseController {
      * @param param 用户待办名，用户待办集ID，用户待办ID，时长，创建时间，状态ID，类型ID
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String update(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         String result = "update-fail";
