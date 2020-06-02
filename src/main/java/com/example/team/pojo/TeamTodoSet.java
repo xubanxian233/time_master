@@ -8,10 +8,10 @@ import java.sql.Date;
 public class TeamTodoSet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="team_todo_set_id")
+    @Column(name = "team_todo_set_id")
     private int teamTodoSetId;
     private String name;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date create;
     @Column(name = "team")
     private int teamId;

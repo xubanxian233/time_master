@@ -10,40 +10,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import javax.persistence.PersistenceContext;
+
 
 @Repository("petDAO")
+@Transactional(rollbackFor = Exception.class)
 public class PetDAOImpl implements PetDAO {
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    protected EntityManager entityManager;
 
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int add(Pet pet) {
         getSession().save(pet);
         return pet.getPetId();
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(int petId) {
         getSession().delete(petId);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(Pet pet) {
-        Session session=getSession();
-        Transaction tx=session.beginTransaction();
-        session.update(pet);
-        tx.commit();
-        session.close();
+        getSession().merge(pet);
     }
 
     @Override
@@ -58,14 +55,4 @@ public class PetDAOImpl implements PetDAO {
         return (Pet) getSession().createQuery(hql).setParameter("userId", userId).uniqueResult();
     }
 
-    @Override
-    public List<Integer> getUserId(){
-        String hql = "from Pet";
-        List<Pet> pList=(List<Pet>) getSession().createQuery(hql).list();
-        List<Integer> uList=null;
-        for (Pet p:pList){
-            uList.add(p.getUserId());
-        }
-        return uList;
-    }
 }

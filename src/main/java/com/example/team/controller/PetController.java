@@ -1,7 +1,9 @@
 package com.example.team.controller;
 
 import com.example.team.pojo.Pet;
+import com.example.team.pojo.Skin;
 import com.example.team.service.PetService;
+import com.example.team.service.SkinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +19,8 @@ import java.util.Map;
 public class PetController extends BaseController {
     @Autowired
     private PetService petService;
-
+    @Autowired
+    private SkinService skinService;
     /**
      * getPet 获取宠物
      *
@@ -38,7 +41,7 @@ public class PetController extends BaseController {
      * @param param 名字或者皮肤
      * @return Pet 宠物
      **/
-    @RequestMapping(value = "/updatePet",method = RequestMethod.POST)
+    @RequestMapping(value = "/updatePet", method = RequestMethod.POST)
     @ResponseBody
     public Pet updatePet(@RequestBody Map<String, Object> param) {
         Object name = param.get("name");
@@ -48,7 +51,8 @@ public class PetController extends BaseController {
         if (name != null) {
             pet.setName(name.toString());
         } else if (skin != null) {
-            pet.setSkinId(Integer.parseInt(skin.toString()));
+            Skin tempSkin=skinService.getSkin(Integer.parseInt(skin.toString()));
+            pet.setSkin(tempSkin);
         }
         petService.update(pet);
         return pet;

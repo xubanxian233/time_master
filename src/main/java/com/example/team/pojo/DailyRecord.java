@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -8,16 +10,17 @@ import java.sql.Date;
 public class DailyRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="daily_record_id")
+    @Column(name = "daily_record_id")
     private int dailyRecordId;
-    @Column(name="success_count")
+    @Column(name = "success_count")
     private int successCount;
-    @Column(name="fail_count")
+    @Column(name = "fail_count")
     private int failCount;
     private long acctime;
     @Column(name = "daily_date")
     private Date dailyDate;
     @Column(name = "user")
+    @JsonIgnore
     private int userId;
 
     public int getDailyRecordId() {

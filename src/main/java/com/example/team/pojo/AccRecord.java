@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,15 +9,16 @@ import javax.persistence.*;
 public class AccRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="acc_record_id")
+    @Column(name = "acc_record_id")
     private int accRecordId;
-    @Column(name="success_count")
+    @Column(name = "success_count")
     private int successCount;
-    @Column(name="fail_count")
+    @Column(name = "fail_count")
     private int failCount;
     private long acctime;
     private long dailytime;
     @Column(name = "user")
+    @JsonIgnore
     private int userId;
 
     public int getAccRecordId() {

@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Skin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="skin_id")
+    @Column(name = "skin_id")
     private int skinId;
 
     public int getSkinId() {

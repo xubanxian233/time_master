@@ -6,10 +6,15 @@ import java.util.List;
 
 public interface TeamTodoService {
     boolean createTeamTodo(TeamTodo teamTodo);
+
     boolean updateTeamTodo(TeamTodo teamTodo);
+    boolean updateState(int teamTodoId,int todoStatusId,int userId);
     void deleteTeamTodo(int teamTodoId);
+    void deleteByUser(String name,int userId);
     TeamTodo getById(int teamTodoId);
-    List<TeamTodo> listTeamTodo(int teamId);
+    TeamTodo getByUser(String name,int userId);
+    List<TeamTodo> listByUser(int teamId,int userId);
     List<TeamTodo> listTeamTodo(int teamTodoSetId, int teamId);
+    List<TeamTodo> listTeamTodo(int teamTodoSetId, int teamId,int userId);
     void updateSchedule();
 }

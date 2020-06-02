@@ -8,18 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository("teamTodoDAO")
 @Transactional(rollbackFor = Exception.class)
 public class TeamTodoDAOImpl implements TeamTodoDAO {
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    protected EntityManager entityManager;
 
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 
     @Override
@@ -30,19 +32,34 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     @Override
     public void delete(int teamTodoId) {
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
         String hql = "from TeamTodo where teamTodoId=:teamTodoId";
-        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("teamTodoId",teamTodoId).uniqueResult();
+        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("teamTodoId", teamTodoId).uniqueResult();
         session.delete(teamTodo);
-        tx.commit();
-        session.close();
+    }
+
+    @Override
+    public void deleteByUser(String name, int userId) {
+        Session session = getSession();
+        String hql = "from TeamTodo where name = :name and userId = :userId";
+        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("name", name).setParameter("userId", userId).uniqueResult();
+        session.delete(teamTodo);
     }
 
     @Override
     public void update(TeamTodo teamTodo) {
+        getSession().update(teamTodo);
+    }
+
+    @Override
+    public void updateState(int teamTodoId, int todoStatusId, int userId) {
         Session session = getSession();
         Transaction tx = session.beginTransaction();
-        session.update(teamTodo);
+        String hqlUpdate = "update TeamTodo as t set todoStatusId = :status where teamTodoId = :teamTodoId and userId = :userId";
+        int updatedEntities = session.createQuery(hqlUpdate)
+                .setParameter("status", todoStatusId)
+                .setParameter("teamTodoId", teamTodoId)
+                .setParameter("userId", userId)
+                .executeUpdate();
         tx.commit();
         session.close();
     }
@@ -50,37 +67,53 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     @Override
     public TeamTodo getById(int teamTodoId) {
         String hql = "from TeamTodo where teamTodoId=:teamTodoId";
-        return (TeamTodo) getSession().createQuery(hql).setParameter("teamTodoId",teamTodoId).uniqueResult();
+        return (TeamTodo) getSession().createQuery(hql).setParameter("teamTodoId", teamTodoId).uniqueResult();
     }
 
     @Override
-    public TeamTodo getByName(String name) {
-        String hql = "from TeamTodo where name=:name";
-        return (TeamTodo) getSession().createQuery(hql).setParameter("name",name).uniqueResult();
+    public TeamTodo getByUser(String name, int userId) {
+        String hql = "from TeamTodo where name=:name and userId=:userId";
+        return (TeamTodo) getSession()
+                .createQuery(hql)
+                .setParameter("name", name)
+                .setParameter("userId", userId)
+                .uniqueResult();
     }
 
     @Override
-    public List<TeamTodo> list(int teamId) {
-        String hql = "from TeamTodo where teamId=:teamId";
-        return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamId",teamId).list();
+    public List<TeamTodo> listByUser(int teamId, int userId) {
+        String hql = "from TeamTodo where teamId=:teamId and userId=:userId";
+        return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamId", teamId).setParameter("userId", userId).list();
     }
 
     @Override
     public List<TeamTodo> list(int teamId, int teamTodoSetId) {
         String hql = "from TeamTodo where teamId=:teamId and teamTodoSetId=:teamTodoSetId";
-        return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamId",teamId).setParameter("teamTodoSetId",teamTodoSetId).list();
+        return (List<TeamTodo>) getSession()
+                .createQuery(hql)
+                .setParameter("teamId", teamId)
+                .setParameter("teamTodoSetId", teamTodoSetId)
+                .list();
+    }
+
+    @Override
+    public List<TeamTodo> list(int teamId, int teamTodoSetId, int userId) {
+        String hql = "from TeamTodo where teamId=:teamId and teamTodoSetId=:teamTodoSetId and userId=:userId";
+        return (List<TeamTodo>) getSession()
+                .createQuery(hql)
+                .setParameter("teamId", teamId)
+                .setParameter("teamTodoSetId", teamTodoSetId)
+                .setParameter("userId", userId)
+                .list();
     }
 
     @Override
     public void updateSchedule() {
-        Session session=getSession();
-        Transaction tx=session.beginTransaction();
+        Session session = getSession();
         String hqlUpdate = "update TeamTodo as t set todoStatusId = :status where todoStatusId != :oldStatus";
-        int updatedEntities = session.createQuery( hqlUpdate )
-                .setParameter( "status", 1 )
-                .setParameter( "oldStatus", 1 )
+        int updatedEntities = session.createQuery(hqlUpdate)
+                .setParameter("status", 1)
+                .setParameter("oldStatus", 1)
                 .executeUpdate();
-        tx.commit();
-        session.close();
     }
 }

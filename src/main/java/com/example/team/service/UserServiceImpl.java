@@ -1,18 +1,24 @@
 package com.example.team.service;
 
 import com.example.team.dao.PetDAO;
+import com.example.team.dao.TeamDAO;
 import com.example.team.dao.UserDAO;
+import com.example.team.mail.MailSenderInfo;
+import com.example.team.mail.SimpleMailSender;
 import com.example.team.pojo.Pet;
+import com.example.team.pojo.Team;
 import com.example.team.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Service(value = "userService")
+@Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService {
-    private String token;
     private int id;
     @Autowired
     private UserDAO userDAO;
@@ -20,6 +26,8 @@ public class UserServiceImpl implements UserService {
     private RedisService redisService;
     @Autowired
     private PetDAO petDAO;
+    @Autowired
+    private TeamDAO teamDAO;
 
     /**
      * verify 验证登录并设置登录
@@ -30,10 +38,7 @@ public class UserServiceImpl implements UserService {
     public boolean verify(String userName, String password) {
         User user = userDAO.getByEmail(userName);
         if (user != null && password.equals(user.getPassword())) {
-            token = UUID.randomUUID().toString().replaceAll("-", "");
             id = user.getUserId();
-            redisService.set(String.valueOf(id), token);
-            redisService.setExpire(String.valueOf(id), 100000);
             return true;
         }
         return false;
@@ -50,7 +55,6 @@ public class UserServiceImpl implements UserService {
      * @param user,pet 注册的用户和宠物
      * @return 注册结果
      */
-    @Transactional(rollbackFor = Exception.class)
     public boolean sign(User user, Pet pet) {
         String email = user.getEmail();
         String tel = user.getTel();
@@ -59,12 +63,10 @@ public class UserServiceImpl implements UserService {
         User user_2 = userDAO.getByTel(tel);
         User user_3 = userDAO.getByName(name);
         if (user_1 == null && user_2 == null && user_3 == null) {
-            int userId = userDAO.add(user);
-            int petId = petDAO.add(pet);
-            user.setPetId(petId);
-            pet.setUserId(userId);
+            pet.setUser(user);
+            petDAO.add(pet);
+            user.setPet(pet);
             userDAO.update(user);
-            petDAO.update(pet);
             return true;
         }
         return false;
@@ -97,16 +99,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * getToken 获取用户登录成功的Token
-     *
-     * @param
-     * @return Token
-     */
-    public String getToken() {
-        return token;
-    }
-
-    /**
      * getId 获得登录成功后的UserId
      *
      * @param
@@ -116,32 +108,62 @@ public class UserServiceImpl implements UserService {
         return id;
     }
 
+
     /**
-     * updateUserInfo 修改用户信息
+     * updateEmail 修改用户信息
      *
-     * @param userId,userName,email,tel 修改对应的userName、email、tel，以及对应用户的Id
+     * @param userId,email 修改对应的email以及对应用户的Id
      * @return 修改结果
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean updateUserInfo(int userId, String userName, String email, String tel) {
+    public boolean updateEmail(int userId, String email) {
         User user = userDAO.getById(userId);
-        User user1 = userDAO.getByName(userName);
-        User user2 = userDAO.getByEmail(email);
-        User user3 = userDAO.getByTel(tel);
-        if ((user1 != null && !userName.equals(user.getName()))
-                || (user2 != null && !email.equals(user.getEmail()))
-                || (user3 != null && !tel.equals(user.getTel()))) {
+        User user1 = userDAO.getByEmail(email);
+        if (user1 != null && !email.equals(user.getEmail())) {
             return false;
         }
-        if (userName != "") {
-            user.setName(userName);
+        if (email.equals("")) {
+            user.setEmail(email);
         }
-        if (tel != "") {
+        userDAO.update(user);
+        return true;
+    }
+
+    /**
+     * updateTel 修改用户信息
+     *
+     * @param userId,tel 修改对应的tel，以及对应用户的Id
+     * @return 修改结果
+     */
+    @Override
+    public boolean updateTel(int userId, String tel) {
+        User user = userDAO.getById(userId);
+        User user1 = userDAO.getByEmail(tel);
+        if (user1 != null && !tel.equals(user.getTel())) {
+            return false;
+        }
+        if (tel.equals("")) {
             user.setTel(tel);
         }
-        if (email != "") {
-            user.setEmail(email);
+        userDAO.update(user);
+        return true;
+    }
+
+    /**
+     * updateUserName 修改用户信息
+     *
+     * @param userId,userName 修改对应的userName，以及对应用户的Id
+     * @return 修改结果
+     */
+    @Override
+    public boolean updateUserName(int userId, String userName) {
+        User user = userDAO.getById(userId);
+        User user1 = userDAO.getByEmail(userName);
+        if (user1 != null && !userName.equals(user.getName())) {
+            return false;
+        }
+        if (userName.equals("")) {
+            user.setName(userName);
         }
         userDAO.update(user);
         return true;
@@ -154,7 +176,6 @@ public class UserServiceImpl implements UserService {
      * @return 修改结果
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateUserPassword(int userId, String password) {
         User user = userDAO.getById(userId);
         if (password.length() >= 6 && password.length() <= 20) {
@@ -175,4 +196,61 @@ public class UserServiceImpl implements UserService {
     public User getById(int userId) {
         return userDAO.getById(userId);
     }
+
+    @Override
+    public Set<User> getMembers(int teamId) {
+        Team team = teamDAO.getByTeamId(teamId);
+        if (team != null) {
+            return team.getUsers();
+        }
+        return null;
+    }
+
+    @Override
+    public Set<Team> getTeams(int userId) {
+        User user = userDAO.getById(userId);
+        if (user != null) {
+            return user.getTeams();
+        }
+        return null;
+    }
+
+    @Override
+    public Team joinTeam(int teamId, int userId) {
+        Team team = teamDAO.getByTeamId(teamId);
+        User user = userDAO.getById(userId);
+        if (team != null && user != null) {
+            for (User user1 : team.getUsers()) {
+                if (user1.getUserId() == userId) {
+                    team.setTeamId(-1);
+                    return team;
+                }
+            }
+            team.getUsers().add(user);
+            teamDAO.update(team);
+            return team;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean quitTeam(int teamId, int userId) {
+        boolean flag = false;
+        Team team = teamDAO.getByTeamId(teamId);
+        if (team != null) {
+            for (User user : team.getUsers()) {
+                if (user.getUserId() == userId) {
+                    team.getUsers().remove(user);
+                    flag = true;
+                    break;
+                }
+            }
+            teamDAO.update(team);
+            if (team.getUsers().size() == 0) {
+                teamDAO.delete(teamId);
+            }
+        }
+        return flag;
+    }
+
 }

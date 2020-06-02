@@ -1,9 +1,6 @@
 package com.example.team;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.jpa.HibernateEntityManagerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +8,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import javax.persistence.EntityManagerFactory;
 
 @Controller
 @SpringBootApplication
@@ -28,5 +25,13 @@ public class IndexControler {
         SpringApplication.run(IndexControler.class, args);
     }
 
-
+    @Bean
+    public InternalResourceViewResolver setupViewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        /** 设置视图路径的前缀 */
+        resolver.setPrefix("/WEB-INF/jsp/");
+        /** 设置视图路径的后缀 */
+        resolver.setSuffix(".jsp");
+        return resolver;
+    }
 }

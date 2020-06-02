@@ -16,8 +16,8 @@ public class TeamTodoServiceImpl implements TeamTodoService {
 
     @Override
     public boolean createTeamTodo(TeamTodo teamTodo) {
-        TeamTodo teamTodo1 = teamTodoDAO.getByName(teamTodo.getName());
-        if (teamTodo1==null){
+        TeamTodo teamTodo1 = teamTodoDAO.getByUser(teamTodo.getName(), teamTodo.getUserId());
+        if (teamTodo1 == null || teamTodo.getUserId() != teamTodo1.getUserId()) {
             teamTodoDAO.add(teamTodo);
             return true;
         }
@@ -26,12 +26,18 @@ public class TeamTodoServiceImpl implements TeamTodoService {
 
     @Override
     public boolean updateTeamTodo(TeamTodo teamTodo) {
-        TeamTodo teamTodo1 = teamTodoDAO.getByName(teamTodo.getName());
-        if (teamTodo1==null||teamTodo1.getTeamTodoId()==teamTodo.getTeamTodoId()){
+        TeamTodo teamTodo1 = teamTodoDAO.getByUser(teamTodo.getName(), teamTodo.getUserId());
+        if (teamTodo1 == null || teamTodo.getUserId() != teamTodo1.getUserId()) {
             teamTodoDAO.update(teamTodo);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean updateState(int teamTodoId, int todoStatusId, int userId) {
+        teamTodoDAO.updateState(teamTodoId, todoStatusId, userId);
+        return true;
     }
 
     @Override
@@ -40,18 +46,33 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     }
 
     @Override
+    public void deleteByUser(String name, int userId) {
+        teamTodoDAO.deleteByUser(name, userId);
+    }
+
+    @Override
     public TeamTodo getById(int teamTodoId) {
         return teamTodoDAO.getById(teamTodoId);
     }
 
     @Override
-    public List<TeamTodo> listTeamTodo(int teamId) {
-        return teamTodoDAO.list(teamId);
+    public TeamTodo getByUser(String name, int userId) {
+        return teamTodoDAO.getByUser(name, userId);
+    }
+
+    @Override
+    public List<TeamTodo> listByUser(int teamId, int userId) {
+        return teamTodoDAO.listByUser(teamId, userId);
     }
 
     @Override
     public List<TeamTodo> listTeamTodo(int teamTodoSetId, int teamId) {
-        return teamTodoDAO.list(teamId,teamTodoSetId);
+        return teamTodoDAO.list(teamId, teamTodoSetId);
+    }
+
+    @Override
+    public List<TeamTodo> listTeamTodo(int teamTodoSetId, int teamId, int userId) {
+        return teamTodoDAO.list(teamId, teamTodoSetId, userId);
     }
 
     @Override

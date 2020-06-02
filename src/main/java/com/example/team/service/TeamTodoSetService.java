@@ -7,8 +7,14 @@ import java.util.List;
 
 public interface TeamTodoSetService {
     boolean createTeamTodoSet(TeamTodoSet teamTodoSet);
+
     boolean updateTeamTodoSet(TeamTodoSet teamTodoSet);
+
     void deleteTeamTodoSet(int teamTodoSetId);
+
     TeamTodoSet getById(int teamTodoSetId);
+
+    TeamTodoSet getByName(String name);
+
     List<TeamTodoSet> listByTeamId(int teamId);
 }

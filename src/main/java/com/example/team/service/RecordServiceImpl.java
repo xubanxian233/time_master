@@ -9,8 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.sql.Date;
+import java.util.Map;
+
 
 @Service("recordService")
 @Transactional(rollbackFor = Exception.class)
@@ -51,7 +54,7 @@ public class RecordServiceImpl implements RecordService {
         accRecord.setDailytime(tTime/days);
         if(tsId==2){
             accRecord.setSuccessCount(1);
-        }else if (tsId==3){
+        } else if (tsId == 3) {
             accRecord.setFailCount(1);
         }
         accRecordDAO.add(accRecord);
@@ -101,18 +104,10 @@ public class RecordServiceImpl implements RecordService {
             addmonthRecord(uId,tTime,tsId);
         }
 
-        if(dailyRecordDAO.getByUserId(uId,time)!=null)
-            updatedailyRecord(uId,tTime,tsId);
+        if (dailyRecordDAO.getByUserId(uId, time) != null)
+            updatedailyRecord(uId, tTime, tsId);
         else
-            adddailyRecord(uId,tTime,tsId);
-
-        List<Type> listType= typeDAO.listType();
-        for (Type t:listType){
-            TypeRecord typeRecord= new TypeRecord();
-            typeRecord.setUserId(uId);
-            typeRecord.setTypeRecordId(t.getTypeId());
-            typeRecordDAO.add(typeRecord);
-        }
+            adddailyRecord(uId, tTime, tsId);
     }
 
     public void addmonthRecord(int uId,long tTime,int tsId){
@@ -123,7 +118,7 @@ public class RecordServiceImpl implements RecordService {
         monthRecord.setMonthDate(mTime);
         if(tsId==2){
             monthRecord.setSuccessCount(1);
-        }else if (tsId==3){
+        } else if (tsId == 3) {
             monthRecord.setFailCount(1);
         }
         monthRecordDAO.add(monthRecord);
@@ -149,7 +144,7 @@ public class RecordServiceImpl implements RecordService {
         dailyRecord.setDailyDate(time);
         if(tsId==2){
             dailyRecord.setSuccessCount(1);
-        }else if (tsId==3){
+        } else if (tsId == 3) {
             dailyRecord.setFailCount(1);
         }
         dailyRecordDAO.add(dailyRecord);
@@ -173,22 +168,30 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public DailyRecord getDailyRecord(int userId, Date dailyDate) {
-        return dailyRecordDAO.getByUserId(userId,dailyDate);
+        return dailyRecordDAO.getByUserId(userId, dailyDate);
     }
 
     @Override
     public MonthRecord getMonthRecord(int userId, Date monthDate) {
-        return monthRecordDAO.getByUserId(userId,monthDate);
+        return monthRecordDAO.getByUserId(userId, monthDate);
     }
 
-    @Override
-    public List<TypeRecord> getTypeRecord(int userId) {
-        return typeRecordDAO.getByUserId(userId);
-    }
 
     @Override
-    public List<DailyRecord> listDailyRecordByMonth(int userId, Date litleMonthDate,Date bigMonthDate) {
-        return dailyRecordDAO.listDailyRecordByMonth(userId,litleMonthDate,bigMonthDate);
+    public Map<Integer, Long> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate) {
+        List<DailyRecord> list = dailyRecordDAO.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Map<Integer, Long> month = new HashMap<>();
+        for (DailyRecord dailyRecord : list) {
+            String date = simpleDateFormat.format(dailyRecord.getDailyDate());
+            month.put(Integer.parseInt(date.substring(8, 10)), dailyRecord.getAcctime());
+        }
+        for (int i = 0; i < 31; i++) {
+            if (!month.containsKey(i + 1)) {
+                month.put(i + 1, 0L);
+            }
+        }
+        return month;
     }
 
     @Override

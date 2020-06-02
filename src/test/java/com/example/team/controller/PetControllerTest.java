@@ -27,7 +27,7 @@ import com.alibaba.fastjson.JSON;
 public class PetControllerTest {
     private MockMvc mvc;
 
-    @Autowired
+    /*@Autowired
     private WebApplicationContext wac;
     @Before
     public void setUp() throws Exception {
@@ -84,5 +84,5 @@ public class PetControllerTest {
 
 
         System.out.println("response------------------:"+mvcResult.getResponse().getContentAsString());
-    }
+    }*/
 }

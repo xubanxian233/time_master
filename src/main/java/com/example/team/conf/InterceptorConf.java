@@ -20,8 +20,12 @@ public class InterceptorConf implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册登录拦截器，拦截除/login以外的所有请求
-//        registry.addInterceptor(loginInterceptor).addPathPatterns("/**")
-//                .excludePathPatterns("/user/login")
-//                .excludePathPatterns("/user/sign");
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/**")
+                .excludePathPatterns("/user/login")
+                .excludePathPatterns("/user/sign")
+                .excludePathPatterns("/user/findPassword")
+                .excludePathPatterns("/user/gotoReset")
+                .excludePathPatterns("/user/resetPassword")
+                .excludePathPatterns("/user/sendVerification");
     }
 }

@@ -18,7 +18,7 @@ class UserServiceImplTest {
     @Autowired
     private UserService userService;
 
-    @Test
+    /*@Test
     void verify() {
         Assert.assertTrue(userService.verify("wj@163.com","123456"));
     }
@@ -59,7 +59,7 @@ class UserServiceImplTest {
         Assert.assertEquals(1,id3);
     }
 
-    @Test
+   /* @Test
     void updateUserInfo() {
         //已存在用户名、email、tel 返回false
         Assert.assertTrue(!userService.updateUserInfo(1,"wjchen","",""));
@@ -67,9 +67,9 @@ class UserServiceImplTest {
         Assert.assertTrue(!userService.updateUserInfo(1,"","1158802650@qq.com",""));
         //不存在
         Assert.assertTrue(userService.updateUserInfo(1,"admin1","",""));
-    }
+    }*/
 
-    @Test
+    /*@Test
     void updateUserPassword() {
         //太短太长
         Assert.assertTrue(!userService.updateUserPassword(1,"12345"));
@@ -82,5 +82,5 @@ class UserServiceImplTest {
     void getById() {
         User user=userService.getById(1);
         Assert.assertEquals(1,user.getUserId());
-    }
+    }*/
 }

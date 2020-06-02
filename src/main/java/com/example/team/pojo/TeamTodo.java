@@ -13,11 +13,11 @@ import java.sql.Date;
 public class TeamTodo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="team_todo_id")
+    @Column(name = "team_todo_id")
     private int teamTodoId;
     private String name;
     private long time;
-    @Column(name="create_date")
+    @Column(name = "create_date")
     private Date create;
     @JsonIgnore
     @Column(name = "status")
@@ -27,15 +27,12 @@ public class TeamTodo {
     private TodoStatus todoStatus;
     @Column(name = "todoset")
     private int teamTodoSetId;
-    @JsonIgnore
-    @Column(name = "type")
-    private int typeId;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "type", insertable = false, updatable = false)
-    private Type type;
 
     @Column(name = "team")
     private int teamId;
+
+    @Column(name = "user")
+    private int userId;
 
     public int getTeamTodoId() {
         return teamTodoId;
@@ -93,27 +90,19 @@ public class TeamTodo {
         this.teamTodoSetId = teamTodoSetId;
     }
 
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
     public int getTeamId() {
         return teamId;
     }
 
     public void setTeamId(int teamId) {
         this.teamId = teamId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

@@ -10,7 +10,7 @@ import java.sql.Date;
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="pet_id")
+    @Column(name = "pet_id")
     private int petId;
     private String name;
 
@@ -18,29 +18,20 @@ public class Pet {
 
     private Date birth;
 
-    @JsonIgnore
-    @Column(name = "status")
-    private  int petStatusId;
-
-
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="status", insertable = false, updatable = false)
-    private  PetStatus petStatus;
+    @JoinColumn(name = "status")
+    private PetStatus petStatus;
 
     private int level;
-    @JsonIgnore
-    @Column(name = "user")
-    private int userId;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user", insertable = false, updatable = false)
+
+    @OneToOne(mappedBy = "pet",cascade = CascadeType.MERGE)
     @JsonIgnore
     private User user;
-    @JsonIgnore
-    @Column(name = "skin")
-    private int skinId;
+
+
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "skin", insertable = false, updatable = false)
+    @JoinColumn(name = "skin")
     private Skin skin;
 
     public int getPetId() {
@@ -75,14 +66,6 @@ public class Pet {
         this.birth = birth;
     }
 
-    public int getPetStatusId() {
-        return petStatusId;
-    }
-
-    public void setPetStatusId(int petStatusId) {
-        this.petStatusId = petStatusId;
-    }
-
     public PetStatus getPetStatus() {
         return petStatus;
     }
@@ -99,13 +82,6 @@ public class Pet {
         this.level = level;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
 
     public User getUser() {
         return user;
@@ -115,13 +91,6 @@ public class Pet {
         this.user = user;
     }
 
-    public int getSkinId() {
-        return skinId;
-    }
-
-    public void setSkinId(int skinId) {
-        this.skinId = skinId;
-    }
 
     public Skin getSkin() {
         return skin;

@@ -13,13 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service("petService")
+@Transactional(rollbackFor = Exception.class)
 public class PetServiceImpl implements PetService {
     @Autowired
     private PetDAO petDAO;
+    @Autowired
     private AccRecordDAO accRecordDAO;
+    @Autowired
+    private UserDAO userDAO;
+
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void addPet(Pet pet) {
         petDAO.add(pet);
     }
@@ -31,7 +35,6 @@ public class PetServiceImpl implements PetService {
      * @return
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(Pet pet) {
         petDAO.update(pet);
     }
@@ -44,7 +47,8 @@ public class PetServiceImpl implements PetService {
      */
     @Override
     public Pet getPetByUserId(int userId) {
-        return petDAO.getByUserId(userId);
+        //return petDAO.getByUserId(userId);
+        return userDAO.getById(userId).getPet();
     }
 
     /**

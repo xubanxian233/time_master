@@ -11,14 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.sql.Date;
@@ -74,19 +72,6 @@ public class RecordController extends BaseController {
     }
 
     /**
-     * getTypeRecord 获取类型使用记录
-     *
-     * @param
-     * @return List<TypeRecord> 用户类型使用记录
-     */
-    @RequestMapping("/getTypeRecord")
-    @ResponseBody
-    List<TypeRecord> getTypeRecord() {
-        int userId = Integer.parseInt(request.getHeader("id"));
-        return recordService.getTypeRecord(userId);
-    }
-
-    /**
      * getMonthRecordByMonth 获取所选月所有日使用记录
      *
      * @param date_1,date_2 所选开始月日期 所选开始月+1日期
@@ -94,7 +79,7 @@ public class RecordController extends BaseController {
      */
     @RequestMapping("/getDailyRecordByMonth")
     @ResponseBody
-    List<DailyRecord> getDailyRecordByMonth(@RequestParam String date_1, @RequestParam String date_2) throws ParseException {
+    Map<Integer, Long> getDailyRecordByMonth(@RequestParam String date_1, @RequestParam String date_2) throws ParseException {
         int userId = Integer.parseInt(request.getHeader("id"));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date litleMonthDate = Date.valueOf(date_1);
@@ -122,7 +107,6 @@ public class RecordController extends BaseController {
         } else {
             recordService.addRecordByUser(uId, tTime, tsId);
         }
-
         //宠物等级
         petService.updateLevel(uId);
         //宠物成就
@@ -145,4 +129,5 @@ public class RecordController extends BaseController {
     private void checkAchievement(int UId){
 
     }
+
 }

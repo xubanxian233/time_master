@@ -14,7 +14,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private RedisService redisService;
 
-    @Override
+    /*@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws IOException {
         boolean flg = false; // 是否通过
@@ -23,6 +23,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         String severToken=redisService.get(id);
         // 有token表示用户已登录（生产环境应该校验token合法性）
         if(token!=null&&severToken!=null&&id!=null&&severToken.equals(token)){
+            redisService.setExpire(id,21600);
             flg=true;
         } else {
             // 根据系统需要，返回特定的消息格式
@@ -37,5 +38,5 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         response.getWriter().write(content);
-    }
+    }*/
 }

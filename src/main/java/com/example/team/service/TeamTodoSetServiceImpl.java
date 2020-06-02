@@ -22,7 +22,7 @@ public class TeamTodoSetServiceImpl implements TeamTodoSetService {
     @Override
     public boolean createTeamTodoSet(TeamTodoSet teamTodoSet) {
         TeamTodoSet teamTodoSet1 = teamTodoSetDAO.getByName(teamTodoSet.getName());
-        if (teamTodoSet1==null){
+        if (teamTodoSet1 == null) {
             teamTodoSetDAO.add(teamTodoSet);
             return true;
         }
@@ -32,7 +32,7 @@ public class TeamTodoSetServiceImpl implements TeamTodoSetService {
     @Override
     public boolean updateTeamTodoSet(TeamTodoSet teamTodoSet) {
         TeamTodoSet teamTodoSet1 = teamTodoSetDAO.getByName(teamTodoSet.getName());
-        if (teamTodoSet1==null||teamTodoSet1.getTeamTodoSetId()==teamTodoSet.getTeamTodoSetId()){
+        if (teamTodoSet1 == null || teamTodoSet1.getTeamTodoSetId() == teamTodoSet.getTeamTodoSetId()) {
             teamTodoSetDAO.update(teamTodoSet);
             return true;
         }
@@ -42,8 +42,8 @@ public class TeamTodoSetServiceImpl implements TeamTodoSetService {
     @Override
     public void deleteTeamTodoSet(int teamTodoSetId) {
         int teamId = teamTodoSetDAO.getById(teamTodoSetId).getTeamId();
-        List<TeamTodo> list = teamTodoDAO.list(teamId,teamTodoSetId);
-        for (int i = 0; i < list.size(); i++){
+        List<TeamTodo> list = teamTodoDAO.list(teamId, teamTodoSetId);
+        for (int i = 0; i < list.size(); i++) {
             TeamTodo teamTodo = list.get(i);
             teamTodoDAO.delete(teamTodo.getTeamTodoId());
         }
@@ -53,6 +53,11 @@ public class TeamTodoSetServiceImpl implements TeamTodoSetService {
     @Override
     public TeamTodoSet getById(int teamTodoSetId) {
         return teamTodoSetDAO.getById(teamTodoSetId);
+    }
+
+    @Override
+    public TeamTodoSet getByName(String name) {
+        return teamTodoSetDAO.getByName(name);
     }
 
     @Override

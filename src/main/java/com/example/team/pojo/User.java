@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -16,6 +17,7 @@ public class User {
     private String tel;
     private String name;
     private String email;
+
     @JsonIgnore
     private String password;
     private String sex;
@@ -23,13 +25,15 @@ public class User {
 
     @Column(name = "create_date")
     private Date create;
-    @JsonIgnore
-    @Column(name = "pet")
-    private int petId;
+
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pet", insertable = false, updatable = false)
+    @JoinColumn(name = "pet",referencedColumnName = "pet_id")
     @JsonIgnore
-    private Pet Pet;
+    private Pet pet;
+
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Team> teams = new HashSet<Team>();
 
     public void setSex(String sex) {
         this.sex = sex;
@@ -87,19 +91,20 @@ public class User {
         this.create = create;
     }
 
-    public int getPetId() {
-        return petId;
+    public Set<Team> getTeams() {
+        return teams;
     }
 
-    public void setPetId(int petId) {
-        this.petId = petId;
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
     }
 
-    public com.example.team.pojo.Pet getPet() {
-        return Pet;
+    public Pet getPet() {
+        return pet;
     }
 
-    public void setPet(com.example.team.pojo.Pet pet) {
-        Pet = pet;
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
+
 }

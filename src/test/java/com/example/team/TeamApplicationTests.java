@@ -18,7 +18,7 @@ import java.util.List;
 @SpringBootTest
 class TeamApplicationTests {
 
-    @Autowired
+    /*@Autowired
     private RedisService redisService;
     @Autowired
     private UserService userService;
@@ -29,7 +29,7 @@ class TeamApplicationTests {
 
     @Test
     public void contextLoads() throws Exception {
-    }
+    }*/
 
 }
 

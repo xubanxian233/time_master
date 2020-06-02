@@ -26,7 +26,7 @@ class PetServiceImplTest {
 
     }
 
-    @Test
+    /*@Test
     void addPet() {
         Pet pet = new Pet();
         pet.setBirth(new Date(new java.util.Date().getTime()));
@@ -60,5 +60,5 @@ class PetServiceImplTest {
     void getPetById() {
         Pet pet=petService.getPetById(24);
         Assert.assertEquals(24,pet.getPetId());
-    }
+    }*/
 }

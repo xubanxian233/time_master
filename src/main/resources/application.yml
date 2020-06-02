@@ -1,14 +1,18 @@
 spring:
+  mvc:
+      view:
+        prefix: /WEB-INF/jsp/
+        suffix: .jsp
   datasource:
     url: jdbc:mysql://localhost:3306/timemaster?characterEncoding=utf8&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
     username: root
     password:
     hikari:
       connection-test-query: SELECT 1 FROM DUAL
-      connection-timeout: 600000
-      maximum-pool-size: 500
+      connection-timeout: 60000
+      maximum-pool-size: 15
       max-lifetime: 1800000
-      minimum-idle: 20
+      minimum-idle: 10
       validation-timeout: 3000
       idle-timeout: 60000
       connection-init-sql: SET NAMES utf8mb4
@@ -18,7 +22,6 @@ spring:
 
     hibernate:
       ddl-auto: update
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
