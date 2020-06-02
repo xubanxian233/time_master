@@ -103,7 +103,6 @@ public class RecordController extends BaseController {
     }
 
     @RequestMapping(value = "/setRecord",method = RequestMethod.POST)
-    @ResponseBody
     public String setRecord(@RequestBody Map<String, Object> param) {
         String userId = request.getHeader("id"); //获取用户id
         String todoId = param.get("userTodoId").toString();//获取待办id
@@ -119,25 +118,25 @@ public class RecordController extends BaseController {
         //日记录
         getCurrentTime();
         if (recordService.isExistDailyRecord(uId,nTime)) {
-            recordService.updatedailyRecord(uId, tTime, tsId);
+            recordService.updateDailyRecord(uId, tTime, tsId);
         } else {
-            recordService.adddailyRecord(uId, tTime, tsId);
+            recordService.addDailyRecord(uId, tTime, tsId);
         }
 
         //月记录
         getMonthDate();
         if(recordService.isExistMonthRecord(uId,mTime)){
-            recordService.updatemonthRecord(uId, tTime, tsId);
+            recordService.updateMonthRecord(uId, tTime, tsId);
         } else {
-            recordService.addmonthRecord(uId, tTime, tsId);
+            recordService.addMonthRecord(uId, tTime, tsId);
         }
 
 
         //总记录
         if (recordService.isExistAccRecord(uId)){
-            recordService.updateaccRecord(uId, tTime, tsId);
+            recordService.updateAccRecord(uId, tTime, tsId);
         } else {
-            recordService.addaccRecord(uId, tTime, tsId);
+            recordService.addAccRecord(uId, tTime, tsId);
         }
 
 
@@ -146,7 +145,7 @@ public class RecordController extends BaseController {
         //宠物成就
         checkAchievement(uId);
         //跳转修改待办状态
-        return "forword:/userTodo/updateState?userTodoId="+todoId+"&todoStatusId="+tsId+"";
+        return "forward:/userTodo/updateState?userTodoId="+todoId+"&todoStatusId="+tsId+"";
     }
 
 

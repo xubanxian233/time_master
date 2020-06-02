@@ -23,6 +23,7 @@ public class AchievementDAOImpl implements AchievementDAO {
     protected Session getSession() {
         return entityManager.unwrap(Session.class);
     }
+
     @Override
     public void add(Achievement achievement) {  getSession().save(achievement); }
 
