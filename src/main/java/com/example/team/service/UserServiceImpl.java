@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service(value = "userService")
+@Transactional(rollbackFor = Exception.class)
 public class UserServiceImpl implements UserService {
     private int id;
     @Autowired
@@ -54,7 +55,6 @@ public class UserServiceImpl implements UserService {
      * @param user,pet 注册的用户和宠物
      * @return 注册结果
      */
-    @Transactional(rollbackFor = Exception.class)
     public boolean sign(User user, Pet pet) {
         String email = user.getEmail();
         String tel = user.getTel();
@@ -116,14 +116,13 @@ public class UserServiceImpl implements UserService {
      * @return 修改结果
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateEmail(int userId, String email) {
         User user = userDAO.getById(userId);
         User user1 = userDAO.getByEmail(email);
         if (user1 != null && !email.equals(user.getEmail())) {
             return false;
         }
-        if (email != "") {
+        if (email.equals("")) {
             user.setEmail(email);
         }
         userDAO.update(user);
@@ -137,14 +136,13 @@ public class UserServiceImpl implements UserService {
      * @return 修改结果
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateTel(int userId, String tel) {
         User user = userDAO.getById(userId);
         User user1 = userDAO.getByEmail(tel);
         if (user1 != null && !tel.equals(user.getTel())) {
             return false;
         }
-        if (tel != "") {
+        if (tel.equals("")) {
             user.setTel(tel);
         }
         userDAO.update(user);
@@ -158,14 +156,13 @@ public class UserServiceImpl implements UserService {
      * @return 修改结果
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateUserName(int userId, String userName) {
         User user = userDAO.getById(userId);
         User user1 = userDAO.getByEmail(userName);
         if (user1 != null && !userName.equals(user.getName())) {
             return false;
         }
-        if (userName != "") {
+        if (userName.equals("")) {
             user.setName(userName);
         }
         userDAO.update(user);
@@ -179,7 +176,6 @@ public class UserServiceImpl implements UserService {
      * @return 修改结果
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateUserPassword(int userId, String password) {
         User user = userDAO.getById(userId);
         if (password.length() >= 6 && password.length() <= 20) {

@@ -5,16 +5,20 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 @Repository("skinDAO")
+@Transactional(rollbackFor = Exception.class)
 public class SkinDAOImpl implements SkinDAO {
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    protected EntityManager entityManager;
 
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
     @Override
     public Skin getBySkinId(int skinId) {

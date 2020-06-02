@@ -7,17 +7,19 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.sql.Date;
 import java.util.List;
 
 @Repository("dailyRecordDAO")
 public class DailyRecordDAOImpl implements DailyRecordDAO {
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    protected EntityManager entityManager;
 
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 
     @Override
@@ -38,11 +40,7 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
 
     @Override
     public void update(DailyRecord dailyRecord) {
-        Session session = getSession();
-        Transaction tx = session.beginTransaction();
-        session.merge(dailyRecord);
-        tx.commit();
-        session.close();
+        getSession().merge(dailyRecord);
     }
 
     @Override

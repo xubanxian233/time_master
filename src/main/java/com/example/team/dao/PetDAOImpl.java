@@ -8,39 +8,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 @Repository("petDAO")
+@Transactional(rollbackFor = Exception.class)
 public class PetDAOImpl implements PetDAO {
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    protected EntityManager entityManager;
 
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int add(Pet pet) {
         getSession().save(pet);
         return pet.getPetId();
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(int petId) {
         getSession().delete(petId);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(Pet pet) {
-        Session session = getSession();
-        Transaction tx = session.beginTransaction();
-        session.merge(pet);
-        tx.commit();
-        session.close();
+        getSession().merge(pet);
     }
 
     @Override
@@ -49,9 +45,4 @@ public class PetDAOImpl implements PetDAO {
         return (Pet) getSession().createQuery(hql).setParameter("petId", petId).uniqueResult();
     }
 
-    /*@Override
-    public Pet getByUserId(int userId) {
-        String hql = "from Pet where user.userId=:userId";
-        return (Pet) getSession().createQuery(hql).setParameter("userId", userId).uniqueResult();
-    }*/
 }

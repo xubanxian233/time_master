@@ -11,5 +11,4 @@ public interface PetDAO {
 
     Pet getById(int petId);
 
-    //Pet getByUserId(int userId);
 }

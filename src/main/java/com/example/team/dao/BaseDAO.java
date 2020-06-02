@@ -13,9 +13,10 @@ import javax.persistence.PersistenceContext;
 
 @Transactional
 public class BaseDAO extends HibernateDaoSupport {
-    /*@Autowired
-    public void setSessionFactoryOverride(SessionFactory sessionFactory)
-    {
-        super.setSessionFactory(sessionFactory);
-    }*/
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
+    }
 }

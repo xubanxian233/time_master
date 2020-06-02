@@ -8,18 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository("teamTodoDAO")
 @Transactional(rollbackFor = Exception.class)
 public class TeamTodoDAOImpl implements TeamTodoDAO {
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    protected EntityManager entityManager;
 
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 
     @Override
@@ -30,32 +32,22 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     @Override
     public void delete(int teamTodoId) {
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
         String hql = "from TeamTodo where teamTodoId=:teamTodoId";
         TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("teamTodoId", teamTodoId).uniqueResult();
         session.delete(teamTodo);
-        tx.commit();
-        session.close();
     }
 
     @Override
     public void deleteByUser(String name, int userId) {
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
         String hql = "from TeamTodo where name = :name and userId = :userId";
         TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("name",name).setParameter("userId",userId).uniqueResult();
         session.delete(teamTodo);
-        tx.commit();
-        session.close();
     }
 
     @Override
     public void update(TeamTodo teamTodo) {
-        Session session = getSession();
-        Transaction tx = session.beginTransaction();
-        session.update(teamTodo);
-        tx.commit();
-        session.close();
+        getSession().update(teamTodo);
     }
 
     @Override
@@ -118,13 +110,10 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     @Override
     public void updateSchedule() {
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
         String hqlUpdate = "update TeamTodo as t set todoStatusId = :status where todoStatusId != :oldStatus";
         int updatedEntities = session.createQuery(hqlUpdate)
                 .setParameter("status", 1)
                 .setParameter("oldStatus", 1)
                 .executeUpdate();
-        tx.commit();
-        session.close();
     }
 }

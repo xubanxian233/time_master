@@ -8,17 +8,21 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.util.Set;
 
 @Repository("teamDAO")
+@Transactional(rollbackFor = Exception.class)
 public class TeamDAOImpl implements TeamDAO {
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    protected EntityManager entityManager;
 
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 
     @Override
@@ -28,22 +32,15 @@ public class TeamDAOImpl implements TeamDAO {
 
     @Override
     public boolean update(Team team) {
-        Session session = getSession();
-        Transaction tx = session.beginTransaction();
-        session.merge(team);
-        tx.commit();
-        session.close();
+        getSession().merge(team);
         return false;
     }
 
     @Override
     public boolean delete(int teamId) {
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
         Team team = session.get(Team.class, teamId);
         session.delete(team);
-        tx.commit();
-        session.close();
         return false;
     }
 
