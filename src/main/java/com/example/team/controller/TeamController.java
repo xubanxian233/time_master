@@ -192,6 +192,7 @@ public class TeamController extends BaseController {
         String records = "";
         int option = Integer.parseInt(param.get("option").toString());
         int teamId = Integer.parseInt(param.get("teamId").toString());
+        String path = param.get("path").toString();
         List<TeamTodo> teamTodoList = teamTodoService.listByUser(teamId,userId);
         List<TeamTodoSet> teamTodoSetList = teamTodoSetService.listByTeamId(teamId);
         List<DataVo> dataVOList = new ArrayList<>();
@@ -266,7 +267,7 @@ public class TeamController extends BaseController {
         FileOutputStream fileOut = null;
         try {
             //E:\files\write-01.xlsx  不用创建，会自动生成的
-            String exportFilePath = "E:\\write-01.xlsx";
+            String exportFilePath = path + "\\write-01.xlsx";
             File exportFile = new File(exportFilePath);
             if (!exportFile.exists()) {
                 exportFile.createNewFile();
