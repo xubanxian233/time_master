@@ -167,19 +167,20 @@ public class TeamTodoController extends BaseController {
     /**
      * updateState 更新团队待办状态
      *
-     * @param param 状态ID，团队待办ID
+     * @param teamTodoId,todoStatusId, 状态ID，团队待办ID
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/updateState", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
+    @RequestMapping("/updateState")
     @ResponseBody
-    public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
+    public String updateState(@RequestParam String teamTodoId, @RequestParam String todoStatusId,
+                              @RequestHeader("id") int userId){
         String result = "updateState-fail";
-        int teamTodoId = Integer.parseInt(param.get("teamTodoId").toString());
-        int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
-        if (todoStatusId<1||todoStatusId>3){
+        int teamTodoId1 = Integer.parseInt(teamTodoId);
+        int todoStatusId1 = Integer.parseInt(todoStatusId);
+        if (todoStatusId1<1||todoStatusId1>3){
              result = "updateState-fail：状态ID错误";
         }
-        else if (teamTodoService.updateState(teamTodoId,todoStatusId,userId)){
+        else if (teamTodoService.updateState(teamTodoId1,todoStatusId1,userId)){
             result = "updateState-success";
         }
         return result;
