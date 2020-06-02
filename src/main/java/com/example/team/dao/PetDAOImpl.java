@@ -49,10 +49,4 @@ public class PetDAOImpl implements PetDAO {
         return (Pet) getSession().createQuery(hql).setParameter("petId", petId).uniqueResult();
     }
 
-    @Override
-    public Pet getByUserId(int userId) {
-        String hql = "from Pet where userId=:userId";
-        return (Pet) getSession().createQuery(hql).setParameter("userId", userId).uniqueResult();
-    }
-
 }
