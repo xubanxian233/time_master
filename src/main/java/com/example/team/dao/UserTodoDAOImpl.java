@@ -69,9 +69,12 @@ public class UserTodoDAOImpl implements UserTodoDAO {
     }
 
     @Override
-    public UserTodo getByName(String name) {
-        String hql = "from UserTodo where name=:name";
-        return (UserTodo) getSession().createQuery(hql).setParameter("name", name).uniqueResult();
+    public UserTodo getByName(String name,int userId) {
+        String hql = "from UserTodo where name=:name and userId=:userId";
+        return (UserTodo) getSession().createQuery(hql)
+                .setParameter("name", name)
+                .setParameter("userId", userId)
+                .uniqueResult();
     }
 
     @Override

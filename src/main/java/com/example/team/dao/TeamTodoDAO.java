@@ -8,7 +8,7 @@ public interface TeamTodoDAO {
     void add(TeamTodo teamTodo);
 
     void delete(int teamTodoId);
-    void deleteByUser(String name,int userId);
+    void deleteByUser(String name,int userId,int teamId);
     void update(TeamTodo teamTodo);
     void updateState(int teamTodoId,int todoStatusId,int userId);
     TeamTodo getById(int teamTodoId);

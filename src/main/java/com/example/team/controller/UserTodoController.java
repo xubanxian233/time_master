@@ -1,9 +1,7 @@
 package com.example.team.controller;
 
 import com.example.team.pojo.UserTodo;
-import com.example.team.pojo.UserTodoSet;
 import com.example.team.service.UserTodoService;
-import com.example.team.service.UserTodoSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +17,6 @@ public class UserTodoController extends BaseController {
 
     @Autowired
     private UserTodoService userTodoService;
-
-    @Autowired
-    private UserTodoSetService userTodoSetService;
 
     /**
      * listById 列出某一用户待办集中所有用户待办
@@ -80,11 +75,8 @@ public class UserTodoController extends BaseController {
         Date create = new Date();
         userTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
         userTodo.setTodoStatusId(1);
-        if (userTodoSetService.getById(userTodoSetId)==null){
-            return null;
-        }
-        else if (userTodoService.createUserTodo(userTodo)) {
-            userTodo = userTodoService.getByName(userTodo.getName());
+        if (userTodoService.createUserTodo(userTodo)) {
+            userTodo = userTodoService.getByName(userTodo.getName(),userId);
             return userTodo;
         }
         return null;
@@ -126,9 +118,6 @@ public class UserTodoController extends BaseController {
         userTodo.setTodoStatusId(todoStatusId);
         if (todoStatusId<1||todoStatusId>3){
             result = "update-fail:状态ID错误";
-        }
-        else if (userTodoService.getById(userTodoSetId)==null){
-            result = "update-fail:用户待办集不存在";
         }
         else if (userTodoService.updateUserTodo(userTodo)) {
             result = "update-success";

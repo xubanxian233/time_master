@@ -17,7 +17,7 @@ public interface UserTodoDAO {
 
     UserTodo getById(int userTodoId);
 
-    UserTodo getByName(String name);
+    UserTodo getByName(String name,int userId);
 
     List<UserTodo> listByUser(int userId);
 

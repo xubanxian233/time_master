@@ -18,7 +18,7 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     public boolean createTeamTodo(TeamTodo teamTodo) {
         System.out.println(teamTodo.getUserId());
         TeamTodo teamTodo1 = teamTodoDAO.getByUser(teamTodo.getName(), teamTodo.getUserId());
-        if (teamTodo1 == null || teamTodo.getUserId() != teamTodo1.getUserId()) {
+        if (teamTodo1 == null || teamTodo.getTeamId() != teamTodo1.getTeamId()) {
             System.out.println(teamTodo.getUserId());
             teamTodoDAO.add(teamTodo);
             return true;
@@ -29,7 +29,7 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     @Override
     public boolean updateTeamTodo(TeamTodo teamTodo) {
         TeamTodo teamTodo1 = teamTodoDAO.getByUser(teamTodo.getName(), teamTodo.getUserId());
-        if (teamTodo1 == null || teamTodo.getUserId() != teamTodo1.getUserId()) {
+        if (teamTodo1 == null || teamTodo.getTeamId() != teamTodo1.getTeamId()) {
             teamTodoDAO.update(teamTodo);
             return true;
         }
@@ -38,7 +38,12 @@ public class TeamTodoServiceImpl implements TeamTodoService {
 
     @Override
     public boolean updateState(int teamTodoId, int todoStatusId, int userId) {
-        teamTodoDAO.updateState(teamTodoId, todoStatusId, userId);
+        if (todoStatusId == 2){
+            return false;
+        }
+        else {
+            teamTodoDAO.updateState(teamTodoId, todoStatusId, userId);
+        }
         return true;
     }
 
@@ -48,8 +53,8 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     }
 
     @Override
-    public void deleteByUser(String name, int userId) {
-        teamTodoDAO.deleteByUser(name, userId);
+    public void deleteByUser(String name, int userId ,int teamId) {
+        teamTodoDAO.deleteByUser(name, userId ,teamId);
     }
 
     @Override

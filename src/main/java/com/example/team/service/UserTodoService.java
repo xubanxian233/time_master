@@ -15,7 +15,7 @@ public interface UserTodoService {
 
     UserTodo getById(int userTodoId);
 
-    UserTodo getByName(String name);
+    UserTodo getByName(String name,int userId);
 
     List<UserTodo> listUserTodo(int userId);
 

@@ -181,7 +181,7 @@ public class TeamController extends BaseController {
     /**
      * getRecords 获取用户待办和待办集使用情况
      *
-     * @param param 选择项（option），团队ID（teamId）
+     * @param param 选择项（option），团队ID（teamId），地址（path）
      * @return String
      */
     @RequestMapping(value = "/getRecords", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
@@ -275,8 +275,7 @@ public class TeamController extends BaseController {
             fileOut = new FileOutputStream(exportFilePath);
             workbook.write(fileOut);
             fileOut.flush();
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             //logger.warn("输出Excel时发生错误，错误原因：" + e.getMessage());
         } finally {
             try {
