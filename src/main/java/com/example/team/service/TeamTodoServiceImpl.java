@@ -50,8 +50,8 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     }
 
     @Override
-    public void deleteByUser(String name, int userId) {
-        teamTodoDAO.deleteByUser(name, userId);
+    public void deleteByUser(String name, int userId,int teamId) {
+        teamTodoDAO.deleteByUser(name, userId,teamId);
     }
 
     @Override
