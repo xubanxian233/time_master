@@ -139,19 +139,20 @@ public class UserTodoController extends BaseController {
     /**
      * updateState 更新用户待办状态
      *
-     * @param param 状态ID，用户待办ID
+     * @param userTodoId,todoStatusId 状态ID，用户待办ID
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/updateState", method = RequestMethod.POST)
+    @RequestMapping("/updateState")
     @ResponseBody
-    public String updateState(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
+    public String updateState(@RequestParam String userTodoId, @RequestParam String todoStatusId,
+                              @RequestHeader("id") int userId) {
         String result = "updateState-fail";
-        int userTodoId = Integer.valueOf(param.get("userTodoId").toString());
-        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
-        if (todoStatusId<1||todoStatusId>3){
+        int userTodoId1 = Integer.valueOf(userTodoId);
+        int todoStatusId1 = Integer.valueOf(todoStatusId);
+        if (todoStatusId1<1||todoStatusId1>3){
             result = "updateState-fail:状态ID错误";
         }
-        else if (userTodoService.updateState(userTodoId, todoStatusId)) {
+        else if (userTodoService.updateState(userTodoId1, todoStatusId1)) {
             result = "updateState-success";
         }
         return result;

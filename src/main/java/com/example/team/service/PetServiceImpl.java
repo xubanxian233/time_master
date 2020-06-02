@@ -63,13 +63,13 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public void updateLevel(int userId){
+    public void updateLevel(int userId) {
         //宠物等级
-        Pet pet=getPetByUserId(userId);
-        AccRecord accRecord1= accRecordDAO.getByUserId(userId);
-        int level =accRecord1.getSuccessCount()/3;
+        Pet pet = userDAO.getById(userId).getPet();
+        AccRecord accRecord1 = accRecordDAO.getByUserId(userId);
+        int level = accRecord1.getSuccessCount() / 3;
         pet.setLevel(level);
-        update(pet);
+        petDAO.update(pet);
     }
 
 }
