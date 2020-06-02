@@ -1,5 +1,6 @@
 package com.example.team.controller;
 
+import com.example.team.dao.TeamTodoDAO;
 import com.example.team.pojo.Team;
 import com.example.team.pojo.TeamTodo;
 import com.example.team.pojo.User;
@@ -73,32 +74,33 @@ public class TeamTodoController extends BaseController {
      * create 创建团队待办
      *
      * @param param 团队待办名，团队ID，团队待办集ID，时长
-     * @return String 成功或失败
+     * @return String 功或失败
      **/
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     private String createTeamTodo(@RequestBody Map<String,Object> param){
         String result = "create-fail";
-        Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
-        TeamTodo teamTodo = new TeamTodo();
-        if (teamTodoSetId == null){
-            teamTodo.setTeamTodoSetId(1);
-        }
-        else {
-            teamTodo.setTeamTodoSetId(teamTodoSetId);
-        }
-        teamTodo.setName(param.get("name").toString());
-        teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
-        teamTodo.setTime(Long.valueOf(param.get("time").toString()));
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date create = new Date();
-        teamTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
-        teamTodo.setTodoStatusId(1);
+        Integer teamTodoSetId = 1;
         Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
-        if (teamTodoSetService.getById(teamTodoSetId)==null){
-            return "create-fail:团队待办集不存在";
-        }
         for (User user : set) {
+            TeamTodo teamTodo = new TeamTodo();
+            if (param.get("teamTodoSetId") == null){
+                teamTodo.setTeamTodoSetId(teamTodoSetId);
+            }
+            else {
+                teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+                teamTodo.setTeamTodoSetId(teamTodoSetId);
+            }
+            if (teamTodoSetService.getById(teamTodoSetId)==null){
+                return "create-fail:团队待办集不存在";
+            }
+            teamTodo.setName(param.get("name").toString());
+            teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
+            teamTodo.setTime(Long.valueOf(param.get("time").toString()));
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Date create = new Date();
+            teamTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
+            teamTodo.setTodoStatusId(1);
             teamTodo.setUserId(user.getUserId());
             if (teamTodoService.createTeamTodo(teamTodo)) {
                 result = "create-success";
@@ -113,28 +115,28 @@ public class TeamTodoController extends BaseController {
      * @param param 原团队待办名，改后的团队待办名，团队待办集ID，时长，团队待办ID，待办状态ID，创建时间
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     private String updateTeamTodo(@RequestBody Map<String,Object> param){
         String result = "update-fail";
         String name = param.get("name").toString();
-        int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
-        int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
-        TeamTodo teamTodo = new TeamTodo();
-        teamTodo.setName(param.get("changeName").toString());
-        teamTodo.setTeamId(Integer.parseInt(param.get("teamId").toString()));
-        teamTodo.setTeamTodoSetId(teamTodoSetId);
-        teamTodo.setTime(Long.valueOf(param.get("time").toString()));
-        teamTodo.setTodoStatusId(todoStatusId);
-        teamTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
-        Set<User> set = userService.getMembers(Integer.parseInt(param.get("teamId").toString()));
-        if (teamTodoSetService.getById(teamTodoSetId)==null){
-            return "update-fail:团队待办集ID不存在";
-        }
-        else if (todoStatusId<1||todoStatusId>3){
-            return "update-fail：状态ID错误";
-        }
+        int teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
+        Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
         for (User user : set) {
+            TeamTodo teamTodo = new TeamTodo();
+            teamTodo.setName(param.get("changeName").toString());
+            teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
+            teamTodo.setTeamTodoSetId(teamTodoSetId);
+            teamTodo.setTime(Long.valueOf(param.get("time").toString()));
+            teamTodo.setTodoStatusId(todoStatusId);
+            teamTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
+            if (teamTodoSetService.getById(teamTodoSetId)==null){
+                return "update-fail:团队待办集ID不存在";
+            }
+            else if (todoStatusId<1||todoStatusId>3){
+                return "update-fail：状态ID错误";
+            }
             teamTodo.setUserId(user.getUserId());
             int teamTodoId = teamTodoService.getByUser(name,user.getUserId()).getTeamTodoId();
             teamTodo.setTeamTodoId(teamTodoId);
@@ -151,7 +153,7 @@ public class TeamTodoController extends BaseController {
      * @param param 团队待办名称，团队ID
      * @return String 成功
      **/
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     private String deleteTeamTodo(@RequestBody Map<String,Object> param){
         String name = param.get("name").toString();
@@ -168,7 +170,7 @@ public class TeamTodoController extends BaseController {
      * @param param 状态ID，团队待办ID
      * @return String 成功或失败
      **/
-    @RequestMapping(value = "/updateState", method = RequestMethod.POST)
+    @RequestMapping(value = "/updateState", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         String result = "updateState-fail";
