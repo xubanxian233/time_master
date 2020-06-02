@@ -32,7 +32,7 @@ public class UserTodoController extends BaseController {
     @RequestMapping(value = "/listById", method = RequestMethod.POST)
     @ResponseBody
     public List<UserTodo> listById(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
-        Integer userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         return userTodoService.listUserTodo(userTodoSetId, userId);
     }
 
@@ -70,12 +70,12 @@ public class UserTodoController extends BaseController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     public UserTodo create(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
-        int userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         UserTodo userTodo = new UserTodo();
         userTodo.setName(param.get("name").toString());
         userTodo.setUserTodoSetId(userTodoSetId);
         userTodo.setUserId(userId);
-        userTodo.setTime(Long.valueOf(param.get("time").toString()));
+        userTodo.setTime(Long.parseLong(param.get("time").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date create = new Date();
         userTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
@@ -84,8 +84,8 @@ public class UserTodoController extends BaseController {
             return null;
         }
         else if (userTodoService.createUserTodo(userTodo)) {
-            UserTodo userTodo1 = userTodoService.getByName(userTodo.getName());
-            return userTodo1;
+            userTodo = userTodoService.getByName(userTodo.getName());
+            return userTodo;
         }
         return null;
     }
@@ -99,7 +99,7 @@ public class UserTodoController extends BaseController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public String delete(@RequestBody Map<String, Object> param) {
-        Integer userTodoId = Integer.valueOf(param.get("userTodoId").toString());
+        int userTodoId = Integer.parseInt(param.get("userTodoId").toString());
         userTodoService.deleteUserTodo(userTodoId);
         return "delete-success";
     }
@@ -114,14 +114,14 @@ public class UserTodoController extends BaseController {
     @ResponseBody
     public String update(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         String result = "update-fail";
-        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
-        int userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         UserTodo userTodo = new UserTodo();
-        userTodo.setUserTodoId(Integer.valueOf(param.get("userTodoId").toString()));
+        userTodo.setUserTodoId(Integer.parseInt(param.get("userTodoId").toString()));
         userTodo.setName(param.get("name").toString());
         userTodo.setUserTodoSetId(userTodoSetId);
         userTodo.setUserId(userId);
-        userTodo.setTime(Long.valueOf(param.get("time").toString()));
+        userTodo.setTime(Long.parseLong(param.get("time").toString()));
         userTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
         userTodo.setTodoStatusId(todoStatusId);
         if (todoStatusId<1||todoStatusId>3){
@@ -147,8 +147,8 @@ public class UserTodoController extends BaseController {
     public String updateState(@RequestParam String userTodoId, @RequestParam String todoStatusId,
                               @RequestHeader("id") int userId) {
         String result = "updateState-fail";
-        int userTodoId1 = Integer.valueOf(userTodoId);
-        int todoStatusId1 = Integer.valueOf(todoStatusId);
+        int userTodoId1 = Integer.parseInt(userTodoId);
+        int todoStatusId1 = Integer.parseInt(todoStatusId);
         if (todoStatusId1<1||todoStatusId1>3){
             result = "updateState-fail:状态ID错误";
         }

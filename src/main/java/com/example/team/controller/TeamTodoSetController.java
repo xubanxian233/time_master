@@ -31,7 +31,7 @@ public class TeamTodoSetController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     private List<TeamTodoSet> list(@RequestBody Map<String, Object> param) {
-        Integer teamId = Integer.valueOf(param.get("teamId").toString());
+        int teamId = Integer.parseInt(param.get("teamId").toString());
         return teamTodoSetService.listByTeamId(teamId);
     }
 
@@ -44,7 +44,7 @@ public class TeamTodoSetController extends BaseController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     private TeamTodoSet getTeamTodoSet(@RequestBody Map<String, Object> param) {
-        Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+        int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
         return teamTodoSetService.getById(teamTodoSetId);
     }
 
@@ -60,7 +60,7 @@ public class TeamTodoSetController extends BaseController {
         String name = param.get("name").toString();
         TeamTodoSet teamTodoSet = new TeamTodoSet();
         teamTodoSet.setName(name);
-        teamTodoSet.setTeamId(Integer.valueOf(param.get("teamId").toString()));
+        teamTodoSet.setTeamId(Integer.parseInt(param.get("teamId").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date create = new java.util.Date();
         teamTodoSet.setCreate(Date.valueOf(df.format(create)));
@@ -82,8 +82,8 @@ public class TeamTodoSetController extends BaseController {
     private String updateTeamTodoSet(@RequestBody Map<String, Object> param) {
         TeamTodoSet teamTodoSet = new TeamTodoSet();
         teamTodoSet.setName(param.get("name").toString());
-        teamTodoSet.setTeamId(Integer.valueOf(param.get("teamId").toString()));
-        teamTodoSet.setTeamTodoSetId(Integer.valueOf(param.get("teamTodoSetId").toString()));
+        teamTodoSet.setTeamId(Integer.parseInt(param.get("teamId").toString()));
+        teamTodoSet.setTeamTodoSetId(Integer.parseInt(param.get("teamTodoSetId").toString()));
         teamTodoSet.setCreate(Date.valueOf(param.get("create").toString()));
         if (teamTodoSetService.updateTeamTodoSet(teamTodoSet)) {
             TeamTodoSet teamTodoSet1 = teamTodoSetService.getByName(teamTodoSet.getName());
@@ -101,7 +101,7 @@ public class TeamTodoSetController extends BaseController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     private String deleteTeamTodoSet(@RequestBody Map<String, Object> param) {
-        Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+        int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
         teamTodoSetService.deleteTeamTodoSet(teamTodoSetId);
         return "delete-success";
     }

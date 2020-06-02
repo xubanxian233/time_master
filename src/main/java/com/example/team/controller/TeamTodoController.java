@@ -39,7 +39,7 @@ public class TeamTodoController extends BaseController {
     @RequestMapping(value = "/listByTeamId", method = RequestMethod.POST)
     @ResponseBody
     private List<TeamTodo> listByTeamId(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
-        Integer teamId = Integer.valueOf(param.get("teamId").toString());
+        int teamId = Integer.parseInt(param.get("teamId").toString());
         return teamTodoService.listByUser(teamId,userId);
     }
 
@@ -52,8 +52,8 @@ public class TeamTodoController extends BaseController {
     @RequestMapping(value = "/listById", method = RequestMethod.POST)
     @ResponseBody
     private List<TeamTodo> listById(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
-        Integer teamId = Integer.valueOf(param.get("teamId").toString());
-        Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+        int teamId = Integer.parseInt(param.get("teamId").toString());
+        int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
         return teamTodoService.listTeamTodo(teamTodoSetId,teamId,userId);
     }
 
@@ -66,7 +66,7 @@ public class TeamTodoController extends BaseController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     private TeamTodo getTeamTodo(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
-        Integer teamTodoId = Integer.valueOf(param.get("teamTodoId").toString());
+        int teamTodoId = Integer.parseInt(param.get("teamTodoId").toString());
         return teamTodoService.getById(teamTodoId);
     }
 
@@ -80,23 +80,23 @@ public class TeamTodoController extends BaseController {
     @ResponseBody
     private String createTeamTodo(@RequestBody Map<String,Object> param){
         String result = "create-fail";
-        Integer teamTodoSetId = 1;
-        Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
+        int teamTodoSetId = 1;
+        Set<User> set = userService.getMembers(Integer.parseInt(param.get("teamId").toString()));
         for (User user : set) {
             TeamTodo teamTodo = new TeamTodo();
             if (param.get("teamTodoSetId") == null){
                 teamTodo.setTeamTodoSetId(teamTodoSetId);
             }
             else {
-                teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+                teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
                 teamTodo.setTeamTodoSetId(teamTodoSetId);
             }
             if (teamTodoSetService.getById(teamTodoSetId)==null){
                 return "create-fail:团队待办集不存在";
             }
             teamTodo.setName(param.get("name").toString());
-            teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
-            teamTodo.setTime(Long.valueOf(param.get("time").toString()));
+            teamTodo.setTeamId(Integer.parseInt(param.get("teamId").toString()));
+            teamTodo.setTime(Long.parseLong(param.get("time").toString()));
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Date create = new Date();
             teamTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
@@ -120,15 +120,15 @@ public class TeamTodoController extends BaseController {
     private String updateTeamTodo(@RequestBody Map<String,Object> param){
         String result = "update-fail";
         String name = param.get("name").toString();
-        int teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
-        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
-        Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
+        int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
+        int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
+        Set<User> set = userService.getMembers(Integer.parseInt(param.get("teamId").toString()));
         for (User user : set) {
             TeamTodo teamTodo = new TeamTodo();
             teamTodo.setName(param.get("changeName").toString());
-            teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
+            teamTodo.setTeamId(Integer.parseInt(param.get("teamId").toString()));
             teamTodo.setTeamTodoSetId(teamTodoSetId);
-            teamTodo.setTime(Long.valueOf(param.get("time").toString()));
+            teamTodo.setTime(Long.parseLong(param.get("time").toString()));
             teamTodo.setTodoStatusId(todoStatusId);
             teamTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
             if (teamTodoSetService.getById(teamTodoSetId)==null){
@@ -157,7 +157,7 @@ public class TeamTodoController extends BaseController {
     @ResponseBody
     private String deleteTeamTodo(@RequestBody Map<String,Object> param){
         String name = param.get("name").toString();
-        Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
+        Set<User> set = userService.getMembers(Integer.parseInt(param.get("teamId").toString()));
         for (User user : set){
             teamTodoService.deleteByUser(name,user.getUserId());
         }
@@ -174,8 +174,8 @@ public class TeamTodoController extends BaseController {
     @ResponseBody
     public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         String result = "updateState-fail";
-        int teamTodoId = Integer.valueOf(param.get("teamTodoId").toString());
-        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
+        int teamTodoId = Integer.parseInt(param.get("teamTodoId").toString());
+        int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
         if (todoStatusId<1||todoStatusId>3){
              result = "updateState-fail：状态ID错误";
         }

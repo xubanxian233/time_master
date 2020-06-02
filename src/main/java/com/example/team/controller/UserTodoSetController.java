@@ -39,7 +39,7 @@ public class UserTodoSetController extends BaseController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     public UserTodoSet get(@RequestBody Map<String, Object> param) {
-        Integer userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         return userTodoSetService.getById(userTodoSetId);
     }
 
@@ -75,7 +75,7 @@ public class UserTodoSetController extends BaseController {
     @ResponseBody
     public String update(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         UserTodoSet userTodoSet = new UserTodoSet();
-        userTodoSet.setUserTodoSetId(Integer.valueOf(param.get("userTodoSetId").toString()));
+        userTodoSet.setUserTodoSetId(Integer.parseInt(param.get("userTodoSetId").toString()));
         userTodoSet.setName(param.get("name").toString());
         userTodoSet.setUserId(userId);
         userTodoSet.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
@@ -95,7 +95,7 @@ public class UserTodoSetController extends BaseController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public String delete(@RequestBody Map<String, Object> param) {
-        Integer userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         userTodoSetService.deleteUserTodoSet(userTodoSetId);
         return "delete-success";
     }
