@@ -32,7 +32,7 @@ public class UserTodoController extends BaseController {
     @RequestMapping(value = "/listById", method = RequestMethod.POST)
     @ResponseBody
     public List<UserTodo> listById(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
-        Integer userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         return userTodoService.listUserTodo(userTodoSetId, userId);
     }
 
@@ -75,7 +75,7 @@ public class UserTodoController extends BaseController {
         userTodo.setName(param.get("name").toString());
         userTodo.setUserTodoSetId(userTodoSetId);
         userTodo.setUserId(userId);
-        userTodo.setTime(Long.valueOf(param.get("time").toString()));
+        userTodo.setTime(Long.parseLong(param.get("time").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date create = new Date();
         userTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
@@ -84,8 +84,8 @@ public class UserTodoController extends BaseController {
             return null;
         }
         else if (userTodoService.createUserTodo(userTodo)) {
-            UserTodo userTodo1 = userTodoService.getByName(userTodo.getName());
-            return userTodo1;
+            userTodo = userTodoService.getByName(userTodo.getName());
+            return userTodo;
         }
         return null;
     }
@@ -99,7 +99,7 @@ public class UserTodoController extends BaseController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public String delete(@RequestBody Map<String, Object> param) {
-        Integer userTodoId = Integer.valueOf(param.get("userTodoId").toString());
+        int userTodoId = Integer.parseInt(param.get("userTodoId").toString());
         userTodoService.deleteUserTodo(userTodoId);
         return "delete-success";
     }
@@ -121,7 +121,7 @@ public class UserTodoController extends BaseController {
         userTodo.setName(param.get("name").toString());
         userTodo.setUserTodoSetId(userTodoSetId);
         userTodo.setUserId(userId);
-        userTodo.setTime(Long.valueOf(param.get("time").toString()));
+        userTodo.setTime(Long.parseLong(param.get("time").toString()));
         userTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
         userTodo.setTodoStatusId(todoStatusId);
         if (todoStatusId<1||todoStatusId>3){

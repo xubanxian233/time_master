@@ -39,7 +39,7 @@ public class UserTodoSetController extends BaseController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     public UserTodoSet get(@RequestBody Map<String, Object> param) {
-        Integer userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         return userTodoSetService.getById(userTodoSetId);
     }
 
@@ -95,7 +95,7 @@ public class UserTodoSetController extends BaseController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public String delete(@RequestBody Map<String, Object> param) {
-        Integer userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         userTodoSetService.deleteUserTodoSet(userTodoSetId);
         return "delete-success";
     }

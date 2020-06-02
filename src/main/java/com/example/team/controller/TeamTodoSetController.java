@@ -31,7 +31,7 @@ public class TeamTodoSetController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
     private List<TeamTodoSet> list(@RequestBody Map<String, Object> param) {
-        Integer teamId = Integer.valueOf(param.get("teamId").toString());
+        int teamId = Integer.parseInt(param.get("teamId").toString());
         return teamTodoSetService.listByTeamId(teamId);
     }
 
@@ -44,7 +44,7 @@ public class TeamTodoSetController extends BaseController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     private TeamTodoSet getTeamTodoSet(@RequestBody Map<String, Object> param) {
-        Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+        int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
         return teamTodoSetService.getById(teamTodoSetId);
     }
 
@@ -101,7 +101,7 @@ public class TeamTodoSetController extends BaseController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     private String deleteTeamTodoSet(@RequestBody Map<String, Object> param) {
-        Integer teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
+        int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
         teamTodoSetService.deleteTeamTodoSet(teamTodoSetId);
         return "delete-success";
     }
