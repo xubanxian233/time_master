@@ -25,10 +25,6 @@ public class RecordServiceImpl implements RecordService {
     @Autowired
     private MonthRecordDAO monthRecordDAO;
     @Autowired
-    private TypeRecordDAO typeRecordDAO;
-    @Autowired
-    private TypeDAO typeDAO;
-    @Autowired
     private UserDAO userDAO;
     private Date time;
     private Date mTime;
@@ -60,14 +56,6 @@ public class RecordServiceImpl implements RecordService {
         accRecordDAO.add(accRecord);
         addmonthRecord(uId,tTime,tsId);
         adddailyRecord(uId,tTime,tsId);
-
-        List<Type> listType= typeDAO.listType();
-        for (Type t:listType){
-            TypeRecord typeRecord= new TypeRecord();
-            typeRecord.setUserId(uId);
-            typeRecord.setTypeRecordId(t.getTypeId());
-            typeRecordDAO.add(typeRecord);
-        }
     }
 
     public void getCurrentTime(){

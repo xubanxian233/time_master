@@ -8,9 +8,7 @@ import com.example.team.service.PetService;
 import com.example.team.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -87,9 +85,9 @@ public class RecordController extends BaseController {
         return recordService.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
     }
 
-    @RequestMapping("/setRecord")
+    @RequestMapping(value = "/setRecord",method = RequestMethod.POST)
     @ResponseBody
-    public String setRecord(@RequestParam Map<String, Object> param) {
+    public String setRecord(@RequestBody Map<String, Object> param) {
         String userId = request.getHeader("id"); //获取用户id
         String todoId = param.get("userTodoId").toString();//获取待办id
         String todoStatusId = param.get("statusId").toString();//获取待办状态
