@@ -42,11 +42,7 @@ public class AccRecordDAOImpl implements AccRecordDAO {
 
     @Override
     public void update(AccRecord accRecord) {
-        Session session = getSession();
-        Transaction tx = session.beginTransaction();
-        session.merge(accRecord);
-        tx.commit();
-        session.close();
+        getSession().merge(accRecord);
     }
 
     @Override

@@ -10,14 +10,14 @@ import java.util.Map;
 
 public interface RecordService {
 
-    void addaccRecord(int uId,long tTime,int tsId);
-    void updateaccRecord(int uId,long tTime,int tsId);
+    void addAccRecord(int uId,long tTime,int tsId);
+    void updateAccRecord(int uId,long tTime,int tsId);
 
-    void addmonthRecord(int uId,long tTime,int tsId);
-    void updatemonthRecord(int uId,long tTime,int tsId);
+    void addMonthRecord(int uId,long tTime,int tsId);
+    void updateMonthRecord(int uId,long tTime,int tsId);
 
-    void adddailyRecord(int uId,long tTime,int tsId);
-    void updatedailyRecord(int uId,long tTime,int tsId);
+    void addDailyRecord(int uId,long tTime,int tsId);
+    void updateDailyRecord(int uId,long tTime,int tsId);
 
     AccRecord getAccRecord(int userId);
     DailyRecord getDailyRecord(int userId, Date dailyDate);
