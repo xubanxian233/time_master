@@ -27,35 +27,32 @@ public class RecordController extends BaseController {
     private RecordService recordService;
     @Autowired
     private PetService petService;
-    private Date mTime;
-    private Date nTime;
 
-    private void getMonthDate(){
+    private Date getMonthDate(){
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new java.util.Date());
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         java.util.Date date=calendar.getTime();
-        mTime=new Date(date.getTime());
+        return new Date(date.getTime());
     }
 
-    public void getCurrentTime(){
+    public Date getCurrentTime(){
         java.util.Date date = new java.util.Date();
-        nTime=new Date(date.getTime());
+        return new Date(date.getTime());
     }
 
     /**
      * getDailyRecord 获取当日使用记录
      *
-     * @param date 当日日期
+     * @param
      * @return DailyRecord 当日使用记录
      */
     @RequestMapping("/getDailyRecord")
     @ResponseBody
-    DailyRecord getDailyRecord(@RequestParam String date) {
+    DailyRecord getDailyRecord() {
         int userId = Integer.parseInt(request.getHeader("id"));
-        Date dailyhDate = Date.valueOf(date);
-        return recordService.getDailyRecord(userId, dailyhDate);
+        return recordService.getDailyRecord(userId, getCurrentTime());
     }
 
     /**
@@ -68,22 +65,20 @@ public class RecordController extends BaseController {
     @ResponseBody
     AccRecord getAccRecord() {
         int userId = Integer.parseInt(request.getHeader("id"));
-        AccRecord accRecord = recordService.getAccRecord(userId);
         return recordService.getAccRecord(userId);
     }
 
     /**
      * getMonthRecord 获取所选月份使用记录
      *
-     * @param date 所选月份日期
+     * @param
      * @return MonthRecord 所选月份使用记录
      */
     @RequestMapping("/getMonthRecord")
     @ResponseBody
-    MonthRecord getMonthRecord(@RequestParam String date) {
+    MonthRecord getMonthRecord() {
         int userId = Integer.parseInt(request.getHeader("id"));
-        Date monthDate = Date.valueOf(date);
-        return recordService.getMonthRecord(userId,monthDate);
+        return recordService.getMonthRecord(userId,getMonthDate());
     }
 
     /**
@@ -116,16 +111,14 @@ public class RecordController extends BaseController {
         int uId = Integer.parseInt(userId);
 
         //日记录
-        getCurrentTime();
-        if (recordService.isExistDailyRecord(uId,nTime)) {
+        if (recordService.isExistDailyRecord(uId,getCurrentTime())) {
             recordService.updateDailyRecord(uId, tTime, tsId);
         } else {
             recordService.addDailyRecord(uId, tTime, tsId);
         }
 
         //月记录
-        getMonthDate();
-        if(recordService.isExistMonthRecord(uId,mTime)){
+        if(recordService.isExistMonthRecord(uId,getMonthDate())){
             recordService.updateMonthRecord(uId, tTime, tsId);
         } else {
             recordService.addMonthRecord(uId, tTime, tsId);

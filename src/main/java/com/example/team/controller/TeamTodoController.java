@@ -118,16 +118,16 @@ public class TeamTodoController extends BaseController {
     private String updateTeamTodo(@RequestBody Map<String,Object> param){
         String result = "update-fail";
         String name = param.get("name").toString();
-        int teamTodoSetId = Integer.valueOf(param.get("teamTodoSetId").toString());
-        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
+        int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
+        int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
         TeamTodo teamTodo = new TeamTodo();
         teamTodo.setName(param.get("changeName").toString());
-        teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
+        teamTodo.setTeamId(Integer.parseInt(param.get("teamId").toString()));
         teamTodo.setTeamTodoSetId(teamTodoSetId);
         teamTodo.setTime(Long.valueOf(param.get("time").toString()));
         teamTodo.setTodoStatusId(todoStatusId);
         teamTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
-        Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
+        Set<User> set = userService.getMembers(Integer.parseInt(param.get("teamId").toString()));
         if (teamTodoSetService.getById(teamTodoSetId)==null){
             return "update-fail:团队待办集ID不存在";
         }
@@ -155,7 +155,7 @@ public class TeamTodoController extends BaseController {
     @ResponseBody
     private String deleteTeamTodo(@RequestBody Map<String,Object> param){
         String name = param.get("name").toString();
-        Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
+        Set<User> set = userService.getMembers(Integer.parseInt(param.get("teamId").toString()));
         for (User user : set){
             teamTodoService.deleteByUser(name,user.getUserId());
         }
@@ -172,8 +172,8 @@ public class TeamTodoController extends BaseController {
     @ResponseBody
     public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         String result = "updateState-fail";
-        int teamTodoId = Integer.valueOf(param.get("teamTodoId").toString());
-        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
+        int teamTodoId = Integer.parseInt(param.get("teamTodoId").toString());
+        int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
         if (todoStatusId<1||todoStatusId>3){
              result = "updateState-fail：状态ID错误";
         }

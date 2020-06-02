@@ -70,7 +70,7 @@ public class UserTodoController extends BaseController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     public UserTodo create(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
-        int userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         UserTodo userTodo = new UserTodo();
         userTodo.setName(param.get("name").toString());
         userTodo.setUserTodoSetId(userTodoSetId);
@@ -114,10 +114,10 @@ public class UserTodoController extends BaseController {
     @ResponseBody
     public String update(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         String result = "update-fail";
-        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
-        int userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         UserTodo userTodo = new UserTodo();
-        userTodo.setUserTodoId(Integer.valueOf(param.get("userTodoId").toString()));
+        userTodo.setUserTodoId(Integer.parseInt(param.get("userTodoId").toString()));
         userTodo.setName(param.get("name").toString());
         userTodo.setUserTodoSetId(userTodoSetId);
         userTodo.setUserId(userId);
@@ -147,8 +147,8 @@ public class UserTodoController extends BaseController {
     public String updateState(@RequestParam String userTodoId, @RequestParam String todoStatusId,
                               @RequestHeader("id") int userId) {
         String result = "updateState-fail";
-        int userTodoId1 = Integer.valueOf(userTodoId);
-        int todoStatusId1 = Integer.valueOf(todoStatusId);
+        int userTodoId1 = Integer.parseInt(userTodoId);
+        int todoStatusId1 = Integer.parseInt(todoStatusId);
         if (todoStatusId1<1||todoStatusId1>3){
             result = "updateState-fail:状态ID错误";
         }
