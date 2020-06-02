@@ -30,6 +30,7 @@ public class RecordServiceImpl implements RecordService {
     private Date mTime;
     private int days;
 
+    //获取本月一号的日期
     private void getMonthDate(){
 
         Calendar calendar = Calendar.getInstance();
@@ -38,9 +39,14 @@ public class RecordServiceImpl implements RecordService {
         java.util.Date date=calendar.getTime();
         mTime=new Date(date.getTime());
     }
+    //获取当前年月日
+    public void getCurrentTime(){
+        java.util.Date date = new java.util.Date();
+        time=new Date(date.getTime());
+    }
 
     @Override
-    public void addRecordByUser(int uId,long tTime,int tsId) {
+    public void addaccRecord(int uId,long tTime,int tsId) {
         AccRecord accRecord=new AccRecord();
         accRecord.setUserId(uId);
         accRecord.setAcctime(tTime);
@@ -54,24 +60,9 @@ public class RecordServiceImpl implements RecordService {
             accRecord.setFailCount(1);
         }
         accRecordDAO.add(accRecord);
-        addmonthRecord(uId,tTime,tsId);
-        adddailyRecord(uId,tTime,tsId);
     }
-
-    public void getCurrentTime(){
-//
-//        Calendar cal=Calendar.getInstance();
-//        int y=cal.get(Calendar.YEAR);
-//        int m=cal.get(Calendar.MONTH);
-//        int d=cal.get(Calendar.DATE);
-//        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-//        time= Date.valueOf(sdf.format(new Date(y,m,d)));
-        java.util.Date date = new java.util.Date();
-        time=new Date(date.getTime());
-    }
-
     @Override
-    public void updateRecordByUser(int uId,long tTime,int tsId) {
+    public void updateaccRecord(int uId,long tTime,int tsId) {
         getCurrentTime();
         AccRecord accRecord=accRecordDAO.getByUserId(uId);
         accRecord.setAcctime(accRecord.getAcctime()+tTime);
@@ -83,21 +74,9 @@ public class RecordServiceImpl implements RecordService {
             accRecord.setFailCount(accRecord.getFailCount()+1);
         }
         accRecordDAO.update(accRecord);
-
-        getMonthDate();
-        if(monthRecordDAO.getByUserId(uId,mTime)!=null){
-            updatemonthRecord(uId,tTime,tsId);
-        }
-        else{
-            addmonthRecord(uId,tTime,tsId);
-        }
-
-        if (dailyRecordDAO.getByUserId(uId, time) != null)
-            updatedailyRecord(uId, tTime, tsId);
-        else
-            adddailyRecord(uId, tTime, tsId);
     }
 
+    @Override
     public void addmonthRecord(int uId,long tTime,int tsId){
         MonthRecord monthRecord=new MonthRecord();
         monthRecord.setUserId(uId);
@@ -112,6 +91,7 @@ public class RecordServiceImpl implements RecordService {
         monthRecordDAO.add(monthRecord);
     }
 
+    @Override
     public void updatemonthRecord(int uId,long tTime,int tsId){
         getMonthDate();
         MonthRecord monthRecord=monthRecordDAO.getByUserId(uId,mTime);
@@ -124,6 +104,7 @@ public class RecordServiceImpl implements RecordService {
         monthRecordDAO.update(monthRecord);
     }
 
+    @Override
     public void adddailyRecord(int uId,long tTime,int tsId){
         DailyRecord dailyRecord=new DailyRecord();
         dailyRecord.setUserId(uId);
@@ -138,6 +119,7 @@ public class RecordServiceImpl implements RecordService {
         dailyRecordDAO.add(dailyRecord);
     }
 
+    @Override
     public void updatedailyRecord(int uId,long tTime,int tsId){
         DailyRecord dailyRecord=new DailyRecord();
         dailyRecord=dailyRecordDAO.getByUserId(uId,time);
@@ -182,9 +164,26 @@ public class RecordServiceImpl implements RecordService {
         return month;
     }
 
+    //判断是否存在记录
     @Override
     public boolean isExistDailyRecord(int uid,Date time){
         if(dailyRecordDAO.getByUserId(uid, time)!=null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    @Override
+    public boolean isExistMonthRecord(int uid,Date time){
+        if(monthRecordDAO.getByUserId(uid, time)!=null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    @Override
+    public boolean isExistAccRecord(int uid){
+        if(accRecordDAO.getByUserId(uid)!=null){
             return true;
         }else{
             return false;

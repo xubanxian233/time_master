@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.sql.Date;
@@ -26,6 +27,22 @@ public class RecordController extends BaseController {
     private RecordService recordService;
     @Autowired
     private PetService petService;
+    private Date mTime;
+    private Date nTime;
+
+    private void getMonthDate(){
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new java.util.Date());
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        java.util.Date date=calendar.getTime();
+        mTime=new Date(date.getTime());
+    }
+
+    public void getCurrentTime(){
+        java.util.Date date = new java.util.Date();
+        nTime=new Date(date.getTime());
+    }
 
     /**
      * getDailyRecord 获取当日使用记录
@@ -98,13 +115,32 @@ public class RecordController extends BaseController {
         long tTime = Integer.parseInt(todoTime);
         int tsId = Integer.parseInt(todoStatusId);
         int uId = Integer.parseInt(userId);
-        java.util.Date date = new java.util.Date();
-        Date time=new Date(date.getTime());
-        if (recordService.isExistDailyRecord(uId,time)) {
-            recordService.updateRecordByUser(uId, tTime, tsId);
+
+        //日记录
+        getCurrentTime();
+        if (recordService.isExistDailyRecord(uId,nTime)) {
+            recordService.updatedailyRecord(uId, tTime, tsId);
         } else {
-            recordService.addRecordByUser(uId, tTime, tsId);
+            recordService.adddailyRecord(uId, tTime, tsId);
         }
+
+        //月记录
+        getMonthDate();
+        if(recordService.isExistMonthRecord(uId,mTime)){
+            recordService.updatemonthRecord(uId, tTime, tsId);
+        } else {
+            recordService.addmonthRecord(uId, tTime, tsId);
+        }
+
+
+        //总记录
+        if (recordService.isExistAccRecord(uId)){
+            recordService.updateaccRecord(uId, tTime, tsId);
+        } else {
+            recordService.addaccRecord(uId, tTime, tsId);
+        }
+
+
         //宠物等级
         petService.updateLevel(uId);
         //宠物成就
@@ -112,6 +148,9 @@ public class RecordController extends BaseController {
         //跳转修改待办状态
         return "forword:/userTodo/updateState?userTodoId="+todoId+"&todoStatusId="+tsId+"";
     }
+
+
+
 
 
 //    宠物成就:
