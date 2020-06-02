@@ -38,7 +38,9 @@ public class TeamTodoServiceImpl implements TeamTodoService {
 
     @Override
     public boolean updateState(int teamTodoId, int todoStatusId, int userId) {
-        teamTodoDAO.updateState(teamTodoId, todoStatusId, userId);
+        if (teamTodoDAO.getById(teamTodoId).getTodoStatus().getTodoStatusId() != 2) {
+            teamTodoDAO.updateState(teamTodoId, todoStatusId, userId);
+        }
         return true;
     }
 

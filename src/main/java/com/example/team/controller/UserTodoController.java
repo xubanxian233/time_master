@@ -80,10 +80,7 @@ public class UserTodoController extends BaseController {
         Date create = new Date();
         userTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
         userTodo.setTodoStatusId(1);
-        if (userTodoSetService.getById(userTodoSetId)==null){
-            return null;
-        }
-        else if (userTodoService.createUserTodo(userTodo)) {
+        if (userTodoService.createUserTodo(userTodo)) {
             userTodo = userTodoService.getByName(userTodo.getName());
             return userTodo;
         }
@@ -126,9 +123,6 @@ public class UserTodoController extends BaseController {
         userTodo.setTodoStatusId(todoStatusId);
         if (todoStatusId<1||todoStatusId>3){
             result = "update-fail:状态ID错误";
-        }
-        else if (userTodoService.getById(userTodoSetId)==null){
-            result = "update-fail:用户待办集不存在";
         }
         else if (userTodoService.updateUserTodo(userTodo)) {
             result = "update-success";

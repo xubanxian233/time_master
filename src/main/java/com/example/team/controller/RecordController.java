@@ -102,8 +102,8 @@ public class RecordController extends BaseController {
         String userId = request.getHeader("id"); //获取用户id
         String todoId = param.get("userTodoId").toString();//获取待办id
         String todoStatusId = param.get("statusId").toString();//获取待办状态
-        String todosetId = param.get("todosetId").toString();//获取所属待办集，0为无属
         String todoTime = param.get("time").toString();//获取待办时间
+        String flag=param.get("flag").toString();
 
         int tId=Integer.parseInt(todoId);
         long tTime = Integer.parseInt(todoTime);
@@ -138,7 +138,12 @@ public class RecordController extends BaseController {
         //宠物成就
         checkAchievement(uId);
         //跳转修改待办状态
-        return "forward:/userTodo/updateState?userTodoId="+todoId+"&todoStatusId="+tsId+"";
+        if(flag.equals("0")){
+            return "forward:/userTodo/updateState?userTodoId=" + todoId + "&todoStatusId=" + tsId + "";
+        }
+        else{
+            return "forward:/teamTodo/updateState?teamTodoId=" + todoId + "&todoStatusId=" + tsId + "";
+        }
     }
 
 
