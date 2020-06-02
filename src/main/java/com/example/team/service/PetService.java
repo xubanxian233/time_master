@@ -7,4 +7,5 @@ public interface PetService {
     void update(Pet pet);
     Pet getPetByUserId(int userId);
     Pet getPetById(int petId);
+    void updateLevel(int userId);
 }

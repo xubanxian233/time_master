@@ -1,17 +1,22 @@
 package com.example.team.service;
 
+import com.example.team.dao.AccRecordDAO;
 import com.example.team.dao.PetDAO;
 import com.example.team.dao.UserDAO;
+import com.example.team.pojo.AccRecord;
 import com.example.team.pojo.Pet;
 import com.example.team.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service("petService")
 public class PetServiceImpl implements PetService {
     @Autowired
     private PetDAO petDAO;
+    private AccRecordDAO accRecordDAO;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -52,4 +57,15 @@ public class PetServiceImpl implements PetService {
     public Pet getPetById(int petId) {
         return petDAO.getById(petId);
     }
+
+    @Override
+    public void updateLevel(int userId){
+        //宠物等级
+        Pet pet=getPetByUserId(userId);
+        AccRecord accRecord1= accRecordDAO.getByUserId(userId);
+        int level =accRecord1.getSuccessCount()/3;
+        pet.setLevel(level);
+        update(pet);
+    }
+
 }
