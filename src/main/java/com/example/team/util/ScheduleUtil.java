@@ -1,5 +1,6 @@
 package com.example.team.util;
 
+import com.example.team.service.PetService;
 import com.example.team.service.TeamTodoService;
 import com.example.team.service.UserTodoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class ScheduleUtil {
 
     @Autowired
     private TeamTodoService teamTodoService;
+
+    @Autowired
+    private PetService petService;
+
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void updateStatus() {
