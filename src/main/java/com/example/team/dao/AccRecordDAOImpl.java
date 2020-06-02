@@ -16,13 +16,6 @@ import javax.persistence.PersistenceContext;
 @Repository("accRecordDAO")
 @Transactional(rollbackFor = Exception.class)
 public class AccRecordDAOImpl implements AccRecordDAO {
-    /*@Autowired
-    private EntityManagerFactory entityManagerFactory;
-
-    public Session getSession() {
-        //return entityManagerFactory.unwrap(SessionFactory.class).openSession();
-        return entityManagerFactory.unwrap(SessionFactory.class).getCurrentSession();
-    }*/
 
     @PersistenceContext
     protected EntityManager entityManager;

@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
+
 @Service("skinService")
 @Transactional(rollbackFor = Exception.class)
 public class SkinServiceImpl implements SkinService {
     @Autowired
     private SkinDAO skinDAO;
+
     @Override
     public Skin getSkin(int skinId) {
         return skinDAO.getBySkinId(skinId);

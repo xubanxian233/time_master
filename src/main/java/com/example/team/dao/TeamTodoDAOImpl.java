@@ -41,7 +41,7 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     public void deleteByUser(String name, int userId) {
         Session session = getSession();
         String hql = "from TeamTodo where name = :name and userId = :userId";
-        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("name",name).setParameter("userId",userId).uniqueResult();
+        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("name", name).setParameter("userId", userId).uniqueResult();
         session.delete(teamTodo);
     }
 
@@ -51,14 +51,14 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     }
 
     @Override
-    public void updateState(int teamTodoId, int todoStatusId,int userId) {
-        Session session=getSession();
-        Transaction tx=session.beginTransaction();
+    public void updateState(int teamTodoId, int todoStatusId, int userId) {
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
         String hqlUpdate = "update TeamTodo as t set todoStatusId = :status where teamTodoId = :teamTodoId and userId = :userId";
-        int updatedEntities = session.createQuery( hqlUpdate )
-                .setParameter( "status", todoStatusId )
-                .setParameter( "teamTodoId", teamTodoId )
-                .setParameter("userId",userId)
+        int updatedEntities = session.createQuery(hqlUpdate)
+                .setParameter("status", todoStatusId)
+                .setParameter("teamTodoId", teamTodoId)
+                .setParameter("userId", userId)
                 .executeUpdate();
         tx.commit();
         session.close();
@@ -71,19 +71,19 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
     }
 
     @Override
-    public TeamTodo getByUser(String name,int userId) {
+    public TeamTodo getByUser(String name, int userId) {
         String hql = "from TeamTodo where name=:name and userId=:userId";
         return (TeamTodo) getSession()
                 .createQuery(hql)
-                .setParameter("name",name)
-                .setParameter("userId",userId)
+                .setParameter("name", name)
+                .setParameter("userId", userId)
                 .uniqueResult();
     }
 
     @Override
-    public List<TeamTodo> listByUser(int teamId,int userId) {
+    public List<TeamTodo> listByUser(int teamId, int userId) {
         String hql = "from TeamTodo where teamId=:teamId and userId=:userId";
-        return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamId",teamId).setParameter("userId",userId).list();
+        return (List<TeamTodo>) getSession().createQuery(hql).setParameter("teamId", teamId).setParameter("userId", userId).list();
     }
 
     @Override
@@ -91,19 +91,19 @@ public class TeamTodoDAOImpl implements TeamTodoDAO {
         String hql = "from TeamTodo where teamId=:teamId and teamTodoSetId=:teamTodoSetId";
         return (List<TeamTodo>) getSession()
                 .createQuery(hql)
-                .setParameter("teamId",teamId)
-                .setParameter("teamTodoSetId",teamTodoSetId)
+                .setParameter("teamId", teamId)
+                .setParameter("teamTodoSetId", teamTodoSetId)
                 .list();
     }
 
     @Override
-    public List<TeamTodo> list(int teamId, int teamTodoSetId,int userId) {
+    public List<TeamTodo> list(int teamId, int teamTodoSetId, int userId) {
         String hql = "from TeamTodo where teamId=:teamId and teamTodoSetId=:teamTodoSetId and userId=:userId";
         return (List<TeamTodo>) getSession()
                 .createQuery(hql)
-                .setParameter("teamId",teamId)
-                .setParameter("teamTodoSetId",teamTodoSetId)
-                .setParameter("userId",userId)
+                .setParameter("teamId", teamId)
+                .setParameter("teamTodoSetId", teamTodoSetId)
+                .setParameter("userId", userId)
                 .list();
     }
 

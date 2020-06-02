@@ -26,12 +26,6 @@ public class TeamTodo {
     private TodoStatus todoStatus;
     @Column(name = "todoset")
     private int teamTodoSetId;
-    @JsonIgnore
-    @Column(name = "type")
-    private int typeId;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "type", insertable = false, updatable = false)
-    private Type type;
 
     @Column(name = "team")
     private int teamId;
@@ -95,22 +89,6 @@ public class TeamTodo {
         this.teamTodoSetId = teamTodoSetId;
     }
 
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
     public int getTeamId() {
         return teamId;
     }
@@ -123,7 +101,7 @@ public class TeamTodo {
         return userId;
     }
 
-    public void  setUserId(int userId){
-        this.userId=userId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

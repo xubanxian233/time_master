@@ -93,7 +93,6 @@ public class TeamTodoController extends BaseController {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         Date create = new Date();
         teamTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
-        teamTodo.setTypeId(0);
         teamTodo.setTodoStatusId(1);
         Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
         if (teamTodoSetService.getById(teamTodoSetId)==null){
@@ -126,7 +125,6 @@ public class TeamTodoController extends BaseController {
         teamTodo.setTeamId(Integer.valueOf(param.get("teamId").toString()));
         teamTodo.setTeamTodoSetId(teamTodoSetId);
         teamTodo.setTime(Long.valueOf(param.get("time").toString()));
-        teamTodo.setTypeId(Integer.valueOf(param.get("typeId").toString()));
         teamTodo.setTodoStatusId(todoStatusId);
         teamTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
         Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
