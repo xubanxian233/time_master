@@ -1,6 +1,7 @@
 package com.example.team.dao;
 
 import com.example.team.pojo.DailyRecord;
+import com.example.team.pojo.UserTodoSet;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -31,8 +32,8 @@ public class DailyRecordDAOImpl implements DailyRecordDAO {
     public void delete(int dailyRecordId) {
         /*Session session = getSession();
         Transaction tx = session.beginTransaction();
-        String hql = "from dailyrecord where daily_record_id=:dailyRecordId";
-        DailyRecord  dailyRecord = (DailyRecord) session.createQuery(hql).setParameter("daily_record_id",dailyRecordId).uniqueResult();
+        String hql = "from DailyRecord where dailyRecordId=:dailyRecordId";
+        DailyRecord  dailyRecord = (DailyRecord) session.createQuery(hql).setParameter("dailyRecordId",dailyRecordId).uniqueResult();
         session.delete(dailyRecord);
         tx.commit();
         session.close();*/

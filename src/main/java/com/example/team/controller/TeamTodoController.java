@@ -157,7 +157,7 @@ public class TeamTodoController extends BaseController {
     @ResponseBody
     private String deleteTeamTodo(@RequestBody Map<String,Object> param){
         String name = param.get("name").toString();
-        Set<User> set = userService.getMembers(Integer.valueOf(param.get("teamId").toString()));
+        Set<User> set = userService.getMembers(Integer.parseInt(param.get("teamId").toString()));
         for (User user : set){
             teamTodoService.deleteByUser(name,user.getUserId());
         }
@@ -174,8 +174,8 @@ public class TeamTodoController extends BaseController {
     @ResponseBody
     public String updateState(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         String result = "updateState-fail";
-        int teamTodoId = Integer.valueOf(param.get("teamTodoId").toString());
-        int todoStatusId = Integer.valueOf(param.get("todoStatusId").toString());
+        int teamTodoId = Integer.parseInt(param.get("teamTodoId").toString());
+        int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
         if (todoStatusId<1||todoStatusId>3){
              result = "updateState-fail：状态ID错误";
         }

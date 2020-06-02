@@ -34,8 +34,8 @@ public class MonthRecordDAOImpl implements MonthRecordDAO {
     public void delete(int monthRecordId) {
        /* Session session = getSession();
         Transaction tx = session.beginTransaction();
-        String hql = "from monthrecord where month_record_id=:monthRecordId";
-        MonthRecord monthRecord = (MonthRecord) session.createQuery(hql).setParameter("month_record_id",monthRecordId).uniqueResult();
+        String hql = "from MonthRecord where monthRecordId=:monthRecordId";
+        MonthRecord monthRecord = (MonthRecord) session.createQuery(hql).setParameter("monthRecordId",monthRecordId).uniqueResult();
         session.delete(monthRecord);
         tx.commit();
         session.close();*/

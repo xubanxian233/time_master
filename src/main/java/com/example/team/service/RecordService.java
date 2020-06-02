@@ -9,15 +9,23 @@ import java.util.List;
 import java.util.Map;
 
 public interface RecordService {
-    void addRecordByUser(int uId, int tTime, int tsId);
 
-    void updateRecordByUser(int uId, int tTime, int tsId);
+    void addAccRecord(int uId,long tTime,int tsId);
+    void updateAccRecord(int uId,long tTime,int tsId);
+
+    void addMonthRecord(int uId,long tTime,int tsId);
+    void updateMonthRecord(int uId,long tTime,int tsId);
+
+    void addDailyRecord(int uId,long tTime,int tsId);
+    void updateDailyRecord(int uId,long tTime,int tsId);
 
     AccRecord getAccRecord(int userId);
-
     DailyRecord getDailyRecord(int userId, Date dailyDate);
 
-    MonthRecord getMonthRecord(int userId, Date monthDate);
+    boolean isExistDailyRecord(int uid,Date time);
+    boolean isExistMonthRecord(int uid,Date time);
+    boolean isExistAccRecord(int uid);
 
+    MonthRecord getMonthRecord(int userId, Date monthDate);
     Map<Integer, Long> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate);
 }

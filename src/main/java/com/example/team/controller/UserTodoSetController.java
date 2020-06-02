@@ -75,7 +75,7 @@ public class UserTodoSetController extends BaseController {
     @ResponseBody
     public String update(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         UserTodoSet userTodoSet = new UserTodoSet();
-        userTodoSet.setUserTodoSetId(Integer.valueOf(param.get("userTodoSetId").toString()));
+        userTodoSet.setUserTodoSetId(Integer.parseInt(param.get("userTodoSetId").toString()));
         userTodoSet.setName(param.get("name").toString());
         userTodoSet.setUserId(userId);
         userTodoSet.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
