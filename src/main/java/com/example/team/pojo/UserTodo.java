@@ -21,18 +21,13 @@ public class UserTodo {
     @JsonIgnore
     @Column(name = "status")
     private int todoStatusId;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status", insertable = false, updatable = false)
     private TodoStatus todoStatus;
 
     @Column(name = "todoset")
     private int userTodoSetId;
-    @JsonIgnore
-    @Column(name = "type")
-    private int typeId;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "type", insertable = false, updatable = false)
-    private Type type;
 
     @Column(name = "user")
     private int userId;
@@ -91,22 +86,6 @@ public class UserTodo {
 
     public void setUserTodoSetId(int userTodoSetId) {
         this.userTodoSetId = userTodoSetId;
-    }
-
-    public int getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     public int getUserId() {

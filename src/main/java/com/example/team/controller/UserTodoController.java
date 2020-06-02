@@ -80,7 +80,6 @@ public class UserTodoController extends BaseController {
         Date create = new Date();
         userTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
         userTodo.setTodoStatusId(1);
-        userTodo.setTypeId(0);
         if (userTodoSetService.getById(userTodoSetId)==null){
             return null;
         }
@@ -125,7 +124,6 @@ public class UserTodoController extends BaseController {
         userTodo.setTime(Long.valueOf(param.get("time").toString()));
         userTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
         userTodo.setTodoStatusId(todoStatusId);
-        userTodo.setTypeId(Integer.valueOf(param.get("typeId").toString()));
         if (todoStatusId<1||todoStatusId>3){
             result = "update-fail:状态ID错误";
         }

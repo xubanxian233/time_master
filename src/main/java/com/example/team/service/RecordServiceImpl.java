@@ -23,10 +23,7 @@ public class RecordServiceImpl implements RecordService {
     private DailyRecordDAO dailyRecordDAO;
     @Autowired
     private MonthRecordDAO monthRecordDAO;
-    @Autowired
-    private TypeRecordDAO typeRecordDAO;
-    @Autowired
-    private TypeDAO typeDAO;
+
     private Date time;
 
     @Override
@@ -44,14 +41,6 @@ public class RecordServiceImpl implements RecordService {
         getCurrentTime();
         addmonthRecord(uId, tTime, tsId);
         adddailyRecord(uId, tTime, tsId);
-
-        List<Type> listType = typeDAO.listType();
-        for (Type t : listType) {
-            TypeRecord typeRecord = new TypeRecord();
-            typeRecord.setUserId(uId);
-            typeRecord.setTypeRecordId(t.getTypeId());
-            typeRecordDAO.add(typeRecord);
-        }
     }
 
     public void getCurrentTime() {
@@ -88,14 +77,6 @@ public class RecordServiceImpl implements RecordService {
             updatedailyRecord(uId, tTime, tsId);
         else
             adddailyRecord(uId, tTime, tsId);
-
-        List<Type> listType = typeDAO.listType();
-        for (Type t1 : listType) {
-            TypeRecord typeRecord = new TypeRecord();
-            typeRecord.setUserId(uId);
-            typeRecord.setTypeRecordId(t1.getTypeId());
-            typeRecordDAO.add(typeRecord);
-        }
     }
 
     public void addmonthRecord(int uId, int tTime, int tsId) {
@@ -160,23 +141,19 @@ public class RecordServiceImpl implements RecordService {
         return monthRecordDAO.getByUserId(userId, monthDate);
     }
 
-    @Override
-    public List<TypeRecord> getTypeRecord(int userId) {
-        return typeRecordDAO.getByUserId(userId);
-    }
 
     @Override
-    public Map<Integer,Long> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate) {
-        List<DailyRecord> list=dailyRecordDAO.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
+    public Map<Integer, Long> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate) {
+        List<DailyRecord> list = dailyRecordDAO.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Map<Integer,Long> month=new HashMap<>();
-        for (DailyRecord dailyRecord:list) {
-            String date=simpleDateFormat.format(dailyRecord.getDailyDate());
-            month.put(Integer.parseInt(date.substring(8,10)),dailyRecord.getAcctime());
+        Map<Integer, Long> month = new HashMap<>();
+        for (DailyRecord dailyRecord : list) {
+            String date = simpleDateFormat.format(dailyRecord.getDailyDate());
+            month.put(Integer.parseInt(date.substring(8, 10)), dailyRecord.getAcctime());
         }
-        for(int i=0;i<31;i++){
-            if(!month.containsKey(i+1)){
-                month.put(i+1,0L);
+        for (int i = 0; i < 31; i++) {
+            if (!month.containsKey(i + 1)) {
+                month.put(i + 1, 0L);
             }
         }
         return month;
