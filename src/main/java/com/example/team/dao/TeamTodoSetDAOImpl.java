@@ -8,18 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository("teamTodoSetDAO")
 @Transactional(rollbackFor = Exception.class)
 public class TeamTodoSetDAOImpl implements TeamTodoSetDAO {
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    @PersistenceContext
+    protected EntityManager entityManager;
 
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 
     @Override
@@ -30,21 +32,14 @@ public class TeamTodoSetDAOImpl implements TeamTodoSetDAO {
     @Override
     public void delete(int teamTodoSetId) {
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
         String hql = "from TeamTodoSet where teamTodoSetId=:teamTodoSetId";
         TeamTodoSet teamTodoSet = (TeamTodoSet) session.createQuery(hql).setParameter("teamTodoSetId", teamTodoSetId).uniqueResult();
         session.delete(teamTodoSet);
-        tx.commit();
-        session.close();
     }
 
     @Override
     public void update(TeamTodoSet teamTodoSet) {
-        Session session = getSession();
-        Transaction tx = session.beginTransaction();
-        session.update(teamTodoSet);
-        tx.commit();
-        session.close();
+        getSession().update(teamTodoSet);
     }
 
     @Override

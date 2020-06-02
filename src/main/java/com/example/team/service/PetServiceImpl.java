@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service("petService")
+@Transactional(rollbackFor = Exception.class)
 public class PetServiceImpl implements PetService {
     @Autowired
     private PetDAO petDAO;
@@ -16,7 +17,6 @@ public class PetServiceImpl implements PetService {
     private UserDAO userDAO;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void addPet(Pet pet) {
         petDAO.add(pet);
     }
@@ -28,7 +28,6 @@ public class PetServiceImpl implements PetService {
      * @return
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(Pet pet) {
         petDAO.update(pet);
     }

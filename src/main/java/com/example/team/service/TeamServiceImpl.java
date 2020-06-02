@@ -6,8 +6,10 @@ import com.example.team.pojo.Team;
 import com.example.team.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("teamService")
+@Transactional(rollbackFor = Exception.class)
 public class TeamServiceImpl implements TeamService {
     @Autowired
     private TeamDAO teamDAO;

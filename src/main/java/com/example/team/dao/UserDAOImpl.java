@@ -8,40 +8,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 
 @Repository(value = "userDAO")
+@Transactional(rollbackFor = Exception.class)
 public class UserDAOImpl implements UserDAO {
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
 
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public int add(User user) {
         getSession().save(user);
         return user.getUserId();
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void delete(int userId) {
         getSession().delete(userId);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void update(User user) {
-        Session session = getSession();
-        Transaction tx = session.beginTransaction();
-        session.merge(user);
-        tx.commit();
-        session.close();
+        getSession().merge(user);
     }
 
 

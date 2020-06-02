@@ -7,16 +7,28 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 @Repository("accRecordDAO")
+@Transactional(rollbackFor = Exception.class)
 public class AccRecordDAOImpl implements AccRecordDAO {
-    @Autowired
+    /*@Autowired
     private EntityManagerFactory entityManagerFactory;
 
     public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+        //return entityManagerFactory.unwrap(SessionFactory.class).openSession();
+        return entityManagerFactory.unwrap(SessionFactory.class).getCurrentSession();
+    }*/
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
+    protected Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
 
     @Override
@@ -26,13 +38,13 @@ public class AccRecordDAOImpl implements AccRecordDAO {
 
     @Override
     public void delete(int accRecordId) {
-        Session session = getSession();
+        /*Session session = getSession();
         Transaction tx = session.beginTransaction();
         String hql = "from accrecord where acc_record_id=:accRecordId";
         AccRecord accRecord = (AccRecord) session.createQuery(hql).setParameter("acc_record_id", accRecordId).uniqueResult();
         session.delete(accRecord);
         tx.commit();
-        session.close();
+        session.close();*/
     }
 
     @Override
