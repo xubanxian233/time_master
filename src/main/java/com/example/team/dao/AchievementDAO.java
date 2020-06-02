@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface AchievementDAO {
     void add(Achievement achievement);
-    Achievement getById(int achievementId);
-    Achievement getByUserId(int userId);
-    List<Achievement> getAchievement();
+    List<Achievement> getByUserId(int userId);
+
 }
