@@ -31,59 +31,61 @@ public class RecordServiceImpl implements RecordService {
     private int days;
 
     //获取本月一号的日期
-    private void getMonthDate(){
+    private void getMonthDate() {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new java.util.Date());
         calendar.set(Calendar.DAY_OF_MONTH, 1);
-        java.util.Date date=calendar.getTime();
-        mTime=new Date(date.getTime());
+        java.util.Date date = calendar.getTime();
+        mTime = new Date(date.getTime());
     }
+
     //获取当前年月日
-    public void getCurrentTime(){
+    public void getCurrentTime() {
         java.util.Date date = new java.util.Date();
-        time=new Date(date.getTime());
+        time = new Date(date.getTime());
     }
 
     @Override
-    public void addaccRecord(int uId,long tTime,int tsId) {
-        AccRecord accRecord=new AccRecord();
+    public void addAccRecord(int uId, long tTime, int tsId) {
+        AccRecord accRecord = new AccRecord();
         accRecord.setUserId(uId);
         accRecord.setAcctime(tTime);
-        Date date=userDAO.getById(uId).getCreate();
+        Date date = userDAO.getById(uId).getCreate();
         getCurrentTime();
-        days = (int) ((time.getTime() - date.getTime())/(1000*3600*24));
-        accRecord.setDailytime(tTime/days);
-        if(tsId==2){
+        days = (int) ((time.getTime() - date.getTime()) / (1000 * 3600 * 24));
+        accRecord.setDailytime(tTime / days);
+        if (tsId == 2) {
             accRecord.setSuccessCount(1);
         } else if (tsId == 3) {
             accRecord.setFailCount(1);
         }
         accRecordDAO.add(accRecord);
     }
+
     @Override
-    public void updateaccRecord(int uId,long tTime,int tsId) {
+    public void updateAccRecord(int uId, long tTime, int tsId) {
         getCurrentTime();
-        AccRecord accRecord=accRecordDAO.getByUserId(uId);
-        accRecord.setAcctime(accRecord.getAcctime()+tTime);
-        days = (int) ((time.getTime() - userDAO.getById(uId).getCreate().getTime()) / (1000*3600*24));
-        accRecord.setDailytime(accRecord.getAcctime()/days);
-        if(tsId==2){
-            accRecord.setSuccessCount(accRecord.getSuccessCount()+1);
-        }else if (tsId==3){
-            accRecord.setFailCount(accRecord.getFailCount()+1);
+        AccRecord accRecord = accRecordDAO.getByUserId(uId);
+        accRecord.setAcctime(accRecord.getAcctime() + tTime);
+        days = (int) ((time.getTime() - userDAO.getById(uId).getCreate().getTime()) / (1000 * 3600 * 24)) + 1;
+        accRecord.setDailytime(accRecord.getAcctime() / days);
+        if (tsId == 2) {
+            accRecord.setSuccessCount(accRecord.getSuccessCount() + 1);
+        } else if (tsId == 3) {
+            accRecord.setFailCount(accRecord.getFailCount() + 1);
         }
         accRecordDAO.update(accRecord);
     }
 
     @Override
-    public void addmonthRecord(int uId,long tTime,int tsId){
-        MonthRecord monthRecord=new MonthRecord();
+    public void addMonthRecord(int uId, long tTime, int tsId) {
+        MonthRecord monthRecord = new MonthRecord();
         monthRecord.setUserId(uId);
         monthRecord.setAcctime(tTime);
         getMonthDate();
         monthRecord.setMonthDate(mTime);
-        if(tsId==2){
+        if (tsId == 2) {
             monthRecord.setSuccessCount(1);
         } else if (tsId == 3) {
             monthRecord.setFailCount(1);
@@ -92,26 +94,26 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public void updatemonthRecord(int uId,long tTime,int tsId){
+    public void updateMonthRecord(int uId, long tTime, int tsId) {
         getMonthDate();
-        MonthRecord monthRecord=monthRecordDAO.getByUserId(uId,mTime);
-        monthRecord.setAcctime(monthRecord.getAcctime()+tTime);
-        if(tsId==2){
-            monthRecord.setSuccessCount(monthRecord.getSuccessCount()+1);
-        }else if (tsId==3){
-            monthRecord.setFailCount(monthRecord.getFailCount()+1);
+        MonthRecord monthRecord = monthRecordDAO.getByUserId(uId, mTime);
+        monthRecord.setAcctime(monthRecord.getAcctime() + tTime);
+        if (tsId == 2) {
+            monthRecord.setSuccessCount(monthRecord.getSuccessCount() + 1);
+        } else if (tsId == 3) {
+            monthRecord.setFailCount(monthRecord.getFailCount() + 1);
         }
         monthRecordDAO.update(monthRecord);
     }
 
     @Override
-    public void adddailyRecord(int uId,long tTime,int tsId){
-        DailyRecord dailyRecord=new DailyRecord();
+    public void addDailyRecord(int uId, long tTime, int tsId) {
+        DailyRecord dailyRecord = new DailyRecord();
         dailyRecord.setUserId(uId);
         dailyRecord.setAcctime(tTime);
         getCurrentTime();
         dailyRecord.setDailyDate(time);
-        if(tsId==2){
+        if (tsId == 2) {
             dailyRecord.setSuccessCount(1);
         } else if (tsId == 3) {
             dailyRecord.setFailCount(1);
@@ -120,14 +122,15 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public void updatedailyRecord(int uId,long tTime,int tsId){
-        DailyRecord dailyRecord=new DailyRecord();
-        dailyRecord=dailyRecordDAO.getByUserId(uId,time);
-        if(tsId==2){
-            dailyRecord.setSuccessCount(dailyRecord.getSuccessCount()+1);
-        }else if (tsId==3){
-            dailyRecord.setFailCount(dailyRecord.getFailCount()+1);
+    public void updateDailyRecord(int uId, long tTime, int tsId) {
+        getCurrentTime();
+        DailyRecord dailyRecord = dailyRecordDAO.getByUserId(uId, time);
+        if (tsId == 2) {
+            dailyRecord.setSuccessCount(dailyRecord.getSuccessCount() + 1);
+        } else if (tsId == 3) {
+            dailyRecord.setFailCount(dailyRecord.getFailCount() + 1);
         }
+        dailyRecord.setAcctime(dailyRecord.getAcctime() + tTime);
         dailyRecordDAO.update(dailyRecord);
     }
 
@@ -166,26 +169,28 @@ public class RecordServiceImpl implements RecordService {
 
     //判断是否存在记录
     @Override
-    public boolean isExistDailyRecord(int uid,Date time){
-        if(dailyRecordDAO.getByUserId(uid, time)!=null){
+    public boolean isExistDailyRecord(int uid, Date time) {
+        if (dailyRecordDAO.getByUserId(uid, time) != null) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
+
     @Override
-    public boolean isExistMonthRecord(int uid,Date time){
-        if(monthRecordDAO.getByUserId(uid, time)!=null){
+    public boolean isExistMonthRecord(int uid, Date time) {
+        if (monthRecordDAO.getByUserId(uid, time) != null) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
+
     @Override
-    public boolean isExistAccRecord(int uid){
-        if(accRecordDAO.getByUserId(uid)!=null){
+    public boolean isExistAccRecord(int uid) {
+        if (accRecordDAO.getByUserId(uid) != null) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
