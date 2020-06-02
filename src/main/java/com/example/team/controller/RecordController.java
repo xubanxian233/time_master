@@ -1,8 +1,10 @@
 package com.example.team.controller;
 
-import com.example.team.pojo.AccRecord;
-import com.example.team.pojo.DailyRecord;
-import com.example.team.pojo.MonthRecord;
+import com.example.team.dao.DailyRecordDAO;
+import com.example.team.dao.DailyRecordDAOImpl;
+import com.example.team.dao.UserTodoDAO;
+import com.example.team.pojo.*;
+import com.example.team.service.PetService;
 import com.example.team.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,17 +12,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.sql.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
+import java.sql.Date;
 
 @Controller
 @RequestMapping("/record")
 public class RecordController extends BaseController {
     @Autowired
     private RecordService recordService;
+    @Autowired
+    private PetService petService;
 
     /**
      * getDailyRecord 获取当日使用记录
@@ -61,7 +68,7 @@ public class RecordController extends BaseController {
     MonthRecord getMonthRecord(@RequestParam String date) {
         int userId = Integer.parseInt(request.getHeader("id"));
         Date monthDate = Date.valueOf(date);
-        return recordService.getMonthRecord(userId, monthDate);
+        return recordService.getMonthRecord(userId,monthDate);
     }
 
     /**
@@ -79,53 +86,48 @@ public class RecordController extends BaseController {
         Date bigMonthDate = Date.valueOf(date_2);
         return recordService.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
     }
-    //记录待办
 
-
-
-
-
-   /* protected HttpServletRequest request;
-    protected HttpServletResponse response;
-    protected HttpSession session;
-    public ModelAndView setRecord(HttpServletRequest req, HttpServletResponse res) {
-        this.request = req;
-        this.response = res;
+    @RequestMapping("/setRecord")
+    @ResponseBody
+    public String setRecord(@RequestParam Map<String, Object> param) {
         String userId = request.getHeader("id"); //获取用户id
-        String todoId = request.getHeader("userTodoId");//获取待办id
-        String todoStatusId = request.getHeader("statusId");//获取待办状态
-        String todoName = request.getHeader("name");//获取待办名称
-        String todoTime = request.getHeader("time");//获取待办时间
-        String typeId = request.getHeader("typeId");//获取待办类型
-        String todosetId = request.getHeader("todosetId");//获取所属待办集，0为无属
+        String todoId = param.get("userTodoId").toString();//获取待办id
+        String todoStatusId = param.get("statusId").toString();//获取待办状态
+        String todosetId = param.get("todosetId").toString();//获取所属待办集，0为无属
+        String todoTime = param.get("time").toString();//获取待办时间
+
         int tId=Integer.parseInt(todoId);
-        int tTime = Integer.parseInt(todoTime);
+        long tTime = Integer.parseInt(todoTime);
         int tsId = Integer.parseInt(todoStatusId);
         int uId = Integer.parseInt(userId);
-
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        Date time=null;
-        try {
-            time= sdf.parse(sdf.format(new Date()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        DailyRecordDAO dailyRecordDAO = new DailyRecordDAOImpl();
-        if (dailyRecordDAO.getByUserId(uId,time) != null) {
+        java.util.Date date = new java.util.Date();
+        Date time=new Date(date.getTime());
+        if (recordService.isExistDailyRecord(uId,time)) {
             recordService.updateRecordByUser(uId, tTime, tsId);
-
         } else {
             recordService.addRecordByUser(uId, tTime, tsId);
         }
-        ModelAndView model = new ModelAndView("/update");
-        model.addObject("userId", userId);
-        model.addObject("userTodoId", todoId);
-        model.addObject("todoStatusId", todoStatusId);
-        model.addObject("name", todoName);
-        model.addObject("time", todoTime);
-        model.addObject("typeId", typeId);
-        model.addObject("todosetId", todosetId);
-        return model;
-    }*/
+        //宠物等级
+        petService.updateLevel(uId);
+        //宠物成就
+        checkAchievement(uId);
+        //跳转修改待办状态
+        return "forword:/userTodo/updateState?userTodoId="+todoId+"&todoStatusId="+tsId+"";
+    }
+
+
+//    宠物成就:
+// 1.坚持不懈：每日完成一项待办（>=21天）
+// 2.屡败屡战：某项待办连续五天都是失败
+// 3.我一定会回来的：获得屡败屡战后该代办成功完成
+// 系列成就1:
+//    5.初出茅庐：总计完成时间>10分钟
+//    6.小试牛刀：总计完成时间>100分钟
+//    7.持之以恒 ：总计完成时间>500分钟
+//    8.毅力惊人：总计完成时间>1000分钟
+//    9.时间管理大师：总计完成时间>5000分钟
+    private void checkAchievement(int UId){
+
+    }
+
 }

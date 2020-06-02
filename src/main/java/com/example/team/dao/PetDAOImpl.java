@@ -1,5 +1,7 @@
 package com.example.team.dao;
 
+import com.example.team.pojo.AccRecord;
+import com.example.team.pojo.DailyRecord;
 import com.example.team.pojo.Pet;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 import javax.persistence.PersistenceContext;
+
 
 @Repository("petDAO")
 @Transactional(rollbackFor = Exception.class)
@@ -43,6 +47,12 @@ public class PetDAOImpl implements PetDAO {
     public Pet getById(int petId) {
         String hql = "from Pet where petId=:petId";
         return (Pet) getSession().createQuery(hql).setParameter("petId", petId).uniqueResult();
+    }
+
+    @Override
+    public Pet getByUserId(int userId) {
+        String hql = "from Pet where userId=:userId";
+        return (Pet) getSession().createQuery(hql).setParameter("userId", userId).uniqueResult();
     }
 
 }
