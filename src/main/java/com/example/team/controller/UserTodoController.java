@@ -59,16 +59,22 @@ public class UserTodoController extends BaseController {
     /**
      * create 创建用户待办
      *
-     * @param param 用户待办名，用户待办集ID，时长
+     * @param param 用户待办名，用户待办集ID(可以不填，默认为0），时长
      * @return String 成功或失败
      **/
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
     public UserTodo create(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
-        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
+        int userTodoSetId = 0;
         UserTodo userTodo = new UserTodo();
         userTodo.setName(param.get("name").toString());
-        userTodo.setUserTodoSetId(userTodoSetId);
+        if(param.get("userTodoSetId")==null){
+            userTodo.setUserTodoSetId(userTodoSetId);
+        }
+        else {
+            userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
+            userTodo.setUserTodoSetId(userTodoSetId);
+        }
         userTodo.setUserId(userId);
         userTodo.setTime(Long.parseLong(param.get("time").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
