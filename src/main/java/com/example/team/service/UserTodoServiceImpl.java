@@ -16,8 +16,8 @@ public class UserTodoServiceImpl implements UserTodoService {
 
     @Override
     public boolean createUserTodo(UserTodo userTodo) {
-        UserTodo userTodo1 = userTodoDAO.getByName(userTodo.getName());
-        if (userTodo1 == null) {
+        UserTodo userTodo1 = userTodoDAO.getByName(userTodo.getName(),userTodo.getUserId());
+        if (userTodo1 == null || userTodo1.getUserId() != userTodo.getUserId()) {
             userTodoDAO.add(userTodo);
             return true;
         }
@@ -26,8 +26,8 @@ public class UserTodoServiceImpl implements UserTodoService {
 
     @Override
     public boolean updateUserTodo(UserTodo userTodo) {
-        UserTodo userTodo1 = userTodoDAO.getByName(userTodo.getName());
-        if (userTodo1 == null || userTodo1.getUserTodoId() == userTodo.getUserTodoId()) {
+        UserTodo userTodo1 = userTodoDAO.getByName(userTodo.getName(),userTodo.getUserId());
+        if (userTodo1 == null || userTodo1.getUserTodoId() == userTodo.getUserTodoId() ) {
             userTodoDAO.update(userTodo);
             return true;
         }
@@ -47,12 +47,12 @@ public class UserTodoServiceImpl implements UserTodoService {
 
     @Override
     public UserTodo getById(int userTodoId) {
-        return userTodoDAO.getById(userTodoId);
+        return userTodoDAO.get(UserTodo.class, userTodoId);
     }
 
     @Override
-    public UserTodo getByName(String name) {
-        return userTodoDAO.getByName(name);
+    public UserTodo getByName(String name,int userId) {
+        return userTodoDAO.getByName(name,userId);
     }
 
     @Override

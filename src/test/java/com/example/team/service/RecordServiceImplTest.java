@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 class RecordServiceImplTest {
-    /*@Autowired
+    @Autowired
     private RecordService recordService;
     @Autowired
     private DailyRecordDAO dailyRecordDAO;
@@ -29,11 +29,15 @@ class RecordServiceImplTest {
     @Test
     void getAccRecord() {
 
-        AccRecord accRecord = recordService.getAccRecord(2);
+        //AccRecord accRecord = recordService.getAccRecord(2);
+        //recordService.addAccRecord(5,5,2);
+
+        recordService.updateAccRecord(5,10,2);
+        AccRecord accRecord = recordService.getAccRecord(5);
         Assert.assertEquals(1, accRecord.getAccRecordId());
         Assert.assertEquals(2, accRecord.getSuccessCount());
         Assert.assertEquals(0, accRecord.getFailCount());
-    }
+    }/*
 
     @Test
     void getDailyRecord() throws ParseException {

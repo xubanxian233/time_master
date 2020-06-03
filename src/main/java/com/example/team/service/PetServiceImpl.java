@@ -24,48 +24,59 @@ public class PetServiceImpl implements PetService {
 
 
     @Override
+    /**
+     * @description: 添加宠物
+     * @Param: [pet]
+     * @return: void
+     * @update: time: 2020/6/3 9:33
+     */
     public void addPet(Pet pet) {
         petDAO.add(pet);
     }
 
-    /**
-     * update 修改宠物信息
-     *
-     * @param pet 修改的宠物
-     * @return
-     */
     @Override
+    /**
+     * @description: 更细宠物
+     * @Param: [pet]
+     * @return: void
+     * @update: time: 2020/6/3 9:34
+     */
     public void update(Pet pet) {
         petDAO.update(pet);
     }
 
-    /**
-     * getPetByUserId 获取pet通过用户
-     *
-     * @param userId 用户Id
-     * @return 对应宠物
-     */
     @Override
+    /**
+     * @description: 获取宠物
+     * @Param: [userId]
+     * @return: com.example.team.pojo.Pet
+     * @update: time: 2020/6/3 9:34
+     */
     public Pet getPetByUserId(int userId) {
-        //return petDAO.getByUserId(userId);
-        return userDAO.getById(userId).getPet();
+        return userDAO.get(User.class, userId).getPet();
     }
 
+    @Override
     /**
-     * getPetById 获取宠物通过宠物id
-     *
-     * @param petId 宠物Id
-     * @return 对应宠物
+     * @description: 获取宠物
+     * @Param: [petId]
+     * @return: com.example.team.pojo.Pet
+     * @update: time: 2020/6/3 9:34
      */
-    @Override
     public Pet getPetById(int petId) {
-        return petDAO.getById(petId);
+        return petDAO.get(Pet.class, petId);
     }
 
     @Override
+    /**
+     * @description: 更新宠物等级
+     * @Param: [userId]
+     * @return: void
+     * @update: time: 2020/6/3 9:34
+     */
     public void updateLevel(int userId) {
         //宠物等级
-        Pet pet = userDAO.getById(userId).getPet();
+        Pet pet = userDAO.get(User.class, userId).getPet();
         AccRecord accRecord1 = accRecordDAO.getByUserId(userId);
         int level = accRecord1.getSuccessCount() / 3;
         pet.setLevel(level);

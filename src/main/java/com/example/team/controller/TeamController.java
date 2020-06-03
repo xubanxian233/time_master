@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -29,15 +30,15 @@ public class TeamController extends BaseController {
     private TeamTodoService teamTodoService;
     @Autowired
     private TeamTodoSetService teamTodoSetService;
-
-    /**
-     * createTeam 创建团队
-     *
-     * @param param
-     * @return Team
-     */
+    
     @RequestMapping(value = "/createTeam", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 创建团队
+     * @Param: [param]
+     * @return: com.example.team.pojo.Team
+     * @update: time: 2020/6/3 9:27
+     */
     public Team createTeam(@RequestBody Map<String, Object> param) {
         String name = param.get("name").toString();
         int userId = Integer.parseInt(request.getHeader("id"));
@@ -48,43 +49,43 @@ public class TeamController extends BaseController {
         team.setLeader(user);
         return teamService.createTeam(user, team);
     }
-
-    /**
-     * deleteTeam 解散团队
-     *
-     * @param param
-     * @return String
-     */
+    
     @RequestMapping(value = "/deleteTeam", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 删除团队
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:27
+     */
     public String deleteTeam(@RequestBody Map<String, Object> param) {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         teamService.deleteTeam(teamId);
         return "delete-success";
     }
-
-    /**
-     * joinTeam 加入团队
-     *
-     * @param param
-     * @return Team
-     */
+    
     @RequestMapping(value = "/joinTeam", method = RequestMethod.POST)
     @ResponseBody
+   /**
+    * @description: 加入团队
+    * @Param: [param]
+    * @return: com.example.team.pojo.Team
+    * @update: time: 2020/6/3 9:27
+    */
     public Team joinTeam(@RequestBody Map<String, Object> param) {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         int userId = Integer.parseInt(request.getHeader("id"));
         return userService.joinTeam(teamId, userId);
     }
-
-    /**
-     * quitTeam 退出团队
-     *
-     * @param param
-     * @return String
-     */
+    
     @RequestMapping(value = "/quitTeam", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 退出团队
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:27
+     */
     public String quitTeam(@RequestBody Map<String, Object> param) {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         int userId = Integer.parseInt(request.getHeader("id"));
@@ -93,15 +94,15 @@ public class TeamController extends BaseController {
         }
         return "quit-fail";
     }
-
-    /**
-     * inviteMember 邀请成员
-     *
-     * @param param
-     * @return String
-     */
+    
     @RequestMapping(value = "/inviteMember", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 邀请队员
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:27
+     */
     public String inviteMember(@RequestBody Map<String, Object> param) {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         String email = param.get("email").toString();
@@ -115,15 +116,15 @@ public class TeamController extends BaseController {
         }
         return "invite-fail";
     }
-
-    /**
-     * outMember 踢出成员
-     *
-     * @param param
-     * @return String
-     */
+    
     @RequestMapping(value = "/outMember", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 踢出队员
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:27
+     */
     public String outMember(@RequestBody Map<String, Object> param) {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         String email = param.get("email").toString();
@@ -133,41 +134,41 @@ public class TeamController extends BaseController {
         }
         return "out-fail";
     }
-
-    /**
-     * getMembers 获取团队所有成员
-     *
-     * @param teamId
-     * @return String
-     */
+    
     @RequestMapping(value = "/getMembers", method = RequestMethod.GET)
     @ResponseBody
+    /**
+     * @description: 获取用户集合
+     * @Param: [teamId]
+     * @return: java.util.Set<com.example.team.pojo.User>
+     * @update: time: 2020/6/3 9:27
+     */
     public Set<User> getMembers(@RequestParam String teamId) {
         int teamId1 = Integer.parseInt(teamId);
         return userService.getMembers(teamId1);
     }
-
-    /**
-     * getTeams 获取用户所有团队
-     *
-     * @param
-     * @return String
-     */
+    
     @RequestMapping(value = "/getTeams", method = RequestMethod.GET)
     @ResponseBody
+    /**
+     * @description: 获取团队集合
+     * @Param: []
+     * @return: java.util.Set<com.example.team.pojo.Team>
+     * @update: time: 2020/6/3 9:27
+     */
     public Set<Team> getTeams() {
         int userId = Integer.parseInt(request.getHeader("id"));
         return userService.getTeams(userId);
     }
-
-    /**
-     * updateTeam 获取用户所有团队
-     *
-     * @param
-     * @return String
-     */
+    
     @RequestMapping(value = "/updateTeam", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 更新团队名
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:27
+     */
     public String updateTeam(@RequestBody Map<String, Object> param) {
         String name = param.get("name").toString();
         int teamId = Integer.parseInt(param.get("teamId").toString());
@@ -178,20 +179,21 @@ public class TeamController extends BaseController {
         return "update-success";
     }
 
-    /**
-     * getRecords 获取用户待办和待办集使用情况
-     *
-     * @param param 选择项（option），团队ID（teamId）
-     * @return String
-     */
     @RequestMapping(value = "/getRecords", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
+    /**
+     * @description: 获取团队使用情况记录
+     * @Param: [param, userId]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:27
+     */
     public String getRecords(@RequestBody Map<String, Object> param,@RequestHeader("id") int userId){
         int todoNum = 0;
         int todoSetNum = 0;
         String records = "";
         int option = Integer.parseInt(param.get("option").toString());
         int teamId = Integer.parseInt(param.get("teamId").toString());
+        String path = param.get("path").toString();
         List<TeamTodo> teamTodoList = teamTodoService.listByUser(teamId,userId);
         List<TeamTodoSet> teamTodoSetList = teamTodoSetService.listByTeamId(teamId);
         List<DataVo> dataVOList = new ArrayList<>();
@@ -204,7 +206,6 @@ public class TeamController extends BaseController {
             }
             dataVO.setName("Todo");
             dataVO.setCompletion(todoNum + "/" + teamTodoList.size());
-            //records += "Todo:" + todoNum + "/" + teamTodoList.size() + "\r\n";
             DataVo dataVO2 = new DataVo();
             for (TeamTodoSet set : teamTodoSetList){
                 int i = 0;
@@ -220,7 +221,6 @@ public class TeamController extends BaseController {
             }
             dataVO2.setSName("TodoSet");
             dataVO2.setCompletion(todoSetNum + "/" + teamTodoSetList.size());
-            //records += "TodoSet:" + todoSetNum + "/" + teamTodoSetList.size();
             dataVOList.add(dataVO2);
             dataVOList.add(dataVO);
             records = "操作1";
@@ -265,8 +265,10 @@ public class TeamController extends BaseController {
         // 以文件的形式输出工作簿对象
         FileOutputStream fileOut = null;
         try {
-            //E:\files\write-01.xlsx  不用创建，会自动生成的
-            String exportFilePath = "E:\\write-01.xlsx";
+            //文件不用创建，会自动生成的
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date create = new java.util.Date();
+            String exportFilePath = path + "\\output-" + df.format(create) + ".xlsx";
             File exportFile = new File(exportFilePath);
             if (!exportFile.exists()) {
                 exportFile.createNewFile();
@@ -274,9 +276,8 @@ public class TeamController extends BaseController {
             fileOut = new FileOutputStream(exportFilePath);
             workbook.write(fileOut);
             fileOut.flush();
-        } catch (
-                Exception e) {
-            //logger.warn("输出Excel时发生错误，错误原因：" + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             try {
                 if (null != fileOut) {
@@ -286,7 +287,7 @@ public class TeamController extends BaseController {
                     workbook.close();
                 }
             } catch (IOException e) {
-                //logger.warn("关闭输出流时发生错误，错误原因：" + e.getMessage());
+                e.printStackTrace();
             }
         }
         return records;
