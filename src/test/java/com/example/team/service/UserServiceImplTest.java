@@ -17,13 +17,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceImplTest {
     @Autowired
     private UserService userService;
-
-    /*@Test
-    void verify() {
-        Assert.assertTrue(userService.verify("wj@163.com","123456"));
-    }
+    @Autowired
+    private AchievementService achievementService;
 
     @Test
+    void verify() {
+        Assert.assertTrue(userService.verify("wj@163.com","123456"));
+        //achievementService.addAchievement(1);
+        //achievementService.updateAchievement(1);
+    }
+
+    /*@Test
     void quit() {
     }
 
