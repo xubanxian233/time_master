@@ -2,6 +2,7 @@ package com.example.team.controller;
 
 import com.example.team.pojo.*;
 import com.example.team.service.*;
+import com.example.team.util.DateUtil;
 import com.example.team.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +22,7 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
     @Autowired
-    private UserTodoService userTodoService;
+    private AchievementService achievementService;
     @Autowired
     private RedisService redisService;
     
@@ -79,22 +80,17 @@ public class UserController extends BaseController {
         user.setTel(param.get("tel").toString());
         user.setPassword(param.get("password").toString());
         user.setSex(param.get("sex").toString());
-        user.setCreate(new Date(new java.util.Date().getTime()));
+        user.setCreate(DateUtil.getCurrentTime());
         Pet pet = new Pet();
-        pet.setBirth(new Date(new java.util.Date().getTime()));
+        pet.setBirth(DateUtil.getCurrentTime());
         pet.setSex(1);
         pet.setName("简时");
-        PetStatus petStatus=new PetStatus();
-        petStatus.setPetStatusId(1);
-        pet.setPetStatus(petStatus);
-        Skin skin=new Skin();
-        skin.setSkinId(1);
-        pet.setSkin(skin);
         pet.setLevel(1);
         String verification = redisService.get(user.getEmail());
         if (verification != null) {
             if (verification.equals(param.get("verification").toString())) {
                 if (userService.sign(user, pet)) {
+                    achievementService.addAchievement(user.getUserId());
                     return "sign-succees";
                 }
                 return "sign-fail";

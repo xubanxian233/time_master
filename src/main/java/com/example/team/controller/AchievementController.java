@@ -38,27 +38,8 @@ public class AchievementController extends BaseController{
      */
     @RequestMapping(value = "/getAchievement", method = RequestMethod.POST)
     @ResponseBody
-    List<AchievementType> getAchievement(@RequestParam userId){
-        //判断是否存在记录
-        if (achievementService.isExistAchievement(UId)){
-            achievementService.addAchievement(UId);
-        }
-        //获取未达成的成就列表
-        List<Achievement> aList=achievementService.getUnAchievement(UId);
-        for (Achievement achievement:aList){
-            switch (achievement.getaId()){
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-            }
-
-        }
+    List<Achievement> getAchievement(@RequestParam int userId){
+       return achievementService.getByUserId(userId);
     }
     private void AchievementOne(int userId){
 
