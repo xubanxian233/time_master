@@ -21,40 +21,40 @@ public class TeamTodoSetController extends BaseController {
     @Autowired
     private TeamTodoSetService teamTodoSetService;
 
-    /**
-     * list 列出所有的团队待办集
-     *
-     * @param param 团队ID
-     * @return List<TeamTodoSet> 团队待办集
-     **/
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 获取团队待办集集合
+     * @Param: [param]
+     * @return: java.util.List<com.example.team.pojo.TeamTodoSet>
+     * @update: time: 2020/6/3 9:25
+     */
     private List<TeamTodoSet> list(@RequestBody Map<String, Object> param) {
         int teamId = Integer.parseInt(param.get("teamId").toString());
         return teamTodoSetService.listByTeamId(teamId);
     }
 
-    /**
-     * get 获取某一团队待办集
-     *
-     * @param param 团队待办集ID
-     * @return TeamTodoSet 获取具体团队待办集
-     **/
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 获取团队待办集
+     * @Param: [param]
+     * @return: com.example.team.pojo.TeamTodoSet
+     * @update: time: 2020/6/3 9:25
+     */
     private TeamTodoSet getTeamTodoSet(@RequestBody Map<String, Object> param) {
         int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
         return teamTodoSetService.getById(teamTodoSetId);
     }
 
-    /**
-     * createTeamTodoSet 创建团队待办集
-     *
-     * @param param 团队待办集名，团队ID
-     * @return String 成功或失败
-     **/
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 创建团队待办集
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:25
+     */
     private String createTeamTodoSet(@RequestBody Map<String, Object> param) {
         String name = param.get("name").toString();
         TeamTodoSet teamTodoSet = new TeamTodoSet();
@@ -70,14 +70,14 @@ public class TeamTodoSetController extends BaseController {
         return "create-fail";
     }
 
-    /**
-     * update 更新团队待办集
-     *
-     * @param param 团队待办集名，团队ID，团队待办集ID，创建时间
-     * @return String 成功或失败
-     **/
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 更新团队待办集
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:25
+     */
     private String updateTeamTodoSet(@RequestBody Map<String, Object> param) {
         TeamTodoSet teamTodoSet = new TeamTodoSet();
         teamTodoSet.setName(param.get("name").toString());
@@ -91,14 +91,14 @@ public class TeamTodoSetController extends BaseController {
         return "update-fail";
     }
 
-    /**
-     * delete 删除团队待办集
-     *
-     * @param param 团队待办集ID
-     * @return String 成功
-     **/
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 删除团队待办集
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:25
+     */
     private String deleteTeamTodoSet(@RequestBody Map<String, Object> param) {
         int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
         teamTodoSetService.deleteTeamTodoSet(teamTodoSetId);

@@ -6,6 +6,8 @@ import com.example.team.dao.UserTodoDAO;
 import com.example.team.pojo.*;
 import com.example.team.service.PetService;
 import com.example.team.service.RecordService;
+import com.example.team.util.DateUtil;
+import com.sun.deploy.security.BadCertificateDialog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -28,67 +30,56 @@ public class RecordController extends BaseController {
     @Autowired
     private PetService petService;
 
-    private Date getMonthDate(){
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new java.util.Date());
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        java.util.Date date=calendar.getTime();
-        return new Date(date.getTime());
-    }
 
-    public Date getCurrentTime(){
-        java.util.Date date = new java.util.Date();
-        return new Date(date.getTime());
-    }
-
-    /**
-     * getDailyRecord 获取当日使用记录
-     *
-     * @param
-     * @return DailyRecord 当日使用记录
-     */
     @RequestMapping("/getDailyRecord")
     @ResponseBody
-    DailyRecord getDailyRecord() {
+    /**
+     * @description:
+     * @Param: []
+     * @return: com.example.team.pojo.DailyRecord
+     * @update: time: 2020/6/3 8:52
+     */
+    DailyRecord getDailyRecord(){
         int userId = Integer.parseInt(request.getHeader("id"));
-        return recordService.getDailyRecord(userId, getCurrentTime());
+        return recordService.getDailyRecord(userId, DateUtil.getCurrentTime());
     }
 
-    /**
-     * getAccRecord 获取累计使用记录
-     *
-     * @param
-     * @return AccRecord 累计使用记录
-     */
     @RequestMapping("/getAccRecord")
     @ResponseBody
+    /**
+     * @description: 获取累计记录
+     * @Param: []
+     * @return: com.example.team.pojo.AccRecord
+     * @update: time: 2020/6/3 8:52
+     */
     AccRecord getAccRecord() {
         int userId = Integer.parseInt(request.getHeader("id"));
         return recordService.getAccRecord(userId);
     }
 
-    /**
-     * getMonthRecord 获取所选月份使用记录
-     *
-     * @param
-     * @return MonthRecord 所选月份使用记录
-     */
     @RequestMapping("/getMonthRecord")
     @ResponseBody
+    /**
+     * @description: 获取月记录
+     * @Param: []
+     * @return: com.example.team.pojo.MonthRecord
+     * @update: time: 2020/6/3 8:52
+     */
     MonthRecord getMonthRecord() {
         int userId = Integer.parseInt(request.getHeader("id"));
-        return recordService.getMonthRecord(userId,getMonthDate());
+        return recordService.getMonthRecord(userId,DateUtil.getMonthDate());
     }
 
-    /**
-     * getMonthRecordByMonth 获取所选月所有日使用记录
-     *
-     * @param date_1,date_2 所选开始月日期 所选开始月+1日期
-     * @return List<DailyRecord> 月所有当日使用记录
-     */
+
     @RequestMapping("/getDailyRecordByMonth")
     @ResponseBody
+    /**
+     * @description: 获取月的日记录集合
+     * @Param: [date_1, date_2]
+     * @return: java.util.Map<java.lang.Integer,java.lang.Long>
+     * @update: time: 2020/6/3 8:51
+     */
     Map<Integer, Long> getDailyRecordByMonth(@RequestParam String date_1, @RequestParam String date_2) throws ParseException {
         int userId = Integer.parseInt(request.getHeader("id"));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -97,28 +88,34 @@ public class RecordController extends BaseController {
         return recordService.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
     }
 
+
     @RequestMapping(value = "/setRecord",method = RequestMethod.POST)
+    /**
+     * @description: 设置记录
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 8:52
+     */
     public String setRecord(@RequestBody Map<String, Object> param) {
         String userId = request.getHeader("id"); //获取用户id
-        String todoId = param.get("userTodoId").toString();//获取待办id
+        String todoId = param.get("todoId").toString();//获取待办id
         String todoStatusId = param.get("statusId").toString();//获取待办状态
         String todoTime = param.get("time").toString();//获取待办时间
         String flag=param.get("flag").toString();
-
-        int tId=Integer.parseInt(todoId);
+        
         long tTime = Integer.parseInt(todoTime);
         int tsId = Integer.parseInt(todoStatusId);
         int uId = Integer.parseInt(userId);
 
         //日记录
-        if (recordService.isExistDailyRecord(uId,getCurrentTime())) {
+        if (recordService.isExistDailyRecord(uId,DateUtil.getCurrentTime())) {
             recordService.updateDailyRecord(uId, tTime, tsId);
         } else {
             recordService.addDailyRecord(uId, tTime, tsId);
         }
 
         //月记录
-        if(recordService.isExistMonthRecord(uId,getMonthDate())){
+        if(recordService.isExistMonthRecord(uId,DateUtil.getMonthDate())){
             recordService.updateMonthRecord(uId, tTime, tsId);
         } else {
             recordService.addMonthRecord(uId, tTime, tsId);

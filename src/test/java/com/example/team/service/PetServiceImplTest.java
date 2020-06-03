@@ -32,10 +32,7 @@ class PetServiceImplTest {
         pet.setBirth(new Date(new java.util.Date().getTime()));
         pet.setSex(1);
         pet.setName("简时");
-        pet.setPetStatusId(1);
-        pet.setSkinId(1);
         pet.setLevel(1);
-        pet.setUserId(5);
         petService.addPet(pet);
         Pet testPet = petService.getPetByUserId(5);
         Assert.assertEquals(pet.getPetId(),testPet.getPetId());

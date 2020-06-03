@@ -2,6 +2,7 @@ package com.example.team.service;
 
 import com.example.team.dao.*;
 import com.example.team.pojo.*;
+import com.example.team.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,30 +28,20 @@ public class RecordServiceImpl implements RecordService {
     @Autowired
     private UserDAO userDAO;
 
-    //获取本月一号的日期
-    private Date getMonthDate() {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new java.util.Date());
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        java.util.Date date = calendar.getTime();
-        return new Date(date.getTime());
-    }
-
-    //获取当前年月日
-    public Date getCurrentTime() {
-        java.util.Date date = new java.util.Date();
-        return new Date(date.getTime());
-    }
 
     @Override
+    /**
+     * @description: 添加累计记录
+     * @Param: [uId, tTime, tsId]
+     * @return: void
+     * @update: time: 2020/6/3 9:37
+     */
     public void addAccRecord(int uId, long tTime, int tsId) {
         AccRecord accRecord = new AccRecord();
         accRecord.setUserId(uId);
         accRecord.setAcctime(tTime);
-        Date date = userDAO.getById(uId).getCreate();
-        getCurrentTime();
-        int days = (int) ((getCurrentTime().getTime() - date.getTime()) / (1000 * 3600 * 24));
+        Date date = userDAO.get(User.class, uId).getCreate();
+        int days = (int) ((DateUtil.getCurrentTime().getTime() - date.getTime()) / (1000 * 3600 * 24));
         accRecord.setDailytime(tTime / days);
         if (tsId == 2) {
             accRecord.setSuccessCount(1);
@@ -61,12 +52,17 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    /**
+     * @description: 更新累计记录
+     * @Param: [uId, tTime, tsId]
+     * @return: void
+     * @update: time: 2020/6/3 9:37
+     */
     public void updateAccRecord(int uId, long tTime, int tsId) {
-        getCurrentTime();
         AccRecord accRecord = accRecordDAO.getByUserId(uId);
         accRecord.setAcctime(accRecord.getAcctime() + tTime);
         int days =
-                (int) ((getCurrentTime().getTime() - userDAO.getById(uId).getCreate().getTime()) / (1000 * 3600 * 24)) + 1;
+                (int) ((DateUtil.getCurrentTime().getTime() - userDAO.get(User.class, uId).getCreate().getTime()) / (1000 * 3600 * 24)) + 1;
         accRecord.setDailytime(accRecord.getAcctime() / days);
         if (tsId == 2) {
             accRecord.setSuccessCount(accRecord.getSuccessCount() + 1);
@@ -77,12 +73,17 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    /**
+     * @description: 添加月记录
+     * @Param: [uId, tTime, tsId]
+     * @return: void
+     * @update: time: 2020/6/3 9:37
+     */
     public void addMonthRecord(int uId, long tTime, int tsId) {
         MonthRecord monthRecord = new MonthRecord();
         monthRecord.setUserId(uId);
         monthRecord.setAcctime(tTime);
-        getMonthDate();
-        monthRecord.setMonthDate(getMonthDate());
+        monthRecord.setMonthDate(DateUtil.getMonthDate());
         if (tsId == 2) {
             monthRecord.setSuccessCount(1);
         } else if (tsId == 3) {
@@ -92,9 +93,14 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    /**
+     * @description: 更新月记录
+     * @Param: [uId, tTime, tsId]
+     * @return: void
+     * @update: time: 2020/6/3 9:37
+     */
     public void updateMonthRecord(int uId, long tTime, int tsId) {
-        getMonthDate();
-        MonthRecord monthRecord = monthRecordDAO.getByUserId(uId, getMonthDate());
+        MonthRecord monthRecord = monthRecordDAO.getByUserId(uId, DateUtil.getMonthDate());
         monthRecord.setAcctime(monthRecord.getAcctime() + tTime);
         if (tsId == 2) {
             monthRecord.setSuccessCount(monthRecord.getSuccessCount() + 1);
@@ -105,12 +111,17 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    /**
+     * @description:
+     * @Param: [uId, tTime, tsId]
+     * @return: void
+     * @update: time: 2020/6/3 9:37
+     */
     public void addDailyRecord(int uId, long tTime, int tsId) {
         DailyRecord dailyRecord = new DailyRecord();
         dailyRecord.setUserId(uId);
         dailyRecord.setAcctime(tTime);
-        getCurrentTime();
-        dailyRecord.setDailyDate(getCurrentTime());
+        dailyRecord.setDailyDate(DateUtil.getCurrentTime());
         if (tsId == 2) {
             dailyRecord.setSuccessCount(1);
         } else if (tsId == 3) {
@@ -120,9 +131,14 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public void updateDailyRecord(int uId, long tTime, int tsId) {
-        getCurrentTime();
-        DailyRecord dailyRecord = dailyRecordDAO.getByUserId(uId, getCurrentTime());
+    /**
+     * @description:
+     * @Param: [uId, tTime, tsId]
+     * @return: void
+     * @update: time: 2020/6/3 9:37
+     */
+    public void updateDailyRecord(int uId, long tTime, int tsId){
+        DailyRecord dailyRecord = dailyRecordDAO.getByUserId(uId, DateUtil.getCurrentTime());
         if (tsId == 2) {
             dailyRecord.setSuccessCount(dailyRecord.getSuccessCount() + 1);
         } else if (tsId == 3) {
@@ -133,22 +149,46 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    /**
+     * @description:
+     * @Param: [userId]
+     * @return: com.example.team.pojo.AccRecord
+     * @update: time: 2020/6/3 9:37
+     */
     public AccRecord getAccRecord(int userId) {
         return accRecordDAO.getByUserId(userId);
     }
 
     @Override
+    /**
+     * @description:
+     * @Param: [userId, dailyDate]
+     * @return: com.example.team.pojo.DailyRecord
+     * @update: time: 2020/6/3 9:37
+     */
     public DailyRecord getDailyRecord(int userId, Date dailyDate) {
         return dailyRecordDAO.getByUserId(userId, dailyDate);
     }
 
     @Override
+    /**
+     * @description:
+     * @Param: [userId, monthDate]
+     * @return: com.example.team.pojo.MonthRecord
+     * @update: time: 2020/6/3 9:37
+     */
     public MonthRecord getMonthRecord(int userId, Date monthDate) {
         return monthRecordDAO.getByUserId(userId, monthDate);
     }
 
 
     @Override
+    /**
+     * @description:
+     * @Param: [userId, litleMonthDate, bigMonthDate]
+     * @return: java.util.Map<java.lang.Integer, java.lang.Long>
+     * @update: time: 2020/6/3 9:37
+     */
     public Map<Integer, Long> listDailyRecordByMonth(int userId, Date litleMonthDate, Date bigMonthDate) {
         List<DailyRecord> list = dailyRecordDAO.listDailyRecordByMonth(userId, litleMonthDate, bigMonthDate);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -167,6 +207,12 @@ public class RecordServiceImpl implements RecordService {
 
     //判断是否存在记录
     @Override
+    /**
+     * @description:
+     * @Param: [uid, time]
+     * @return: boolean
+     * @update: time: 2020/6/3 9:37
+     */
     public boolean isExistDailyRecord(int uid, Date time) {
         if (dailyRecordDAO.getByUserId(uid, time) != null) {
             return true;
@@ -176,6 +222,12 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    /**
+     * @description:
+     * @Param: [uid, time]
+     * @return: boolean
+     * @update: time: 2020/6/3 9:37
+     */
     public boolean isExistMonthRecord(int uid, Date time) {
         if (monthRecordDAO.getByUserId(uid, time) != null) {
             return true;
@@ -185,6 +237,12 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    /**
+     * @description:
+     * @Param: [uid]
+     * @return: boolean
+     * @update: time: 2020/6/3 9:37
+     */
     public boolean isExistAccRecord(int uid) {
         if (accRecordDAO.getByUserId(uid) != null) {
             return true;

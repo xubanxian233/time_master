@@ -32,46 +32,55 @@ public class TeamTodoController extends BaseController {
      **/
     @RequestMapping(value = "/listByTeamId", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 获取团队待办集合
+     * @Param: [param, userId]
+     * @return: java.util.List<com.example.team.pojo.TeamTodo>
+     * @update: time: 2020/6/3 9:23
+     */
     private List<TeamTodo> listByTeamId(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         int teamId = Integer.parseInt(param.get("teamId").toString());
         return teamTodoService.listByUser(teamId,userId);
     }
 
-    /**
-     * listById 通过团队待办集ID获取具体的团队待办集中的事项
-     *
-     * @param param 团队ID和团队待办集ID
-     * @return List<TeamTodo> 某一团队待办集中的事项
-     **/
+
     @RequestMapping(value = "/listById", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 获取团队待办集的集合
+     * @Param: [param, userId]
+     * @return: java.util.List<com.example.team.pojo.TeamTodo>
+     * @update: time: 2020/6/3 9:23
+     */
     private List<TeamTodo> listById(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         int teamId = Integer.parseInt(param.get("teamId").toString());
         int teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
         return teamTodoService.listTeamTodo(teamTodoSetId,teamId,userId);
     }
 
-    /**
-     * get 通过团队ID获取具体的团队待办事项
-     *
-     * @param param 团队待办ID
-     * @return List<TeamTodo> 某一团队待办事项
-     **/
+ 
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 获取团队待办
+     * @Param: [param, userId]
+     * @return: com.example.team.pojo.TeamTodo
+     * @update: time: 2020/6/3 9:23
+     */
     private TeamTodo getTeamTodo(@RequestBody Map<String,Object> param,@RequestHeader("id") int userId){
         int teamTodoId = Integer.parseInt(param.get("teamTodoId").toString());
         return teamTodoService.getById(teamTodoId);
     }
 
-    /**
-     * create 创建团队待办
-     *
-     * @param param 团队待办名，团队ID，团队待办集ID，时长
-     * @return String 功或失败
-     **/
+
     @RequestMapping(value = "/create", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
+    /**
+     * @description: 创建团队待办
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:23
+     */
     private String createTeamTodo(@RequestBody Map<String,Object> param){
         String result = "create-fail";
         int teamTodoSetId = 1;
@@ -99,15 +108,15 @@ public class TeamTodoController extends BaseController {
         }
         return result;
     }
-
-    /**
-     * update 更新团队待办
-     *
-     * @param param 原团队待办名，改后的团队待办名，团队待办集ID，时长，团队待办ID，待办状态ID，创建时间
-     * @return String 成功或失败
-     **/
+    
     @RequestMapping(value = "/update", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
+    /**
+     * @description: 更新团队待办
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:23
+     */
     private String updateTeamTodo(@RequestBody Map<String,Object> param){
         String result = "update-fail";
         String name = param.get("name").toString();
@@ -134,15 +143,15 @@ public class TeamTodoController extends BaseController {
         }
         return result;
     }
-
-    /**
-     * delete 删除团队待办
-     *
-     * @param param 团队待办名称，团队ID
-     * @return String 成功
-     **/
+    
     @RequestMapping(value = "/delete", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
+    /**
+     * @description: 删除团队待办
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:23
+     */
     private String deleteTeamTodo(@RequestBody Map<String,Object> param){
         String name = param.get("name").toString();
         Set<User> set = userService.getMembers(Integer.parseInt(param.get("teamId").toString()));
@@ -152,15 +161,16 @@ public class TeamTodoController extends BaseController {
         return "delete-success";
     }
 
-    /**
-     * updateState 更新团队待办状态
-     *
-     * @param teamTodoId,todoStatusId 状态ID，团队待办ID
-     * @return String 成功或失败
-     **/
-    @RequestMapping(value = "/updateState",method = RequestMethod.GET,produces = "application/json;charset=utf-8")
+    
+    @RequestMapping("/updateState")
     @ResponseBody
-    public String updateState(@RequestParam String teamTodoId,@RequestParam String todoStatusId,
+    /**
+     * @description: 更新团队待办状态
+     * @Param: [teamTodoId, todoStatusId, userId]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:23
+     */
+    public String updateState(@RequestParam String teamTodoId, @RequestParam String todoStatusId,
                               @RequestHeader("id") int userId){
         String result = "updateState-fail";
         int teamTodoId1 = Integer.parseInt(teamTodoId);

@@ -13,10 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class TeamServiceImpl implements TeamService {
     @Autowired
     private TeamDAO teamDAO;
-    @Autowired
-    private UserDAO userDAO;
 
     @Override
+    /**
+     * @description: 
+     * @Param: [user, team] 
+     * @return: com.example.team.pojo.Team 
+     * @update: time: 2020/6/3 9:36 
+     */
     public Team createTeam(User user, Team team) {
         teamDAO.add(team);
         team.getUsers().add(user);
@@ -25,13 +29,25 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    /**
+     * @description: 
+     * @Param: [team] 
+     * @return: void 
+     * @update: time: 2020/6/3 9:37 
+     */
     public void updateTeam(Team team) {
-        Team team1 = teamDAO.getByTeamId(team.getTeamId());
+        Team team1 = teamDAO.get(Team.class,team.getTeamId());
         team1.setName(team.getName());
         teamDAO.update(team1);
     }
 
     @Override
+    /**
+     * @description: 
+     * @Param: [teamId] 
+     * @return: void 
+     * @update: time: 2020/6/3 10:22
+     */
     public void deleteTeam(int teamId) {
         teamDAO.delete(teamId);
     }

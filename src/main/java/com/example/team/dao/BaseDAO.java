@@ -10,13 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.Serializable;
 
 @Transactional
-public class BaseDAO extends HibernateDaoSupport {
-    @PersistenceContext
-    protected EntityManager entityManager;
+public interface BaseDAO<T> {
 
-    protected Session getSession() {
-        return entityManager.unwrap(Session.class);
-    }
+    void add(T obj);
+
+    void update(T obj);
+
+    void delete(T obj);
+
+    void delete(int objId);
+
+    T get(Class<T> c, Serializable id);
+
 }
