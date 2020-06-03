@@ -18,10 +18,6 @@ public class UserTodoController extends BaseController {
     @Autowired
     private UserTodoService userTodoService;
 
-
-    @Autowired
-    private UserTodoSetService userTodoSetService;
-
     @RequestMapping(value = "/listById", method = RequestMethod.POST)
     @ResponseBody
     /**
@@ -69,10 +65,16 @@ public class UserTodoController extends BaseController {
      * @update: time: 2020/6/3 9:01
      */
     public UserTodo create(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
-        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
+        int userTodoSetId = 0;
         UserTodo userTodo = new UserTodo();
         userTodo.setName(param.get("name").toString());
-        userTodo.setUserTodoSetId(userTodoSetId);
+        if(param.get("userTodoSetId")==null){
+            userTodo.setUserTodoSetId(userTodoSetId);
+        }
+        else {
+            userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
+            userTodo.setUserTodoSetId(userTodoSetId);
+        }
         userTodo.setUserId(userId);
         userTodo.setTime(Long.parseLong(param.get("time").toString()));
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -151,3 +153,4 @@ public class UserTodoController extends BaseController {
         return result;
     }
 }
+
