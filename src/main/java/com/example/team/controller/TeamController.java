@@ -179,12 +179,6 @@ public class TeamController extends BaseController {
         return "update-success";
     }
 
-    /**
-     * getRecords 获取用户待办和待办集使用情况
-     *
-     * @param param 选择项（option），团队ID（teamId），地址（path）
-     * @return String
-     */
     @RequestMapping(value = "/getRecords", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     /**
@@ -274,7 +268,7 @@ public class TeamController extends BaseController {
             //文件不用创建，会自动生成的
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date create = new java.util.Date();
-            String exportFilePath = path + "\\output-" + create + ".xlsx";
+            String exportFilePath = path + "\\output-" + df.format(create) + ".xlsx";
             File exportFile = new File(exportFilePath);
             if (!exportFile.exists()) {
                 exportFile.createNewFile();

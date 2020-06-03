@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 
 @Transactional(rollbackFor = Exception.class)
 public class BaseDAOImpl<T> implements BaseDAO<T> {
@@ -18,6 +19,12 @@ public class BaseDAOImpl<T> implements BaseDAO<T> {
     }
 
     private Class<T> clazz;
+
+    public BaseDAOImpl() {
+        super();
+        this.clazz = null;
+        this.clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
 
     @Override
     public void add(T obj) {

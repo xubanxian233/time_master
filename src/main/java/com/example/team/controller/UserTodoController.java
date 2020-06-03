@@ -18,10 +18,6 @@ public class UserTodoController extends BaseController {
     @Autowired
     private UserTodoService userTodoService;
 
-
-    @Autowired
-    private UserTodoSetService userTodoSetService;
-
     @RequestMapping(value = "/listById", method = RequestMethod.POST)
     @ResponseBody
     /**
