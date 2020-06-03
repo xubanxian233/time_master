@@ -1,19 +1,10 @@
 package com.example.team.dao;
 
 
-import com.example.team.pojo.Team;
 import com.example.team.pojo.User;
 
-import java.util.Set;
 
-public interface UserDAO {
-    int add(User user);
-
-    void delete(int userId);
-
-    void update(User user);
-
-    User getById(int userId);
+public interface UserDAO extends BaseDAO<User>{
 
     User getByName(String name);
 

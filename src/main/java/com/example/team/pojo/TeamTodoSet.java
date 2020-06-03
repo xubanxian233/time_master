@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -12,6 +14,7 @@ public class TeamTodoSet {
     private int teamTodoSetId;
     private String name;
     @Column(name = "create_date")
+    @JsonIgnore
     private Date create;
     @Column(name = "team")
     private int teamId;
