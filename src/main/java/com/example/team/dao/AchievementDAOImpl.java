@@ -20,16 +20,32 @@ public class AchievementDAOImpl implements AchievementDAO {
     @PersistenceContext
     protected EntityManager entityManager;
 
+
+
     protected Session getSession() {
         return entityManager.unwrap(Session.class);
     }
 
     @Override
-    public void add(Achievement achievement) {  getSession().save(achievement); }
+    public void add(Achievement achievement) {
+        getSession().save(achievement); }
+
+    @Override
+    public void update(Achievement achievement) {
+        getSession().merge(achievement);
+    }
+
+
 
     @Override
     public List<Achievement> getByUserId(int userId) {
         String hql="from Achievement where userId=:userId";
         return (List<Achievement>) getSession().createQuery(hql).setParameter("userId",userId).list();
+    }
+
+    @Override
+    public List<Achievement> getUnAchievement(int userId){
+        String hql="from Achievement where userId=:userId and status=:status";
+        return (List<Achievement>) getSession().createQuery(hql).setParameter("userId",userId).setParameter("status","0").list();
     }
 }
