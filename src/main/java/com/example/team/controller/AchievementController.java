@@ -38,7 +38,7 @@ public class AchievementController extends BaseController{
      */
     @RequestMapping(value = "/getAchievement", method = RequestMethod.POST)
     @ResponseBody
-    List<Achievement> getAchievement(@RequestParam int userId){
+    List<AchievementType> getAchievement(@RequestParam int userId){
         //判断是否存在记录
         if (achievementService.isExistAchievement(userId)){
             achievementService.addAchievement(userId);
@@ -48,23 +48,21 @@ public class AchievementController extends BaseController{
         //判断是否达成
         for (Achievement a:aList){
             achievement=a;
-            switch (a.getaId()){
-                case 1:AchievementOne(userId);
+            switch (a.getType()){
+                case 1:AchievementTwo(userId);
                     break;
-                case 2:AchievementTwo(userId);
+                case 2:AchievementThree(userId);
                     break;
-                case 3:AchievementThree(userId);
+                case 3:AchievementFour(userId);
                     break;
-                case 4:AchievementFour(userId);
+                case 4:AchievementFive(userId);
                     break;
-                case 5:AchievementFive(userId);
-                    break;
-                case 6:AchievementSix(userId);
+                case 5:AchievementSix(userId);
                     break;
             }
 
         }
-        return achievementService.getByUserId(userId);
+        return achievementService.getAchievement(userId);
     }
 
     //获取前一天的日期
@@ -101,7 +99,7 @@ public class AchievementController extends BaseController{
             }
             getBeforeDate(bTime);
             if (i>21){
-                achievement.setStatus("1");
+                achievement.setStatus(1);
                 achievementService.updateAchievement(achievement);
                 break;
             }
@@ -112,7 +110,7 @@ public class AchievementController extends BaseController{
         AccRecord accRecord=recordService.getAccRecord(userId);
         if(accRecord!=null){
             if (accRecord.getAcctime()>10){
-                achievement.setStatus("1");
+                achievement.setStatus(1);
                 achievementService.updateAchievement(achievement);
             }
 
@@ -123,7 +121,7 @@ public class AchievementController extends BaseController{
         AccRecord accRecord=recordService.getAccRecord(userId);
         if(accRecord!=null){
             if (accRecord.getAcctime()>100){
-                achievement.setStatus("1");
+                achievement.setStatus(1);
                 achievementService.updateAchievement(achievement);
             }
 
@@ -134,7 +132,7 @@ public class AchievementController extends BaseController{
         AccRecord accRecord=recordService.getAccRecord(userId);
         if(accRecord!=null){
             if (accRecord.getAcctime()>500){
-                achievement.setStatus("1");
+                achievement.setStatus(1);
                 achievementService.updateAchievement(achievement);
             }
 
@@ -145,7 +143,7 @@ public class AchievementController extends BaseController{
         AccRecord accRecord=recordService.getAccRecord(userId);
         if(accRecord!=null){
             if (accRecord.getAcctime()>1000){
-                achievement.setStatus("1");
+                achievement.setStatus(1);
                 achievementService.updateAchievement(achievement);
             }
 
@@ -156,7 +154,7 @@ public class AchievementController extends BaseController{
         AccRecord accRecord=recordService.getAccRecord(userId);
         if(accRecord!=null){
             if (accRecord.getAcctime()>5000){
-                achievement.setStatus("1");
+                achievement.setStatus(1);
                 achievementService.updateAchievement(achievement);
             }
 

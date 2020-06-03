@@ -22,9 +22,10 @@ public class AchievementServiceImpl implements AchievementService {
         Achievement achievement = null;
         List<AchievementType> aList=achievementTypeDAO.getAchievementType();
         for (AchievementType a:aList){
-            achievement.setaId(userId);
-            achievement.setStatus("0");
-            achievement.setaId(a.getaId());
+            achievement=achievementDAO.getAchievement(userId,a.getAId());
+            achievement.setUserId(userId);
+            achievement.setStatus(0);
+            achievement.setType(a.getAId());
             achievementDAO.add(achievement);
         }
     }
@@ -51,5 +52,16 @@ public class AchievementServiceImpl implements AchievementService {
     @Override
     public List<Achievement> getUnAchievement(int userId){
         return achievementDAO.getUnAchievement(userId);
+    }
+
+    @Override
+    public List<AchievementType> getAchievement(int userId) {
+        List<Achievement> aList=getByUserId(userId);
+        List<AchievementType> atList=achievementTypeDAO.getAchievementType();
+        for (AchievementType at:atList){
+            at.setAstatus(achievementDAO.getAchievement(userId,at.getAId()).getStatus());
+        }
+
+        return null;
     }
 }

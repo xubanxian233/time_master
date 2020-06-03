@@ -11,17 +11,17 @@ public class AchievementType {
     @Column(name="achievement_id")
     private int aId;
     @Column(name="achievement_name")
-    private int aname;
+    private String  aname;
     @Column(name = "a_introduction")
     private String aintro;
-    @Column(name = "a_condition")
-    private String acondition;
+    @Column(name = "a_status")
+    private int astatus;
 
-    public int getaId() {
+    public int getAId() {
         return aId;
     }
 
-    public int getAname() {
+    public String getAname() {
         return aname;
     }
 
@@ -29,15 +29,15 @@ public class AchievementType {
         return aintro;
     }
 
-    public String getAcondition() {
-        return acondition;
+    public int getAstatus() {
+        return astatus;
     }
 
-    public void setaId(int aId) {
+    public void setAId(int aId) {
         this.aId = aId;
     }
 
-    public void setAname(int aname) {
+    public void setAname(String aname) {
         this.aname = aname;
     }
 
@@ -45,7 +45,7 @@ public class AchievementType {
         this.aintro = aintro;
     }
 
-    public void setAcondition(String acondition) {
-        this.acondition = acondition;
+    public void setAstatus(int astatus) {
+        this.astatus = astatus;
     }
 }

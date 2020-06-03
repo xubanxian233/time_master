@@ -7,17 +7,17 @@ import javax.persistence.*;
 public class Achievement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="achievement_id")
-    private int aId;
+    @Column(name="type")
+    private int type;
     @Column(name="user_id")
     private int userId;
     @Column(name = "a_create")
     private String create;
     @Column(name = "a_status")
-    private String status;
+    private int status;
 
-    public int getaId() {
-        return aId;
+    public int getType() {
+        return type;
     }
 
     public int getUserId() {
@@ -28,12 +28,12 @@ public class Achievement {
         return create;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setaId(int aId) {
-        this.aId = aId;
+    public void setType(int type) {
+        this.type = type;
     }
 
     public void setCreate(String create) {
@@ -44,7 +44,7 @@ public class Achievement {
         this.userId = userId;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 }

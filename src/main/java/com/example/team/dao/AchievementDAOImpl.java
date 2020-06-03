@@ -44,6 +44,11 @@ public class AchievementDAOImpl implements AchievementDAO {
     }
 
     @Override
+    public Achievement getAchievement(int userId,int aId){
+        String hql="from Achievement where userId=:userId and type=:aId";
+        return (Achievement) getSession().createQuery(hql).setParameter("userId",userId).setParameter("aId",aId).uniqueResult();
+    }
+    @Override
     public List<Achievement> getUnAchievement(int userId){
         String hql="from Achievement where userId=:userId and status=:status";
         return (List<Achievement>) getSession().createQuery(hql).setParameter("userId",userId).setParameter("status","0").list();
