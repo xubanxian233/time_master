@@ -10,7 +10,7 @@ public interface UserTodoDAO extends BaseDAO<UserTodo>{
 
     void updateState(int userTodoId, int todoStatusId);
 
-    UserTodo getByName(String name);
+    UserTodo getByName(String name,int userId);
 
     List<UserTodo> listByUser(int userId);
 

@@ -5,7 +5,7 @@ import com.example.team.pojo.TeamTodo;
 import java.util.List;
 
 public interface TeamTodoDAO extends BaseDAO<TeamTodo>{
-    void deleteByUser(String name,int userId);
+    void deleteByUser(String name,int userId,int teamId);
     void updateState(int teamTodoId,int todoStatusId,int userId);
     TeamTodo getByUser(String name,int userId);
     List<TeamTodo> listByUser(int teamId,int userId);

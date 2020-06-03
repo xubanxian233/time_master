@@ -1,11 +1,8 @@
 package com.example.team.controller;
 
-import com.example.team.dao.TeamTodoDAO;
-import com.example.team.pojo.Team;
 import com.example.team.pojo.TeamTodo;
 import com.example.team.pojo.User;
 import com.example.team.service.TeamTodoService;
-import com.example.team.service.TeamTodoSetService;
 import com.example.team.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,10 +24,12 @@ public class TeamTodoController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private TeamTodoSetService teamTodoSetService;
-
-
+    /**
+     * listByTeamId 通过团队ID获取团队所有的待办事项
+     *
+     * @param param 团队ID
+     * @return List<TeamTodo> 团队待办事项
+     **/
     @RequestMapping(value = "/listByTeamId", method = RequestMethod.POST)
     @ResponseBody
     /**
@@ -95,9 +94,6 @@ public class TeamTodoController extends BaseController {
                 teamTodoSetId = Integer.parseInt(param.get("teamTodoSetId").toString());
                 teamTodo.setTeamTodoSetId(teamTodoSetId);
             }
-            if (teamTodoSetService.getById(teamTodoSetId)==null){
-                return "create-fail:团队待办集不存在";
-            }
             teamTodo.setName(param.get("name").toString());
             teamTodo.setTeamId(Integer.parseInt(param.get("teamId").toString()));
             teamTodo.setTime(Long.parseLong(param.get("time").toString()));
@@ -135,10 +131,7 @@ public class TeamTodoController extends BaseController {
             teamTodo.setTime(Long.parseLong(param.get("time").toString()));
             teamTodo.setTodoStatusId(todoStatusId);
             teamTodo.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
-            if (teamTodoSetService.getById(teamTodoSetId)==null){
-                return "update-fail:团队待办集ID不存在";
-            }
-            else if (todoStatusId<1||todoStatusId>3){
+            if (todoStatusId<1||todoStatusId>3){
                 return "update-fail：状态ID错误";
             }
             teamTodo.setUserId(user.getUserId());
@@ -163,10 +156,11 @@ public class TeamTodoController extends BaseController {
         String name = param.get("name").toString();
         Set<User> set = userService.getMembers(Integer.parseInt(param.get("teamId").toString()));
         for (User user : set){
-            teamTodoService.deleteByUser(name,user.getUserId());
+            teamTodoService.deleteByUser(name,user.getUserId(),Integer.parseInt(param.get("teamId").toString()));
         }
         return "delete-success";
     }
+
     
     @RequestMapping("/updateState")
     @ResponseBody
