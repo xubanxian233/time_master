@@ -6,24 +6,19 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 @Repository("achievementTypeDAO")
-public class AchievementTypeDAOImpl implements AchievementTypeDAO {
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
-
-    public Session getSession() {
-        return entityManagerFactory.unwrap(SessionFactory.class).openSession();
-    }
-
+@Transactional(rollbackFor = Exception.class)
+public class AchievementTypeDAOImpl extends BaseDAOImpl<AchievementType> implements AchievementTypeDAO {
 
     @Override
-    public AchievementType getById(int achievementId) {
-        String hql="from AchievementType where aId=:achievementId";
-        return (AchievementType) getSession().createQuery(hql).setParameter("achievementId",achievementId).uniqueResult();
+    public int getAchievementId(int acctime, int userId) {
+        String hql="select max(obj.aId) from AchievementType as obj where obj.acctime<=:acctime";
+        return (int) getSession().createQuery(hql).setParameter("acctime",acctime).uniqueResult();
     }
 
     @Override
