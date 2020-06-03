@@ -18,52 +18,56 @@ public class UserTodoController extends BaseController {
     @Autowired
     private UserTodoService userTodoService;
 
-    /**
-     * listById 列出某一用户待办集中所有用户待办
-     *
-     * @param param 用户待办集ID
-     * @return List<UserTodo> 用户待办
-     **/
+
+    @Autowired
+    private UserTodoSetService userTodoSetService;
+
     @RequestMapping(value = "/listById", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 获取对应待办集的待办集合
+     * @Param: [param, userId]
+     * @return: java.util.List<com.example.team.pojo.UserTodo> 待办集合
+     * @update: time: 2020/6/3 9:01
+     */
     public List<UserTodo> listById(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         return userTodoService.listUserTodo(userTodoSetId, userId);
     }
 
-    /**
-     * listByUserId 列出所有用户待办
-     *
-     * @param
-     * @return List<UserTodo> 用户待办
-     **/
     @RequestMapping(value = "/listByUserId", method = RequestMethod.GET)
     @ResponseBody
+    /**
+     * @description: 获取所有待办集合
+     * @Param: [userId]
+     * @return: java.util.List<com.example.team.pojo.UserTodo> 待办集合
+     * @update: time: 2020/6/3 9:01
+     */
     public List<UserTodo> listByUserId(@RequestHeader("id") int userId) {
-        return userTodoService.listUserTodo(userId);
+        return userTodoService.listUserTodo(0, userId);
     }
 
-    /**
-     * get 获取某一用户待办
-     *
-     * @param param 用户待办ID
-     * @return UserTodo 用户待办
-     **/
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description:
+     * @Param: [param]
+     * @return: com.example.team.pojo.UserTodo
+     * @update: time: 2020/6/3 9:01
+     */
     public UserTodo get(@RequestBody Map<String, Object> param) {
         Integer userTodoId = Integer.valueOf(param.get("userTodoId").toString());
         return userTodoService.getById(userTodoId);
     }
 
-    /**
-     * create 创建用户待办
-     *
-     * @param param 用户待办名，用户待办集ID(可以不填，默认为0），时长
-     * @return String 成功或失败
-     **/
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 创建待办
+     * @Param: [param, userId]
+     * @return: com.example.team.pojo.UserTodo 待办
+     * @update: time: 2020/6/3 9:01
+     */
     public UserTodo create(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         int userTodoSetId = 0;
         UserTodo userTodo = new UserTodo();
@@ -88,28 +92,28 @@ public class UserTodoController extends BaseController {
         return null;
     }
 
-    /**
-     * delete 删除用户待办
-     *
-     * @param param 用户待办ID
-     * @return String 成功或失败
-     **/
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 删除待办
+     * @Param: [param]
+     * @return: java.lang.String 删除结果
+     * @update: time: 2020/6/3 9:01
+     */
     public String delete(@RequestBody Map<String, Object> param) {
         int userTodoId = Integer.parseInt(param.get("userTodoId").toString());
         userTodoService.deleteUserTodo(userTodoId);
         return "delete-success";
     }
 
-    /**
-     * update 更新用户待办
-     *
-     * @param param 用户待办名，用户待办集ID，用户待办ID，时长，创建时间，状态ID，类型ID
-     * @return String 成功或失败
-     **/
     @RequestMapping(value = "/update", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
+    /**
+     * @description: 更新待办
+     * @Param: [param, userId]
+     * @return: java.lang.String 更新结果
+     * @update: time: 2020/6/3 9:01
+     */
     public String update(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         String result = "update-fail";
         int todoStatusId = Integer.parseInt(param.get("todoStatusId").toString());
@@ -131,14 +135,14 @@ public class UserTodoController extends BaseController {
         return result;
     }
 
-    /**
-     * updateState 更新用户待办状态
-     *
-     * @param userTodoId,todoStatusId 状态ID，用户待办ID
-     * @return String 成功或失败
-     **/
     @RequestMapping("/updateState")
     @ResponseBody
+    /**
+     * @description: 更新状态
+     * @Param: [userTodoId, todoStatusId, userId]
+     * @return: java.lang.String 更新结果
+     * @update: time: 2020/6/3 9:01
+     */
     public String updateState(@RequestParam String userTodoId, @RequestParam String todoStatusId,
                               @RequestHeader("id") int userId) {
         String result = "updateState-fail";
@@ -153,3 +157,4 @@ public class UserTodoController extends BaseController {
         return result;
     }
 }
+
