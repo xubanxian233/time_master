@@ -13,6 +13,8 @@ public class Achievement {
     private int userId;
     @Column(name = "a_create")
     private String create;
+    @Column(name = "a_status")
+    private String status;
 
     public int getaId() {
         return aId;
@@ -26,6 +28,10 @@ public class Achievement {
         return create;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setaId(int aId) {
         this.aId = aId;
     }
@@ -36,5 +42,9 @@ public class Achievement {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

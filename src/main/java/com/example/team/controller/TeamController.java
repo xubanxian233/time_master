@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -178,12 +179,6 @@ public class TeamController extends BaseController {
         return "update-success";
     }
 
-    /**
-     * getRecords 获取用户待办和待办集使用情况
-     *
-     * @param param 选择项（option），团队ID（teamId），地址（path）
-     * @return String
-     */
     @RequestMapping(value = "/getRecords", method = RequestMethod.POST,produces = "application/json;charset=utf-8")
     @ResponseBody
     /**
@@ -211,7 +206,6 @@ public class TeamController extends BaseController {
             }
             dataVO.setName("Todo");
             dataVO.setCompletion(todoNum + "/" + teamTodoList.size());
-            //records += "Todo:" + todoNum + "/" + teamTodoList.size() + "\r\n";
             DataVo dataVO2 = new DataVo();
             for (TeamTodoSet set : teamTodoSetList){
                 int i = 0;
@@ -227,7 +221,6 @@ public class TeamController extends BaseController {
             }
             dataVO2.setSName("TodoSet");
             dataVO2.setCompletion(todoSetNum + "/" + teamTodoSetList.size());
-            //records += "TodoSet:" + todoSetNum + "/" + teamTodoSetList.size();
             dataVOList.add(dataVO2);
             dataVOList.add(dataVO);
             records = "操作1";
@@ -272,8 +265,10 @@ public class TeamController extends BaseController {
         // 以文件的形式输出工作簿对象
         FileOutputStream fileOut = null;
         try {
-            //E:\files\write-01.xlsx  不用创建，会自动生成的
-            String exportFilePath = path + "\\write-01.xlsx";
+            //文件不用创建，会自动生成的
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date create = new java.util.Date();
+            String exportFilePath = path + "\\output-" + df.format(create) + ".xlsx";
             File exportFile = new File(exportFilePath);
             if (!exportFile.exists()) {
                 exportFile.createNewFile();
@@ -282,7 +277,7 @@ public class TeamController extends BaseController {
             workbook.write(fileOut);
             fileOut.flush();
         } catch (Exception e) {
-            //logger.warn("输出Excel时发生错误，错误原因：" + e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 if (null != fileOut) {
@@ -292,7 +287,7 @@ public class TeamController extends BaseController {
                     workbook.close();
                 }
             } catch (IOException e) {
-                //logger.warn("关闭输出流时发生错误，错误原因：" + e.getMessage());
+                e.printStackTrace();
             }
         }
         return records;
