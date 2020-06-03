@@ -4,14 +4,7 @@ import com.example.team.pojo.MonthRecord;
 
 import java.sql.Date;
 
-public interface MonthRecordDAO {
-    void add(MonthRecord monthRecord);
-
-    void delete(int monthRecordId);
-
-    void update(MonthRecord monthRecord);
-
-    MonthRecord getById(int monthRecordId);
+public interface MonthRecordDAO extends BaseDAO<MonthRecord>{
 
     MonthRecord getByUserId(int userId, Date monthDate);
 }

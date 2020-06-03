@@ -21,28 +21,30 @@ public class PetController extends BaseController {
     private PetService petService;
     @Autowired
     private SkinService skinService;
-    /**
-     * getPet 获取宠物
-     *
-     * @param
-     * @return Pet 宠物
-     **/
+
     @RequestMapping("/getPet")
     @ResponseBody
+    /**
+     * @description: 获取宠物信息
+     * @Param: []
+     * @return: com.example.team.pojo.Pet
+     * @update: time: 2020/6/3 8:56
+     */
     public Pet getPet() {
         String userId = request.getHeader("id");
         Pet pet = petService.getPetByUserId(Integer.parseInt(userId));
         return pet;
     }
 
-    /**
-     * updatePet 修改宠物信息
-     *
-     * @param param 名字或者皮肤
-     * @return Pet 宠物
-     **/
+
     @RequestMapping(value = "/updatePet", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 修改宠物
+     * @Param: [param]
+     * @return: com.example.team.pojo.Pet
+     * @update: time: 2020/6/3 8:56
+     */
     public Pet updatePet(@RequestBody Map<String, Object> param) {
         Object name = param.get("name");
         Object skin = param.get("skin");

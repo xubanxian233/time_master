@@ -18,39 +18,39 @@ public class UserTodoSetController extends BaseController {
     @Autowired
     private UserTodoSetService userTodoSetService;
 
-    /**
-     * list 列出用户待办集
-     *
-     * @param
-     * @return List<UserTodoSet> 用户待办集
-     **/
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
+    /**
+     * @description: 获取待办集集合
+     * @Param: [userId]
+     * @return java.util.List<com.example.team.pojo.UserTodoSet> 待办集集合
+     * @update time: 2020/6/3 9:02
+     */
     public List<UserTodoSet> list(@RequestHeader("id") int userId) {
         return userTodoSetService.listByUserId(userId);
     }
 
-    /**
-     * get 获取某一具体的用户待办集
-     *
-     * @param param 用户待办集ID
-     * @return UserTodoSet 用户待办集
-     **/
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 获取待办集
+     * @Param: [param]
+     * @return com.example.team.pojo.UserTodoSet 待办集
+     * @update time: 2020/6/3 9:02
+     */
     public UserTodoSet get(@RequestBody Map<String, Object> param) {
-        Integer userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         return userTodoSetService.getById(userTodoSetId);
     }
 
-    /**
-     * create 创建用户待办集
-     *
-     * @param param 用户待办集名称
-     * @return String 成功或失败
-     **/
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 创建待办集
+     * @Param: [param, userId]
+     * @return java.lang.String 创建结果
+     * @update time: 2020/6/3 9:02
+     */
     public String create(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         UserTodoSet userTodoSet = new UserTodoSet();
         userTodoSet.setName(param.get("name").toString());
@@ -65,17 +65,17 @@ public class UserTodoSetController extends BaseController {
         return "create-fail";
     }
 
-    /**
-     * update 更新用户待办集
-     *
-     * @param param 用户待办集名称，用户待办集ID，创建时间
-     * @return String 成功或失败
-     **/
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 更新待办集
+     * @Param: [param, userId]
+     * @return java.lang.String 更新结果
+     * @update time: 2020/6/3 9:02
+     */
     public String update(@RequestBody Map<String, Object> param, @RequestHeader("id") int userId) {
         UserTodoSet userTodoSet = new UserTodoSet();
-        userTodoSet.setUserTodoSetId(Integer.valueOf(param.get("userTodoSetId").toString()));
+        userTodoSet.setUserTodoSetId(Integer.parseInt(param.get("userTodoSetId").toString()));
         userTodoSet.setName(param.get("name").toString());
         userTodoSet.setUserId(userId);
         userTodoSet.setCreate(java.sql.Date.valueOf(param.get("create").toString()));
@@ -86,16 +86,16 @@ public class UserTodoSetController extends BaseController {
         return "update-fail";
     }
 
-    /**
-     * delete 删除用户待办集
-     *
-     * @param param 用户待办集ID
-     * @return String 成功或失败
-     **/
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 删除用户待办集
+     * @Param: [param]
+     * @return java.lang.String 删除结果
+     * @update time: 2020/6/3 9:02
+     */
     public String delete(@RequestBody Map<String, Object> param) {
-        Integer userTodoSetId = Integer.valueOf(param.get("userTodoSetId").toString());
+        int userTodoSetId = Integer.parseInt(param.get("userTodoSetId").toString());
         userTodoSetService.deleteUserTodoSet(userTodoSetId);
         return "delete-success";
     }

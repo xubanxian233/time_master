@@ -42,7 +42,7 @@ public class UserTodoSetServiceImpl implements UserTodoSetService {
 
     @Override
     public void deleteUserTodoSet(int userTodoSetId) {
-        int userId = userTodoSetDAO.getById(userTodoSetId).getUserId();
+        int userId = userTodoSetDAO.get(UserTodoSet.class, userTodoSetId).getUserId();
         List<UserTodo> list = userTodoDAO.listByUser(userId, userTodoSetId);
         for (int i = 0; i < list.size(); i++) {
             UserTodo userTodo = list.get(i);
@@ -53,7 +53,7 @@ public class UserTodoSetServiceImpl implements UserTodoSetService {
 
     @Override
     public UserTodoSet getById(int userTodoSetId) {
-        return userTodoSetDAO.getById(userTodoSetId);
+        return userTodoSetDAO.get(UserTodoSet.class, userTodoSetId);
     }
 
     @Override

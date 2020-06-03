@@ -4,20 +4,13 @@ import com.example.team.pojo.UserTodo;
 
 import java.util.List;
 
-public interface UserTodoDAO {
-    void add(UserTodo userTodo);
-
-    void delete(int userTodoId);
-
-    void update(UserTodo userTodo);
+public interface UserTodoDAO extends BaseDAO<UserTodo>{
 
     void updateSchedule();
 
     void updateState(int userTodoId, int todoStatusId);
 
-    UserTodo getById(int userTodoId);
-
-    UserTodo getByName(String name);
+    UserTodo getByName(String name,int userId);
 
     List<UserTodo> listByUser(int userId);
 

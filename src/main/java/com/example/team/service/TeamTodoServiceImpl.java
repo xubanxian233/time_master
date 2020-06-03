@@ -36,7 +36,9 @@ public class TeamTodoServiceImpl implements TeamTodoService {
 
     @Override
     public boolean updateState(int teamTodoId, int todoStatusId, int userId) {
-        teamTodoDAO.updateState(teamTodoId, todoStatusId, userId);
+        if (teamTodoDAO.get(TeamTodo.class,teamTodoId).getTodoStatus().getTodoStatusId() != 2) {
+            teamTodoDAO.updateState(teamTodoId, todoStatusId, userId);
+        }
         return true;
     }
 
@@ -46,13 +48,13 @@ public class TeamTodoServiceImpl implements TeamTodoService {
     }
 
     @Override
-    public void deleteByUser(String name, int userId) {
-        teamTodoDAO.deleteByUser(name, userId);
+    public void deleteByUser(String name, int userId,int teamId) {
+        teamTodoDAO.deleteByUser(name, userId,teamId);
     }
 
     @Override
     public TeamTodo getById(int teamTodoId) {
-        return teamTodoDAO.getById(teamTodoId);
+        return teamTodoDAO.get(TeamTodo.class,teamTodoId);
     }
 
     @Override

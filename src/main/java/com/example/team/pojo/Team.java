@@ -29,7 +29,7 @@ public class Team {
     private Set<User> users = new HashSet<User>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "leader", insertable = false, updatable = false)
+    @JoinColumn(name = "leader")
     private User leader;
 
     public String getName() {
