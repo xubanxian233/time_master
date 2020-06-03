@@ -18,6 +18,7 @@ public class TeamTodo {
     private String name;
     private long time;
     @Column(name = "create_date")
+    @JsonIgnore
     private Date create;
     @JsonIgnore
     @Column(name = "status")
@@ -32,6 +33,7 @@ public class TeamTodo {
     private int teamId;
 
     @Column(name = "user")
+    @JsonIgnore
     private int userId;
 
     public int getTeamTodoId() {

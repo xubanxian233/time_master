@@ -4,14 +4,7 @@ import com.example.team.pojo.UserTodoSet;
 
 import java.util.List;
 
-public interface UserTodoSetDAO {
-    void add(UserTodoSet userTodoSet);
-
-    void update(UserTodoSet userTodoSet);
-
-    void delete(int userTodoSetId);
-
-    UserTodoSet getById(int userTodoSetId);
+public interface UserTodoSetDAO extends BaseDAO<UserTodoSet>{
 
     UserTodoSet getByName(String name);
 
