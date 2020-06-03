@@ -24,15 +24,15 @@ public class UserController extends BaseController {
     private UserTodoService userTodoService;
     @Autowired
     private RedisService redisService;
-
-    /**
-     * login 登录
-     *
-     * @param param 登录的用户名和密码的map
-     * @return List<userTodo> 待办集合
-     */
+    
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 登录
+     * @Param: [param]
+     * @return: java.lang.String 登录结果
+     * @update: time: 2020/6/3 9:01
+     */
     public String login(@RequestBody Map<String, Object> param) {
         String userName = param.get("userName").toString();
         String password = param.get("password").toString();
@@ -50,28 +50,28 @@ public class UserController extends BaseController {
         return "login-fail";
     }
 
-    /**
-     * quit 退出登录
-     *
-     * @param
-     * @return 退出结果
-     */
     @RequestMapping("/quit")
     @ResponseBody
+    /**
+     * @description: 退出
+     * @Param: []
+     * @return: java.lang.String 退出结果
+     * @update: time: 2020/6/3 9:01
+     */
     public String quit() {
         int userId = Integer.parseInt(request.getHeader("id"));
         userService.quit(userId);
         return "quit-success";
     }
 
-    /**
-     * sign 注册
-     *
-     * @param param 注册的用户信息参数 map
-     * @return String 注册结果
-     */
     @RequestMapping(value = "/sign", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 注册
+     * @Param: [param]
+     * @return: java.lang.String 注册结果
+     * @update: time: 2020/6/3 9:01
+     */
     public String sign(@RequestBody Map<String, Object> param) {
         User user = new User();
         user.setEmail(param.get("email").toString());
@@ -104,14 +104,14 @@ public class UserController extends BaseController {
         return "overtime";
     }
 
-    /**
-     * updateEamil 修改信息
-     *
-     * @param param 修改的用户信息参数 map
-     * @return String 修改结果
-     */
     @RequestMapping(value = "/updateEmail", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 更新邮箱
+     * @Param: [param]
+     * @return: java.lang.String 更新结果
+     * @update: time: 2020/6/3 9:00
+     */
     public String updateEmail(@RequestBody Map<String, Object> param) {
         int userId = Integer.parseInt(request.getHeader("id"));
         String email = param.get("email").toString();
@@ -128,14 +128,14 @@ public class UserController extends BaseController {
         return "overtime";
     }
 
-    /**
-     * updateUserName 修改信息
-     *
-     * @param param 修改的用户信息参数 map
-     * @return String 修改结果
-     */
     @RequestMapping(value = "/updateUserName", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 更新用户名
+     * @Param: [param]
+     * @return: java.lang.String 更新结果
+     * @update: time: 2020/6/3 9:00
+     */
     public String updateUserName(@RequestBody Map<String, Object> param) {
         int userId = Integer.parseInt(request.getHeader("id"));
         String userName = param.get("userName").toString();
@@ -146,14 +146,14 @@ public class UserController extends BaseController {
 
     }
 
-    /**
-     * updateTel 修改信息
-     *
-     * @param param 修改的用户信息参数 map
-     * @return String 修改结果
-     */
     @RequestMapping(value = "/updateTel", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 更新手机
+     * @Param: [param]
+     * @return: java.lang.String 更新结果
+     * @update: time: 2020/6/3 9:00
+     */
     public String updateTel(@RequestBody Map<String, Object> param) {
         int userId = Integer.parseInt(request.getHeader("id"));
         String tel = param.get("tel").toString();
@@ -164,14 +164,14 @@ public class UserController extends BaseController {
 
     }
 
-    /**
-     * updatePassword 修改密码
-     *
-     * @param param 修改的密码参数
-     * @return String 修改结果
-     */
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
     @ResponseBody
+    /**
+     * @description: 
+     * @Param: [param]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:00
+     */
     public String updatePassword(@RequestBody Map<String, Object> param) {
         int userId = Integer.parseInt(request.getHeader("id"));
         String newPassword = param.get("newPassword").toString();
@@ -185,27 +185,27 @@ public class UserController extends BaseController {
         return "update-fail";
     }
 
-    /**
-     * getUserInfo 获取用户信息
-     *
-     * @param
-     * @return User 对应用户
-     */
     @RequestMapping("/getUserInfo")
     @ResponseBody
+    /**
+     * @description: 
+     * @Param: []
+     * @return: com.example.team.pojo.User
+     * @update: time: 2020/6/3 9:00
+     */
     public User getUserInfo() {
         int userId = Integer.parseInt(request.getHeader("id"));
         return userService.getById(userId);
     }
 
-    /**
-     * findPassword 找回密码
-     *
-     * @param email 邮箱账号
-     * @return 找回邮件发送结果
-     */
     @RequestMapping("/findPassword")
     @ResponseBody
+    /**
+     * @description: 
+     * @Param: [email]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:00
+     */
     public String findPassword(@RequestParam String email) {
         int userId = userService.getUserId("", email, "");
         String address="http://3554ff4f3e94.ngrok.io";
@@ -219,13 +219,13 @@ public class UserController extends BaseController {
         return "send-fail";
     }
 
-    /**
-     * gotoReset 跳转重置密码页面
-     *
-     * @param key model 判定参数和传递参数
-     * @return String 跳转页面
-     */
     @RequestMapping(value = "/gotoReset")
+    /**
+     * @description: 
+     * @Param: [key, model]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:00
+     */
     public String gotoReset(@RequestParam String key, Model model) {
         String[] keys = key.split("@");
         int userId = Integer.parseInt(keys[0]);
@@ -242,13 +242,13 @@ public class UserController extends BaseController {
         return "resetPassword";
     }
 
-    /**
-     * resetPassword 重置密码
-     *
-     * @param userId password1 修改的密码参数
-     * @return String 修改结果
-     */
     @RequestMapping(value = "/resetPassword")
+    /**
+     * @description: 
+     * @Param: [userId, password1, model]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:00
+     */
     public String resetPassword(@RequestParam String userId, @RequestParam String password1, Model model) {
         int userId1 = Integer.parseInt(userId);
         User user = userService.getById(userId1);
@@ -261,14 +261,14 @@ public class UserController extends BaseController {
         return "result";
     }
 
-    /**
-     * sendVerification 找回密码
-     *
-     * @param email 邮箱账号
-     * @return 找回邮件发送结果
-     */
     @RequestMapping("/sendVerification")
     @ResponseBody
+    /**
+     * @description: 
+     * @Param: [email]
+     * @return: java.lang.String
+     * @update: time: 2020/6/3 9:00
+     */
     public String sendVerification(@RequestParam String email) {
         StringBuilder content = new StringBuilder();
         StringBuilder code = new StringBuilder();

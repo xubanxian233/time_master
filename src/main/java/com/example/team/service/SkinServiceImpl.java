@@ -18,6 +18,6 @@ public class SkinServiceImpl implements SkinService {
 
     @Override
     public Skin getSkin(int skinId) {
-        return skinDAO.getBySkinId(skinId);
+        return skinDAO.get(Skin.class, skinId);
     }
 }

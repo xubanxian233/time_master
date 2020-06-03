@@ -1,52 +1,14 @@
 package com.example.team.dao;
 
 import com.example.team.pojo.User;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 
 
 @Repository(value = "userDAO")
 @Transactional(rollbackFor = Exception.class)
-public class UserDAOImpl implements UserDAO {
-
-
-    @PersistenceContext
-    protected EntityManager entityManager;
-
-    protected Session getSession() {
-        return entityManager.unwrap(Session.class);
-    }
-
-    @Override
-    public int add(User user) {
-        getSession().save(user);
-        return user.getUserId();
-    }
-
-    @Override
-    public void delete(int userId) {
-        getSession().delete(userId);
-    }
-
-    @Override
-    public void update(User user) {
-        getSession().merge(user);
-    }
-
-
-    @Override
-    public User getById(int userId) {
-        String hql = "from User where userId=:userId";
-        return (User) getSession().createQuery(hql).setParameter("userId", userId).uniqueResult();
-    }
+public class UserDAOImpl extends BaseDAOImpl<User> implements UserDAO {
 
     @Override
     public User getByName(String name) {

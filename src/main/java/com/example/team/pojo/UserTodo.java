@@ -16,6 +16,7 @@ public class UserTodo {
     private String name;
     private long time;
     @Column(name = "create_date")
+    @JsonIgnore
     private Date create;
 
     @JsonIgnore
@@ -30,6 +31,7 @@ public class UserTodo {
     private int userTodoSetId;
 
     @Column(name = "user")
+    @JsonIgnore
     private int userId;
 
     public int getUserTodoId() {

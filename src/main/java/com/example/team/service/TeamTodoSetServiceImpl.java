@@ -41,7 +41,7 @@ public class TeamTodoSetServiceImpl implements TeamTodoSetService {
 
     @Override
     public void deleteTeamTodoSet(int teamTodoSetId) {
-        int teamId = teamTodoSetDAO.getById(teamTodoSetId).getTeamId();
+        int teamId = teamTodoSetDAO.get(TeamTodoSet.class, teamTodoSetId).getTeamId();
         List<TeamTodo> list = teamTodoDAO.list(teamId, teamTodoSetId);
         for (int i = 0; i < list.size(); i++) {
             TeamTodo teamTodo = list.get(i);
@@ -52,7 +52,7 @@ public class TeamTodoSetServiceImpl implements TeamTodoSetService {
 
     @Override
     public TeamTodoSet getById(int teamTodoSetId) {
-        return teamTodoSetDAO.getById(teamTodoSetId);
+        return teamTodoSetDAO.get(TeamTodoSet.class, teamTodoSetId);
     }
 
     @Override

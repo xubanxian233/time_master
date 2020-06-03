@@ -2,45 +2,14 @@ package com.example.team.dao;
 
 import com.example.team.pojo.UserTodo;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository(value = "userTodoDAO")
 @Transactional(rollbackFor = Exception.class)
-public class UserTodoDAOImpl implements UserTodoDAO {
-
-    @PersistenceContext
-    protected EntityManager entityManager;
-
-    protected Session getSession() {
-        return entityManager.unwrap(Session.class);
-    }
-
-    @Override
-    public void add(UserTodo userTodo) {
-        getSession().save(userTodo);
-    }
-
-    @Override
-    public void delete(int userTodoId) {
-        Session session = getSession();
-        String hql = "from UserTodo where userTodoId=:userTodoId";
-        UserTodo userTodo = (UserTodo) session.createQuery(hql).setParameter("userTodoId", userTodoId).uniqueResult();
-        session.delete(userTodo);
-    }
-
-    @Override
-    public void update(UserTodo userTodo) {
-        getSession().update(userTodo);
-    }
+public class UserTodoDAOImpl extends BaseDAOImpl<UserTodo> implements UserTodoDAO {
 
     @Override
     public void updateSchedule() {
@@ -60,12 +29,6 @@ public class UserTodoDAOImpl implements UserTodoDAO {
                 .setParameter("status", todoStatusId)
                 .setParameter("userTodoId", userTodoId)
                 .executeUpdate();
-    }
-
-    @Override
-    public UserTodo getById(int userTodoId) {
-        String hql = "from UserTodo where userTodoId=:userTodoId";
-        return (UserTodo) getSession().createQuery(hql).setParameter("userTodoId", userTodoId).uniqueResult();
     }
 
     @Override
