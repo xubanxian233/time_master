@@ -10,7 +10,7 @@ public interface TeamTodoService {
     boolean updateTeamTodo(TeamTodo teamTodo);
     boolean updateState(int teamTodoId,int todoStatusId,int userId);
     void deleteTeamTodo(int teamTodoId);
-    void deleteByUser(String name,int userId);
+    void deleteByUser(String name,int userId,int teamId);
     TeamTodo getById(int teamTodoId);
     TeamTodo getByUser(String name,int userId);
     List<TeamTodo> listByUser(int teamId,int userId);

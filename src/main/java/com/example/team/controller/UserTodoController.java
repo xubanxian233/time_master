@@ -1,9 +1,7 @@
 package com.example.team.controller;
 
 import com.example.team.pojo.UserTodo;
-import com.example.team.pojo.UserTodoSet;
 import com.example.team.service.UserTodoService;
-import com.example.team.service.UserTodoSetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +17,7 @@ public class UserTodoController extends BaseController {
 
     @Autowired
     private UserTodoService userTodoService;
+
 
     @Autowired
     private UserTodoSetService userTodoSetService;
@@ -81,7 +80,7 @@ public class UserTodoController extends BaseController {
         userTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
         userTodo.setTodoStatusId(1);
         if (userTodoService.createUserTodo(userTodo)) {
-            userTodo = userTodoService.getByName(userTodo.getName());
+            userTodo = userTodoService.getByName(userTodo.getName(),userId);
             return userTodo;
         }
         return null;

@@ -14,10 +14,14 @@ public class TeamTodoDAOImpl extends BaseDAOImpl<TeamTodo> implements TeamTodoDA
 
 
     @Override
-    public void deleteByUser(String name, int userId) {
+    public void deleteByUser(String name, int userId ,int teamId) {
         Session session = getSession();
-        String hql = "from TeamTodo where name = :name and userId = :userId";
-        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql).setParameter("name", name).setParameter("userId", userId).uniqueResult();
+        String hql = "from TeamTodo where name = :name and userId = :userId and teamId = :teamId";
+        TeamTodo teamTodo = (TeamTodo) session.createQuery(hql)
+                .setParameter("name", name)
+                .setParameter("userId", userId)
+                .setParameter("teamId",teamId)
+                .uniqueResult();
         session.delete(teamTodo);
     }
 
