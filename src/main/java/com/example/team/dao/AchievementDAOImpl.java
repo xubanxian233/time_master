@@ -20,28 +20,32 @@ public class AchievementDAOImpl implements AchievementDAO {
     @PersistenceContext
     protected EntityManager entityManager;
 
+
+
     protected Session getSession() {
         return entityManager.unwrap(Session.class);
     }
 
     @Override
-    public void add(Achievement achievement) {  getSession().save(achievement); }
-
+    public void add(Achievement achievement) {
+        getSession().save(achievement); }
 
     @Override
-    public Achievement getById(int achievementId) {
-        String hql="from Achievement where aId=:achievementId";
-        return (Achievement) getSession().createQuery(hql).setParameter("achievementId",achievementId).uniqueResult();
+    public void update(Achievement achievement) {
+        getSession().merge(achievement);
     }
 
+
+
     @Override
-    public Achievement getByUserId(int userId) {
+    public List<Achievement> getByUserId(int userId) {
         String hql="from Achievement where userId=:userId";
-        return (Achievement) getSession().createQuery(hql).setParameter("userId",userId).uniqueResult();
+        return (List<Achievement>) getSession().createQuery(hql).setParameter("userId",userId).list();
     }
 
     @Override
-    public List<Achievement> getAchievement(){
-        return null;
+    public List<Achievement> getUnAchievement(int userId){
+        String hql="from Achievement where userId=:userId and status=:status";
+        return (List<Achievement>) getSession().createQuery(hql).setParameter("userId",userId).setParameter("status","0").list();
     }
 }
