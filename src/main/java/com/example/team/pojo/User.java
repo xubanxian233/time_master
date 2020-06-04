@@ -35,9 +35,14 @@ public class User {
     @JsonIgnore
     private Set<Team> teams = new HashSet<Team>();
 
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
+    @ManyToMany
+    @JoinTable(
+            name="achievement",
+            joinColumns=@JoinColumn(name="user_id"),
+            inverseJoinColumns=@JoinColumn(name="type")
+    )
+    @JsonIgnore
+    private Set<Achievement> achievements=new HashSet<>();
 
     public int getUserId() {
         return userId;
@@ -83,20 +88,16 @@ public class User {
         return sex;
     }
 
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
     public Date getCreate() {
         return create;
     }
 
     public void setCreate(Date create) {
         this.create = create;
-    }
-
-    public Set<Team> getTeams() {
-        return teams;
-    }
-
-    public void setTeams(Set<Team> teams) {
-        this.teams = teams;
     }
 
     public Pet getPet() {
@@ -107,4 +108,19 @@ public class User {
         this.pet = pet;
     }
 
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
+    }
+
+    public Set<Achievement> getAchievements() {
+        return achievements;
+    }
+
+    public void setAchievements(Set<Achievement> achievements) {
+        this.achievements = achievements;
+    }
 }

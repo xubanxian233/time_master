@@ -30,6 +30,8 @@ public class RecordController extends BaseController {
     private RecordService recordService;
     @Autowired
     private PetService petService;
+    @Autowired
+    private AchievementService achievementService;
 
 
 
@@ -130,7 +132,7 @@ public class RecordController extends BaseController {
             recordService.addAccRecord(uId, tTime, tsId);
         }
 
-
+        achievementService.updateAchievement(uId);
         //宠物等级
         petService.updateLevel(uId);
         //跳转修改待办状态

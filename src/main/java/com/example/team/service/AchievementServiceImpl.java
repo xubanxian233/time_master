@@ -9,38 +9,34 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service("achievementService")
+@Transactional(rollbackFor = Exception.class)
 public class AchievementServiceImpl implements AchievementService {
     @Autowired
     private AchievementDAO achievementDAO;
     @Autowired
     private AchievementTypeDAO achievementTypeDAO;
+    @Autowired
+    private UserDAO userDAO;
+    @Autowired
     private AccRecordDAO accRecordDAO;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void addAchievement(int userId) {
-        Achievement achievement = null;
         List<AchievementType> aList=achievementTypeDAO.getAchievementType();
         for (AchievementType a:aList){
-            achievement.setaId(userId);
-            achievement.setStatus("0");
-            achievement.setaId(a.getaId());
+            Achievement achievement = new Achievement();
+            achievement.setUser(userDAO.get(User.class,userId));
+            achievement.setStatus(0);
+            achievement.setAchievementType(a);
             achievementDAO.add(achievement);
         }
     }
 
     @Override
-    public void updateAchievement(Achievement achievement){
-        achievementDAO.update(achievement);
-    }
-
-    @Override
-    public boolean isExistAchievement(int userId){
-        if(achievementDAO.getByUserId(userId)!=null){
-            return true;
-        }else{
-            return false;
-        }
+    public void updateAchievement(int userId){
+        AccRecord accRecord =accRecordDAO.getByUserId(userId);
+        int id=achievementTypeDAO.getAchievementId((int)accRecord.getAcctime(),userId);
+        achievementDAO.update(userId,id);
     }
 
     @Override
@@ -51,5 +47,16 @@ public class AchievementServiceImpl implements AchievementService {
     @Override
     public List<Achievement> getUnAchievement(int userId){
         return achievementDAO.getUnAchievement(userId);
+    }
+
+    @Override
+    public List<AchievementType> getAchievement(int userId) {
+        List<Achievement> aList=getByUserId(userId);
+        List<AchievementType> atList=achievementTypeDAO.getAchievementType();
+        for (AchievementType at:atList){
+            at.setAstatus(achievementDAO.getAchievement(userId,at.getAId()).getStatus());
+        }
+
+        return null;
     }
 }

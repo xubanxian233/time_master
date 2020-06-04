@@ -1,5 +1,7 @@
 package com.example.team.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,43 +10,49 @@ public class Achievement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="achievement_id")
+    @JsonIgnore
     private int aId;
-    @Column(name="user_id")
-    private int userId;
-    @Column(name = "a_create")
-    private String create;
     @Column(name = "a_status")
-    private String status;
+    private int status;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @JsonIgnore
+    private User user;
+    @ManyToOne
+    @JoinColumn(name="type")
+    private AchievementType achievementType;
 
-    public int getaId() {
-        return aId;
-    }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getCreate() {
-        return create;
-    }
-
-    public String getStatus() {
-        return status;
+    public int getType() {
+        return type;
     }
 
     public void setaId(int aId) {
         this.aId = aId;
     }
 
-    public void setCreate(String create) {
-        this.create = create;
+    public int getStatus() {
+        return status;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public AchievementType getAchievementType() {
+        return achievementType;
+    }
+
+
+    public void setAchievementType(AchievementType achievementType) {
+        this.achievementType = achievementType;
     }
 }

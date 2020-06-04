@@ -77,9 +77,20 @@ public class PetServiceImpl implements PetService {
     public void updateLevel(int userId) {
         //宠物等级
         Pet pet = userDAO.get(User.class, userId).getPet();
-        AccRecord accRecord1 = accRecordDAO.getByUserId(userId);
-        int level = accRecord1.getSuccessCount() / 3;
-        pet.setLevel(level);
+        AccRecord accRecord = accRecordDAO.getByUserId(userId);
+        int level = pet.getLevel();
+        int total = accRecord.getSuccessCount() - accRecord.getFailCount();
+        int upTotal = (level * level + level) / 2;
+        int downTotal = ((level - 1) * (level - 1) + level - 1) / 2;
+        if (total == upTotal) {
+            if (level < 60) {
+                pet.setLevel(level + 1);
+            }
+        } else if (total == downTotal) {
+            if (level > 1) {
+                pet.setLevel(level - 1);
+            }
+        }
         petDAO.update(pet);
     }
 
