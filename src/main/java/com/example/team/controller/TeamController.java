@@ -6,6 +6,7 @@ import com.example.team.service.TeamTodoService;
 import com.example.team.service.TeamTodoSetService;
 import com.example.team.service.UserService;
 import com.example.team.util.DataVo;
+import com.example.team.util.DateUtil;
 import com.example.team.util.ExcelWr;
 import com.example.team.util.ExcelWriter;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -46,7 +47,7 @@ public class TeamController extends BaseController {
         Team team = new Team();
         User user = userService.getById(userId);
         team.setName(name);
-        team.setCreateDate(new Date(new java.util.Date().getTime()));
+        team.setCreateDate(DateUtil.getCurrentTime());
         team.setLeader(user);
         return teamService.createTeam(user, team);
     }
