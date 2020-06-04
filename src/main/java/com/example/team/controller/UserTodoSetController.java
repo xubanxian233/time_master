@@ -2,6 +2,7 @@ package com.example.team.controller;
 
 import com.example.team.pojo.UserTodoSet;
 import com.example.team.service.UserTodoSetService;
+import com.example.team.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -55,9 +56,7 @@ public class UserTodoSetController extends BaseController {
         UserTodoSet userTodoSet = new UserTodoSet();
         userTodoSet.setName(param.get("name").toString());
         userTodoSet.setUserId(userId);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date create = new Date();
-        userTodoSet.setCreate(java.sql.Date.valueOf(df.format(create)));
+        userTodoSet.setCreate(DateUtil.getCurrentTime());
         if (userTodoSetService.createUserTodoSet(userTodoSet)) {
             UserTodoSet userTodoSet1 = userTodoSetService.getByName(userTodoSet.getName());
             return "create-success,userTodoSetId:" + userTodoSet1.getUserTodoSetId();

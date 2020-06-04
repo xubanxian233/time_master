@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
      */
     public boolean updateTel(int userId, String tel) {
         User user = userDAO.get(User.class, userId);
-        User user1 = userDAO.getByEmail(tel);
+        User user1 = userDAO.getByTel(tel);
         if (user1 != null && !tel.equals(user.getTel())) {
             return false;
         }
@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
      */
     public boolean updateUserName(int userId, String userName) {
         User user = userDAO.get(User.class, userId);
-        User user1 = userDAO.getByEmail(userName);
+        User user1 = userDAO.getByName(userName);
         if (user1 != null && !userName.equals(user.getName())) {
             return false;
         }

@@ -2,6 +2,7 @@ package com.example.team.controller;
 
 import com.example.team.pojo.TeamTodoSet;
 import com.example.team.service.TeamTodoSetService;
+import com.example.team.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -60,9 +61,7 @@ public class TeamTodoSetController extends BaseController {
         TeamTodoSet teamTodoSet = new TeamTodoSet();
         teamTodoSet.setName(name);
         teamTodoSet.setTeamId(Integer.parseInt(param.get("teamId").toString()));
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        java.util.Date create = new java.util.Date();
-        teamTodoSet.setCreate(Date.valueOf(df.format(create)));
+        teamTodoSet.setCreate(DateUtil.getCurrentTime());
         if (teamTodoSetService.createTeamTodoSet(teamTodoSet)) {
             TeamTodoSet teamTodoSet1 = teamTodoSetService.getByName(name);
             return "create-success,teamTodoSetId:"+teamTodoSet1.getTeamTodoSetId();

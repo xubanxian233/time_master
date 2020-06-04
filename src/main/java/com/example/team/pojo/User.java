@@ -41,6 +41,7 @@ public class User {
             joinColumns=@JoinColumn(name="user_id"),
             inverseJoinColumns=@JoinColumn(name="type")
     )
+    @JsonIgnore
     private Set<Achievement> achievements=new HashSet<>();
 
     public int getUserId() {
