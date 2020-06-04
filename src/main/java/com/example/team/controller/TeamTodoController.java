@@ -4,6 +4,7 @@ import com.example.team.pojo.TeamTodo;
 import com.example.team.pojo.User;
 import com.example.team.service.TeamTodoService;
 import com.example.team.service.UserService;
+import com.example.team.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -97,9 +98,7 @@ public class TeamTodoController extends BaseController {
             teamTodo.setName(param.get("name").toString());
             teamTodo.setTeamId(Integer.parseInt(param.get("teamId").toString()));
             teamTodo.setTime(Long.parseLong(param.get("time").toString()));
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            Date create = new Date();
-            teamTodo.setCreate(java.sql.Date.valueOf(df.format(create)));
+            teamTodo.setCreate(DateUtil.getCurrentTime());
             teamTodo.setTodoStatusId(1);
             teamTodo.setUserId(user.getUserId());
             if (teamTodoService.createTeamTodo(teamTodo)) {
